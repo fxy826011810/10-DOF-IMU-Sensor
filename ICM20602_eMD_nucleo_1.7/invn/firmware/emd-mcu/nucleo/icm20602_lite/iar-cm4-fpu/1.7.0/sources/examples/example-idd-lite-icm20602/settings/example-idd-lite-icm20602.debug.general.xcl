@@ -1,0 +1,15 @@
+"G:\IAR Systems\Embedded Workbench 8.0\arm\bin\armproc.dll" 
+
+"G:\IAR Systems\Embedded Workbench 8.0\arm\bin\armstlink2.dll" 
+
+"D:\stm32学习\ICM20602_eMD_nucleo_1.7\invn\firmware\emd-mcu\nucleo\icm20602_lite\iar-cm4-fpu\1.7.0\sources\examples\example-idd-lite-icm20602\build\example-idd-lite-icm20602\bin\example-idd-lite-icm20602.elf" 
+
+--plugin "G:\IAR Systems\Embedded Workbench 8.0\arm\bin\armbat.dll" 
+
+--device_macro "G:\IAR Systems\Embedded Workbench 8.0\arm\config\debugger\ST\STM32F4xx.dmac" 
+
+--flash_loader "G:\IAR Systems\Embedded Workbench 8.0\arm\config\flashloader\ST\FlashSTM32F411xE.board" 
+
+
+
+
