@@ -28,7 +28,8 @@
 ".\objects\icm20602.o"
 ".\objects\icm20602int.o"
 ".\objects\ist8310.o"
---library_type=microlib --strict --scatter ".\Objects\keil.sct"
+".\objects\ms5611.o"
+--strict --scatter ".\Objects\keil.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list ".\Listings\keil.map" -o .\Objects\keil.axf

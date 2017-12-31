@@ -15,7 +15,7 @@ void Bsp_GPIO_Init(void)
 	gpio.GPIO_Speed							= GPIO_Speed_100MHz;
 	GPIO_Init(GPIOC, &gpio);
 
-	//usart1
+//usart1
 	GPIO_StructInit(&gpio);
 	gpio.GPIO_Mode = GPIO_Mode_AF;
 	gpio.GPIO_OType = GPIO_OType_PP;
@@ -35,7 +35,7 @@ void Bsp_GPIO_Init(void)
 	GPIO_Init(GPIOC, &gpio);
 	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_USART3);
 	GPIO_PinAFConfig(GPIOC, GPIO_PinSource11, GPIO_AF_USART3);
-	//can1
+//can1
 	GPIO_StructInit(&gpio);
 	gpio.GPIO_Mode							= GPIO_Mode_AF;
 	gpio.GPIO_OType							= GPIO_OType_PP;
@@ -45,6 +45,12 @@ void Bsp_GPIO_Init(void)
 	GPIO_Init(GPIOA, &gpio);
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource11, GPIO_AF_CAN1);
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource12, GPIO_AF_CAN1);
+	
+	//Õ”¬›“«÷–∂œ
+	GPIO_StructInit(&gpio);
+	gpio.GPIO_Mode=SPIX_IRQ_MODE;
+  gpio.GPIO_Pin = SPIX_IRQ_PIN;
+  GPIO_Init(SPIX_IRQ_GPIO,&gpio);
 	
 //SPI(Õ”¬›“«)
 //∆¨—°
@@ -67,26 +73,26 @@ void Bsp_GPIO_Init(void)
 	GPIO_PinAFConfig(SPIX_SCK_GPIO, SPIX_SCK_PinSource, GPIO_AF_SPIX);
 	GPIO_PinAFConfig(SPIX_MISO_GPIO, SPIX_MISO_PinSource, GPIO_AF_SPIX);
 	GPIO_PinAFConfig(SPIX_MOSI_GPIO, SPIX_MOSI_PinSource, GPIO_AF_SPIX);
-//	//Õ”¬›“«÷–∂œ
-	GPIO_StructInit(&gpio);
-	gpio.GPIO_Mode=SPIX_IRQ_MODE;
-  gpio.GPIO_Pin = SPIX_IRQ_PIN;
-  GPIO_Init(SPIX_IRQ_GPIO,&gpio);
-//IIC
+	
+	//¥≈¡¶º∆IIC
 	//SCL
-	gpio.GPIO_Mode = I2CX_SCL_MODE;
-	gpio.GPIO_OType = I2CX_SCL_OTYPE;
-	gpio.GPIO_Pin = I2CX_SCL_PIN;
-	gpio.GPIO_PuPd = GPIO_PuPd_DOWN;
-	gpio.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init(I2CX_SCL_GPIO, &gpio);
+	ist8310IIC.gpio=I2CI_SCL_GPIO;
+	ist8310IIC.scl_gpio_init.GPIO_Mode = I2CI_SCL_MODE;
+	ist8310IIC.scl_gpio_init.GPIO_OType = I2CI_SCL_OTYPE;
+	ist8310IIC.scl_gpio_init.GPIO_Pin = I2CI_SCL_PIN;
+	ist8310IIC.scl_gpio_init.GPIO_PuPd = GPIO_PuPd_DOWN;
+	ist8310IIC.scl_gpio_init.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_Init(ist8310IIC.gpio, &ist8310IIC.scl_gpio_init);
 	//SDA
-	gpio.GPIO_Mode = I2CX_SDA_MODE;
-	gpio.GPIO_OType = I2CX_SDA_OTYPE;
-	gpio.GPIO_Pin = I2CX_SDA_PIN;
-	gpio.GPIO_PuPd = GPIO_PuPd_UP;
-	gpio.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init(I2CX_SDA_GPIO, &gpio);
+	ist8310IIC.gpio=I2CI_SDA_GPIO;
+	ist8310IIC.sda_gpio_init.GPIO_Mode = I2CI_SDA_MODE;
+	ist8310IIC.sda_gpio_init.GPIO_OType = I2CI_SDA_OTYPE;
+	ist8310IIC.sda_gpio_init.GPIO_Pin = I2CI_SDA_PIN;
+	ist8310IIC.sda_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
+	ist8310IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_Init(ist8310IIC.gpio, &ist8310IIC.sda_gpio_init);
+	//	GPIO_PinAFConfig(I2CI_SCL_GPIO, I2CI_SCL_PinSource, GPIO_AF_I2CI);
+	//	GPIO_PinAFConfig(I2CI_SDA_GPIO, I2CI_SDA_PinSource, GPIO_AF_I2CI);
 	//¥≈¡¶º∆÷–∂œ
 	GPIO_StructInit(&gpio);
 	gpio.GPIO_Mode=IST8310_INT_MODE;
@@ -99,8 +105,27 @@ void Bsp_GPIO_Init(void)
 	gpio.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	gpio.GPIO_Speed = GPIO_Speed_2MHz;
 	GPIO_Init(IST8310_RST_GPIO, &gpio);
-//	GPIO_PinAFConfig(I2CX_SCL_GPIO, I2CX_SCL_PinSource, GPIO_AF_I2CX);
-//	GPIO_PinAFConfig(I2CX_SDA_GPIO, I2CX_SDA_PinSource, GPIO_AF_I2CX);
+
+
+
+	//∆¯—πº∆IIC
+	//SCL
+	ms5611IIC.gpio=I2CM_SCL_GPIO;
+	ms5611IIC.scl_gpio_init.GPIO_Mode = I2CM_SCL_MODE;
+	ms5611IIC.scl_gpio_init.GPIO_OType = I2CM_SCL_OTYPE;
+	ms5611IIC.scl_gpio_init.GPIO_Pin = I2CM_SCL_PIN;
+	ms5611IIC.scl_gpio_init.GPIO_PuPd = GPIO_PuPd_DOWN;
+	ms5611IIC.scl_gpio_init.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_Init(ms5611IIC.gpio, &ms5611IIC.scl_gpio_init);
+	//SDA
+	ms5611IIC.gpio=I2CM_SDA_GPIO;
+	ms5611IIC.sda_gpio_init.GPIO_Mode = I2CM_SDA_MODE;
+	ms5611IIC.sda_gpio_init.GPIO_OType = I2CM_SDA_OTYPE;
+	ms5611IIC.sda_gpio_init.GPIO_Pin = I2CM_SDA_PIN;
+	ms5611IIC.sda_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
+	ms5611IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_Init(ms5611IIC.gpio, &ms5611IIC.sda_gpio_init);
+
 
 }
 

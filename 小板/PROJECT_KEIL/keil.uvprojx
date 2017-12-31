@@ -186,7 +186,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>1</useUlib>
+            <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40XX</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Program\inc;..\Program\Core;..\Program\Mpu6050;..\Program\src;..\Program\System;..\Program\User;..\Program\Icm20602;..\Program\Ist8310</IncludePath>
+              <IncludePath>..\Program\inc;..\Program\Core;..\Program\Mpu6050;..\Program\src;..\Program\System;..\Program\User;..\Program\Icm20602;..\Program\Ist8310;..\Program\Ms5611</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -563,6 +563,16 @@
               <FileName>ist8310.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\Ist8310\ist8310.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Ms5611</GroupName>
+          <Files>
+            <File>
+              <FileName>ms5611.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Ms5611\ms5611.c</FilePath>
             </File>
           </Files>
         </Group>

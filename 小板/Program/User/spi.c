@@ -5,7 +5,10 @@
 uint8_t a;
 void Bsp_Spi_Init(void)
 {
-	SPI_InitTypeDef spi;
+	SPI_InitTypeDef 						spi;
+	
+	
+	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPIX,ENABLE);
 	SPI_I2S_DeInit(SPIX);
 	spi.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_8;

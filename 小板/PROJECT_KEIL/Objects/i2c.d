@@ -52,3 +52,4 @@
 .\objects\i2c.o: ..\Program\Icm20602\icm20602Dri.h
 .\objects\i2c.o: ..\Program\Icm20602\icm20602.h
 .\objects\i2c.o: ..\Program\Ist8310\ist8310.h
+.\objects\i2c.o: ..\Program\Ms5611\ms5611.h

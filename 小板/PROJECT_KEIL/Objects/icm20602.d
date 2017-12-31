@@ -52,3 +52,4 @@
 .\objects\icm20602.o: ..\Program\Icm20602\icm20602Dri.h
 .\objects\icm20602.o: ..\Program\Icm20602\icm20602.h
 .\objects\icm20602.o: ..\Program\Ist8310\ist8310.h
+.\objects\icm20602.o: ..\Program\Ms5611\ms5611.h

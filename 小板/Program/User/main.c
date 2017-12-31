@@ -23,11 +23,11 @@ int main(void)
   system_init();//系统初始化
 	while (1)
 	{
-//		if(GPIO_ReadInputDataBit(IST8310_INT_GPIO,IST8310_INT_PIN))
-//		{
+		if(GPIO_ReadInputDataBit(IST8310_INT_GPIO,IST8310_INT_PIN))
+		{
 		IST8310_GetData(&mag);
 		MAG_Monitor.time++;
-//		}
+	}
 	//LED_HEAT();
   }
 }

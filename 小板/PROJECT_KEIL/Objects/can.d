@@ -52,3 +52,4 @@
 .\objects\can.o: ..\Program\Icm20602\icm20602Dri.h
 .\objects\can.o: ..\Program\Icm20602\icm20602.h
 .\objects\can.o: ..\Program\Ist8310\ist8310.h
+.\objects\can.o: ..\Program\Ms5611\ms5611.h

@@ -5,19 +5,32 @@
 #define I2CX  I2C1
 #define GPIO_AF_I2CX GPIO_AF_I2C1
 #define RCC_APB1Periph_I2CX RCC_APB1Periph_I2C1
+/*			I2C	IST8310		*/
+#define I2CI_SCL_GPIO  GPIOB
+#define I2CI_SCL_PIN  GPIO_Pin_10
+#define I2CI_SCL_MODE  GPIO_Mode_OUT
+#define I2CI_SCL_OTYPE  GPIO_OType_PP
+#define I2CI_SCL_PinSource GPIO_PinSource10
 
-#define I2CX_SCL_GPIO  GPIOB
-#define I2CX_SCL_PIN  GPIO_Pin_10
-#define I2CX_SCL_MODE  GPIO_Mode_OUT
-#define I2CX_SCL_OTYPE  GPIO_OType_PP
-#define I2CX_SCL_PinSource GPIO_PinSource10
+#define I2CI_SDA_GPIO  GPIOB
+#define I2CI_SDA_PIN  GPIO_Pin_11
+#define I2CI_SDA_MODE  GPIO_Mode_OUT
+#define I2CI_SDA_OTYPE  GPIO_OType_PP
+#define I2CI_SDA_PinSource GPIO_PinSource11
+/*			I2C	Ms5611		*/
+#define I2CM_SCL_GPIO  GPIOB
+#define I2CM_SCL_PIN  GPIO_Pin_5
+#define I2CM_SCL_MODE  GPIO_Mode_OUT
+#define I2CM_SCL_OTYPE  GPIO_OType_PP
+#define I2CM_SCL_PinSource GPIO_PinSource5
 
-#define I2CX_SDA_GPIO  GPIOB
-#define I2CX_SDA_PIN  GPIO_Pin_11
-#define I2CX_SDA_MODE  GPIO_Mode_OUT
-#define I2CX_SDA_OTYPE  GPIO_OType_PP
-#define I2CX_SDA_PinSource GPIO_PinSource11
-/*			IST8310			*/
+#define I2CM_SDA_GPIO  GPIOB
+#define I2CM_SDA_PIN  GPIO_Pin_4
+#define I2CM_SDA_MODE  GPIO_Mode_OUT
+#define I2CM_SDA_OTYPE  GPIO_OType_PP
+#define I2CM_SDA_PinSource GPIO_PinSource4
+
+/*			IST8310	RST INT		*/
 
 #define IST8310_INT_GPIO  GPIOB
 #define IST8310_INT_PIN  GPIO_Pin_0
@@ -28,7 +41,7 @@
 #define IST8310_RST_MODE  GPIO_Mode_OUT
 #define IST8310_RST_OTYPE  GPIO_OType_PP
 
-/*			SPI			*/
+/*			SPI	CS MISO MOSI SCLK INT*/
 #define SPIX  SPI1
 #define GPIO_AF_SPIX GPIO_AF_SPI1
 #define RCC_APB2Periph_SPIX RCC_APB2Periph_SPI1
@@ -42,7 +55,7 @@
 #define SPIX_NSS_PIN  GPIO_Pin_4
 #define SPIX_NSS_MODE  GPIO_Mode_OUT
 #define SPIX_NSS_OTYPE  GPIO_OType_PP
-
+//SCLK
 #define SPIX_SCK_GPIO  GPIOA
 #define SPIX_SCK_PIN  GPIO_Pin_5
 #define SPIX_SCK_MODE  GPIO_Mode_AF
