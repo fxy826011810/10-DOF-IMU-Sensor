@@ -8,7 +8,7 @@ void controlLoop(void)
 		if(heart%1000==0)//初始化快闪正常0.5秒闪一次
 	{
 		Monitor_Update();
-		LED_HEAT();
+//		LED_HEAT();
 	}
 	
 }

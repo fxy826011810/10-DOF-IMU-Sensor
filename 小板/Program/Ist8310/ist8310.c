@@ -5,7 +5,6 @@ static uint8_t IIC_ReadByte(SimIIC_Typedef *simiic,uint8_t reg, uint8_t *pbuffer
 static uint8_t IIC_Read(SimIIC_Typedef *simiic, uint8_t reg,uint8_t *pbuffer, uint8_t len);//读多个字节
 static uint8_t IIC_Write(SimIIC_Typedef *simiic, uint8_t reg, uint8_t *Data, uint8_t len);//写多个字节
 
-
 void Ist8310_Init(void)
 {
 	ist8310IIC.Addr=IST8310_ADDR;
@@ -28,6 +27,10 @@ void Ist8310_Init(void)
 	IST8310_WriteByte(IST8310_R_CONFA,IST8310_ODR_MODE);
 	delay_ms(10);
 	
+}
+uint8_t IST8310_GetIntData(void)
+{
+	return GPIO_ReadInputDataBit(IST8310_INT_GPIO,IST8310_INT_PIN);
 }
 void IST8310_GetMagData(uint8_t *data)
 {

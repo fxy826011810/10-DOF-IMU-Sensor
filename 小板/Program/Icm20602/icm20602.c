@@ -3,7 +3,10 @@
 uint8_t Icm20602_init(void)
 {
 	
-	
+	uint8_t initdata[10][2]={{ICM20602_PWR_MGMT_1,0x80},\
+													 {1,1},\
+													 {1,1},\
+													};
 	uint8_t mpu6500_id=0;
 	
 	uint8_t data=0,state=0;

@@ -1,22 +1,29 @@
 #ifndef __MS5611_H
 #define __MS5611_H
 
-#define MS5611_ADDR          		0x77
-//#define IST8310_WHO_AM_I          0x00
-//#define IST8310_R_CONFA           0x0A
-//#define IST8310_R_CONFB           0x0B
-//#define IST8310_R_MODE            0x02
+#define MS5611_ADDR          	 0x77
+#define RESET          				 0x1E
+#define ADC_READ							 0x00
 
-//#define IST8310_R_XL              0x03
-//#define IST8310_R_XM              0x04
-//#define IST8310_R_YL              0x05
-//#define IST8310_R_YM              0x06
-//#define IST8310_R_ZL              0x07
-//#define IST8310_R_ZM              0x08
+#define Convert_D1_256           0x40
+#define Convert_D1_512           0x42
+#define Convert_D1_1024          0x44
+#define Convert_D1_2048					 0x46
+#define Convert_D1_4096					 0x48
 
-//#define IST8310_AVGCNTL           0x41
-//#define IST8310_PDCNTL            0x42
+#define Convert_D2_256           0x50
+#define Convert_D2_512           0x52
+#define Convert_D2_1024          0x54
+#define Convert_D2_2048					 0x56
+#define Convert_D2_4096					 0x58
 
-//#define IST8310_ODR_MODE          0x01
+#define PROM_READ							 0xA0//to 0xae
 
+void Ms5611_Init(void);
+uint8_t Ms5611_ReadBytes(SimIIC_Typedef *simiic,uint8_t *pbuffer,uint8_t len);
+void Ms5611_Read(uint8_t reg,  uint8_t *pbuffer, uint8_t len);
+uint8_t Ms5611_WriteByte(SimIIC_Typedef *simiic,uint8_t reg,uint8_t flag);
+uint8_t Ms5611_ReadADC(void);
+uint8_t Ms5611_Reset(void);
+uint8_t Ms5611_PromRead(SimIIC_Typedef *simiic,uint8_t reg,uint8_t Data);
 #endif

@@ -18,17 +18,17 @@
 #define I2CI_SDA_OTYPE  GPIO_OType_PP
 #define I2CI_SDA_PinSource GPIO_PinSource11
 /*			I2C	Ms5611		*/
-#define I2CM_SCL_GPIO  GPIOB
-#define I2CM_SCL_PIN  GPIO_Pin_5
+#define I2CM_SCL_GPIO  GPIOA
+#define I2CM_SCL_PIN  GPIO_Pin_8
 #define I2CM_SCL_MODE  GPIO_Mode_OUT
 #define I2CM_SCL_OTYPE  GPIO_OType_PP
-#define I2CM_SCL_PinSource GPIO_PinSource5
+#define I2CM_SCL_PinSource GPIO_PinSource8
 
-#define I2CM_SDA_GPIO  GPIOB
-#define I2CM_SDA_PIN  GPIO_Pin_4
+#define I2CM_SDA_GPIO  GPIOC
+#define I2CM_SDA_PIN  GPIO_Pin_9
 #define I2CM_SDA_MODE  GPIO_Mode_OUT
 #define I2CM_SDA_OTYPE  GPIO_OType_PP
-#define I2CM_SDA_PinSource GPIO_PinSource4
+#define I2CM_SDA_PinSource GPIO_PinSource9
 
 /*			IST8310	RST INT		*/
 

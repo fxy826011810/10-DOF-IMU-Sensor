@@ -13,10 +13,10 @@ void IIC_SCL(SimIIC_Typedef *simiic,uint8_t x)
 		switch(x)
 	{
 		case 1:
-			GPIO_SetBits(simiic->gpio,simiic->scl_gpio_init.GPIO_Pin);
+			GPIO_SetBits(simiic->gpioScl,simiic->scl_gpio_init.GPIO_Pin);
 		break;
 		case 0:
-			GPIO_ResetBits(simiic->gpio,simiic->scl_gpio_init.GPIO_Pin);
+			GPIO_ResetBits(simiic->gpioScl,simiic->scl_gpio_init.GPIO_Pin);
 		break;
 	}
 }
@@ -25,22 +25,22 @@ void IIC_SDA(SimIIC_Typedef *simiic,uint8_t x)
 		switch(x)
 	{
 		case 1:
-			GPIO_SetBits(simiic->gpio,simiic->sda_gpio_init.GPIO_Pin);
+			GPIO_SetBits(simiic->gpioSda,simiic->sda_gpio_init.GPIO_Pin);
 		break;
 		case 0:
-			GPIO_ResetBits(simiic->gpio,simiic->sda_gpio_init.GPIO_Pin);
+			GPIO_ResetBits(simiic->gpioSda,simiic->sda_gpio_init.GPIO_Pin);
 		break;
 	}
 }
 uint8_t READ_SDA(SimIIC_Typedef *simiic)
 {
-	return GPIO_ReadInputDataBit(simiic->gpio,simiic->sda_gpio_init.GPIO_Pin);
+	return GPIO_ReadInputDataBit(simiic->gpioSda,simiic->sda_gpio_init.GPIO_Pin);
 }
 void SDA_IN(SimIIC_Typedef *simiic)
 {
 	simiic->sda_gpio_init.GPIO_Mode							= GPIO_Mode_IN;
 	simiic->sda_gpio_init.GPIO_PuPd							= GPIO_PuPd_NOPULL;
-	GPIO_Init(simiic->gpio, &simiic->sda_gpio_init);
+	GPIO_Init(simiic->gpioSda, &simiic->sda_gpio_init);
 }
 void SDA_OUT(SimIIC_Typedef *simiic)
 {
@@ -49,7 +49,7 @@ void SDA_OUT(SimIIC_Typedef *simiic)
 	simiic->sda_gpio_init.GPIO_Pin								= I2CI_SDA_PIN;
 	simiic->sda_gpio_init.GPIO_PuPd							= GPIO_PuPd_NOPULL;
 	simiic->sda_gpio_init.GPIO_Speed							= GPIO_Speed_50MHz;
-	GPIO_Init(simiic->gpio, &simiic->sda_gpio_init);
+	GPIO_Init(simiic->gpioSda, &simiic->sda_gpio_init);
 }
  
 uint8_t IIC_Start(SimIIC_Typedef *simiic)

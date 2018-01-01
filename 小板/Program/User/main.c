@@ -14,6 +14,7 @@ void system_init(void)
 	Icm20602_init();
 	Icm20602IntInit();
 	Ist8310_Init();
+	Ms5611_Init();
   sysEnable();    
 }
 
@@ -23,11 +24,15 @@ int main(void)
   system_init();//系统初始化
 	while (1)
 	{
-		if(GPIO_ReadInputDataBit(IST8310_INT_GPIO,IST8310_INT_PIN))
+		if(IST8310_GetIntData())
 		{
 		IST8310_GetData(&mag);
 		MAG_Monitor.time++;
-	}
+		}
+		delay_ms(100);
+		Ms5611_ReadADC();
+
+		
 	//LED_HEAT();
   }
 }
