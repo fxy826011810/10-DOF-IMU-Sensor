@@ -1,9 +1,9 @@
 .\objects\icm20602.o: ..\Program\Icm20602\icm20602.c
 .\objects\icm20602.o: ..\Program\User\main.h
-.\objects\icm20602.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\icm20602.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\icm20602.o: ..\Program\System\stm32f4xx.h
 .\objects\icm20602.o: ..\Program\Core\core_cm4.h
-.\objects\icm20602.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\icm20602.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\icm20602.o: ..\Program\Core\core_cmInstr.h
 .\objects\icm20602.o: ..\Program\Core\core_cmFunc.h
 .\objects\icm20602.o: ..\Program\Core\core_cm4_simd.h

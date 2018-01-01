@@ -1,9 +1,9 @@
 .\objects\tim.o: ..\Program\User\tim.c
 .\objects\tim.o: ..\Program\User\main.h
-.\objects\tim.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\tim.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\tim.o: ..\Program\System\stm32f4xx.h
 .\objects\tim.o: ..\Program\Core\core_cm4.h
-.\objects\tim.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\tim.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\tim.o: ..\Program\Core\core_cmInstr.h
 .\objects\tim.o: ..\Program\Core\core_cmFunc.h
 .\objects\tim.o: ..\Program\Core\core_cm4_simd.h

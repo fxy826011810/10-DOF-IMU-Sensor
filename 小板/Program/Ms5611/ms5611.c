@@ -11,11 +11,9 @@ void Ms5611_Init(void)
 	ms5611IIC.WriteBytes=&IIC_Write;
 	ms5611IIC.Addr=MS5611_ADDR;
 	Ms5611_Reset();
-	while(1)
-	{
-	delay_ms(100);
+
 	Ms5611_PromRead(&ms5611IIC,NULL,NULL);
-	}
+
 }
 
 

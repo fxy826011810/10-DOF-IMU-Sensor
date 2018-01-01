@@ -1,9 +1,9 @@
 .\objects\ms5611.o: ..\Program\Ms5611\ms5611.c
 .\objects\ms5611.o: ..\Program\User\main.h
-.\objects\ms5611.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\ms5611.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\ms5611.o: ..\Program\System\stm32f4xx.h
 .\objects\ms5611.o: ..\Program\Core\core_cm4.h
-.\objects\ms5611.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\ms5611.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\ms5611.o: ..\Program\Core\core_cmInstr.h
 .\objects\ms5611.o: ..\Program\Core\core_cmFunc.h
 .\objects\ms5611.o: ..\Program\Core\core_cm4_simd.h

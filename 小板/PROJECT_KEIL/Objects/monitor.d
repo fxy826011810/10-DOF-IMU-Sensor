@@ -1,9 +1,9 @@
 .\objects\monitor.o: ..\Program\User\monitor.c
 .\objects\monitor.o: ..\Program\User\main.h
-.\objects\monitor.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\monitor.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\monitor.o: ..\Program\System\stm32f4xx.h
 .\objects\monitor.o: ..\Program\Core\core_cm4.h
-.\objects\monitor.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\monitor.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\monitor.o: ..\Program\Core\core_cmInstr.h
 .\objects\monitor.o: ..\Program\Core\core_cmFunc.h
 .\objects\monitor.o: ..\Program\Core\core_cm4_simd.h

@@ -118,6 +118,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
+          <Name>?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -149,18 +150,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>28</LineNumber>
+          <LineNumber>27</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134223120</Address>
+          <Address>134223020</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>E:\瀹夎鍖?淇′话\鏂板缓鏂囦欢澶?灏忔澘\Program\Ist8310\ist8310.c</Filename>
+          <Filename>D:\git\10-DOF-IMU-Sensor\灏忔澘\Program\Icm20602\icm20602.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\keil\../Program/Ist8310/ist8310.c\28</Expression>
+          <Expression>\\keil\../Program/Icm20602/icm20602.c\27</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -213,6 +214,11 @@
           <count>9</count>
           <WinNumber>1</WinNumber>
           <ItemText>ms5611IIC</ItemText>
+        </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>mag</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>

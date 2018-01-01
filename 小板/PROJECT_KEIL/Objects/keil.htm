@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Objects\keil.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\keil.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Mon Jan 01 21:56:16 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Tue Jan 02 00:59:28 2018
 <BR><P>
-<H3>Maximum Stack Usage =        124 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        132 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; system_init &rArr; Ms5611_Init &rArr; Ms5611_PromRead &rArr; Ms5611_ReadBytes &rArr; IIC_Read_Byte &rArr; IIC_NAck &rArr; SDA_OUT &rArr; GPIO_Init
 <P>
@@ -244,7 +244,7 @@ Global Symbols
 <P><STRONG><a name="[f8]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[74]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 124 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 132 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; system_init &rArr; Ms5611_Init &rArr; Ms5611_PromRead &rArr; Ms5611_ReadBytes &rArr; IIC_Read_Byte &rArr; IIC_NAck &rArr; SDA_OUT &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -967,8 +967,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Icm20602_init
 </UL>
 
-<P><STRONG><a name="[bb]"></a>Icm20602_init</STRONG> (Thumb, 68 bytes, Stack size 40 bytes, icm20602.o(i.Icm20602_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Icm20602_init &rArr; Icm20602_WriteByte &rArr; SPI_WriteReadByte
+<P><STRONG><a name="[bb]"></a>Icm20602_init</STRONG> (Thumb, 80 bytes, Stack size 32 bytes, icm20602.o(i.Icm20602_init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = Icm20602_init &rArr; Icm20602_WriteByte &rArr; SPI_WriteReadByte
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
@@ -1000,11 +1000,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;controlLoop
 </UL>
 
-<P><STRONG><a name="[bf]"></a>Ms5611_Init</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, ms5611.o(i.Ms5611_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 116<LI>Call Chain = Ms5611_Init &rArr; Ms5611_PromRead &rArr; Ms5611_ReadBytes &rArr; IIC_Read_Byte &rArr; IIC_NAck &rArr; SDA_OUT &rArr; GPIO_Init
+<P><STRONG><a name="[bf]"></a>Ms5611_Init</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, ms5611.o(i.Ms5611_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 124<LI>Call Chain = Ms5611_Init &rArr; Ms5611_PromRead &rArr; Ms5611_ReadBytes &rArr; IIC_Read_Byte &rArr; IIC_NAck &rArr; SDA_OUT &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ms5611_Reset
+<BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ms5611_Reset
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ms5611_PromRead
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;system_init
@@ -1334,7 +1333,6 @@ Global Symbols
 
 <P><STRONG><a name="[ab]"></a>delay_ms</STRONG> (Thumb, 56 bytes, Stack size 0 bytes, delay.o(i.delay_ms))
 <BR><BR>[Called By]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ms5611_ReadADC
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ms5611_Init
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ist8310_Init
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Icm20602_init
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;system_init
@@ -1354,7 +1352,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[75]"></a>main</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 124<LI>Call Chain = main &rArr; system_init &rArr; Ms5611_Init &rArr; Ms5611_PromRead &rArr; Ms5611_ReadBytes &rArr; IIC_Read_Byte &rArr; IIC_NAck &rArr; SDA_OUT &rArr; GPIO_Init
+<BR><BR>[Stack]<UL><LI>Max Depth = 132<LI>Call Chain = main &rArr; system_init &rArr; Ms5611_Init &rArr; Ms5611_PromRead &rArr; Ms5611_ReadBytes &rArr; IIC_Read_Byte &rArr; IIC_NAck &rArr; SDA_OUT &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ms5611_ReadADC
@@ -1376,7 +1374,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[d4]"></a>system_init</STRONG> (Thumb, 60 bytes, Stack size 8 bytes, main.o(i.system_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 124<LI>Call Chain = system_init &rArr; Ms5611_Init &rArr; Ms5611_PromRead &rArr; Ms5611_ReadBytes &rArr; IIC_Read_Byte &rArr; IIC_NAck &rArr; SDA_OUT &rArr; GPIO_Init
+<BR><BR>[Stack]<UL><LI>Max Depth = 132<LI>Call Chain = system_init &rArr; Ms5611_Init &rArr; Ms5611_PromRead &rArr; Ms5611_ReadBytes &rArr; IIC_Read_Byte &rArr; IIC_NAck &rArr; SDA_OUT &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sysEnable
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms

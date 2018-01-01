@@ -1,9 +1,9 @@
 .\objects\ist8310.o: ..\Program\Ist8310\ist8310.c
 .\objects\ist8310.o: ..\Program\User\main.h
-.\objects\ist8310.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\ist8310.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\ist8310.o: ..\Program\System\stm32f4xx.h
 .\objects\ist8310.o: ..\Program\Core\core_cm4.h
-.\objects\ist8310.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\ist8310.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\ist8310.o: ..\Program\Core\core_cmInstr.h
 .\objects\ist8310.o: ..\Program\Core\core_cmFunc.h
 .\objects\ist8310.o: ..\Program\Core\core_cm4_simd.h
