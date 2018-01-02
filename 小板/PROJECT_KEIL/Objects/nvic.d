@@ -1,9 +1,9 @@
 .\objects\nvic.o: ..\Program\User\nvic.c
 .\objects\nvic.o: ..\Program\User\main.h
-.\objects\nvic.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\nvic.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\nvic.o: ..\Program\System\stm32f4xx.h
 .\objects\nvic.o: ..\Program\Core\core_cm4.h
-.\objects\nvic.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\nvic.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\nvic.o: ..\Program\Core\core_cmInstr.h
 .\objects\nvic.o: ..\Program\Core\core_cmFunc.h
 .\objects\nvic.o: ..\Program\Core\core_cm4_simd.h

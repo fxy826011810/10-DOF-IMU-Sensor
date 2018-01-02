@@ -1,9 +1,9 @@
 .\objects\i2c.o: ..\Program\User\i2c.c
 .\objects\i2c.o: ..\Program\User\main.h
-.\objects\i2c.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\i2c.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\i2c.o: ..\Program\System\stm32f4xx.h
 .\objects\i2c.o: ..\Program\Core\core_cm4.h
-.\objects\i2c.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\i2c.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\i2c.o: ..\Program\Core\core_cmInstr.h
 .\objects\i2c.o: ..\Program\Core\core_cmFunc.h
 .\objects\i2c.o: ..\Program\Core\core_cm4_simd.h

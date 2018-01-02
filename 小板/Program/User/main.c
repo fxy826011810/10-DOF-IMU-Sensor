@@ -29,8 +29,8 @@ int main(void)
 		IST8310_GetData(&mag);
 		MAG_Monitor.time++;
 		}
-		delay_ms(100);
-		Ms5611_ReadADC();
+//		delay_ms(100);
+//		Ms5611_ReadADC();
 
 		
 	//LED_HEAT();

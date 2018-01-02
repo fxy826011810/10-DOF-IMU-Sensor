@@ -118,7 +118,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>?</Name>
+          <Name>P%?P?wP%?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -150,18 +150,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>27</LineNumber>
+          <LineNumber>30</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134223020</Address>
+          <Address>134223024</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\git\10-DOF-IMU-Sensor\灏忔澘\Program\Icm20602\icm20602.c</Filename>
+          <Filename>E:\瀹夎鍖?淇′话\鏂板缓鏂囦欢澶?灏忔澘\Program\Icm20602\icm20602.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\keil\../Program/Icm20602/icm20602.c\27</Expression>
+          <Expression>\\keil\../Program/Icm20602/icm20602.c\30</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -220,6 +220,16 @@
           <WinNumber>1</WinNumber>
           <ItemText>mag</ItemText>
         </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>mpu6500_id</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>ICM20602_WHO_AM_I_CONST</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
@@ -277,7 +287,7 @@
 
   <Group>
     <GroupName>Src</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

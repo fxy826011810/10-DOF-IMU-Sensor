@@ -1,9 +1,9 @@
 .\objects\delay.o: ..\Program\User\delay.c
 .\objects\delay.o: ..\Program\User\main.h
-.\objects\delay.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\delay.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\delay.o: ..\Program\System\stm32f4xx.h
 .\objects\delay.o: ..\Program\Core\core_cm4.h
-.\objects\delay.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\delay.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\delay.o: ..\Program\Core\core_cmInstr.h
 .\objects\delay.o: ..\Program\Core\core_cmFunc.h
 .\objects\delay.o: ..\Program\Core\core_cm4_simd.h

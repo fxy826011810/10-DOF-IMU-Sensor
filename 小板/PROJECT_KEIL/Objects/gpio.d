@@ -1,9 +1,9 @@
 .\objects\gpio.o: ..\Program\User\gpio.c
 .\objects\gpio.o: ..\Program\User\main.h
-.\objects\gpio.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\gpio.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\gpio.o: ..\Program\System\stm32f4xx.h
 .\objects\gpio.o: ..\Program\Core\core_cm4.h
-.\objects\gpio.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\gpio.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\gpio.o: ..\Program\Core\core_cmInstr.h
 .\objects\gpio.o: ..\Program\Core\core_cmFunc.h
 .\objects\gpio.o: ..\Program\Core\core_cm4_simd.h

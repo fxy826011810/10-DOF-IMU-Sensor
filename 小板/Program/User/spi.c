@@ -9,7 +9,7 @@ void Bsp_Spi_Init(void)
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPIX,ENABLE);
 	SPI_I2S_DeInit(SPIX);
-	spi.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_32;
+	spi.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_8;
 	spi.SPI_CPHA=SPI_CPHA_2Edge;
 	spi.SPI_CPOL=SPI_CPOL_High;
 	spi.SPI_CRCPolynomial=7;
