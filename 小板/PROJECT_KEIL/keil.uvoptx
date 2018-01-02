@@ -426,8 +426,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Program\Keil\StartUp\startup_stm32f40xx.s</PathWithFileName>
-      <FilenameWithoutPath>startup_stm32f40xx.s</FilenameWithoutPath>
+      <PathWithFileName>..\Program\StartUp\startup_stm32f40_41xxx.s</PathWithFileName>
+      <FilenameWithoutPath>startup_stm32f40_41xxx.s</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
