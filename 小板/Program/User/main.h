@@ -26,7 +26,7 @@
 
 //debug
 #define WHILE_DEBUG   0					//主循环调试
-#define TIM_DEBUG			0					//tim循环
+#define TIM_DEBUG			1					//tim循环
 #define USE_TIM				1					//使用tim
 #define USE_IST8310		1					//使用磁力计
 #define USE_ICM20602	1					//使用陀螺仪

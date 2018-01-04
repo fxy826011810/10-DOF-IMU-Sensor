@@ -16,7 +16,7 @@ typedef struct SimIIC_Typedef
 }SimIIC_Typedef;
 
 extern SimIIC_Typedef ist8310IIC;
-//extern SimIIC_Typedef ms5611IIC;
+extern SimIIC_Typedef ms5611IIC;
 
 void Bsp_IIC_Init(void);
 

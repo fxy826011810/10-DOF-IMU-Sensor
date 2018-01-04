@@ -1,6 +1,6 @@
 #include "main.h"
 SimIIC_Typedef ist8310IIC;
-//SimIIC_Typedef ms5611IIC;
+SimIIC_Typedef ms5611IIC;
 
 void Bsp_IIC_Init(void)
 {
