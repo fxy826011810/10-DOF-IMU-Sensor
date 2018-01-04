@@ -1,6 +1,6 @@
 #include "main.h"
 SimIIC_Typedef ist8310IIC;
-SimIIC_Typedef ms5611IIC;
+//SimIIC_Typedef ms5611IIC;
 
 void Bsp_IIC_Init(void)
 {
@@ -83,8 +83,8 @@ void IIC_Stop(SimIIC_Typedef *simiic)
 {
 	u8 ucErrTime=0;
 	SDA_IN(simiic);      //SDA设置为输入  
-	IIC_SDA(simiic,1);	   
-	IIC_SCL(simiic,1);	 
+	IIC_SDA(simiic,1);delay_us(1);   
+	IIC_SCL(simiic,1);delay_us(1);
 	while(READ_SDA(simiic))
 	{
 		ucErrTime++;
@@ -160,7 +160,7 @@ uint8_t IIC_Read_Byte(SimIIC_Typedef *simiic,uint8_t ack)
 				delay_us(1); 
         }
     IIC_SCL(simiic,0);
-    delay_us(2);
+//    delay_us(2);
     if (!ack)
         IIC_NAck(simiic);//发送nACK
     else
@@ -169,7 +169,107 @@ uint8_t IIC_Read_Byte(SimIIC_Typedef *simiic,uint8_t ack)
 }
 
 
+uint8_t IIC_WriteByte(SimIIC_Typedef *simiic,uint8_t reg,uint8_t Data)
+{
+  IIC_Start(simiic);
+  IIC_Send_Byte(simiic,simiic->Addr<<1);
+  if(IIC_Wait_Ack(simiic))
+  {
+	  return 1;
+  }
+  IIC_Send_Byte(simiic,reg);
+  if (IIC_Wait_Ack(simiic))
+  {
+	  return 1;
+  }
+  IIC_Send_Byte(simiic,Data);
+  if (IIC_Wait_Ack(simiic))
+  {
+	  return 1;
+  }
+  IIC_Stop(simiic);
+  return 0;
+}
 
+uint8_t IIC_ReadByte(SimIIC_Typedef *simiic,uint8_t reg, uint8_t *pbuffer)
+{				  
+    IIC_Start(simiic);
+    IIC_Send_Byte(simiic,simiic->Addr << 1);   //发送器件地址0XA0,写数据 	 
+	if (IIC_Wait_Ack(simiic))
+	{
+		return 1;
+	}
+    IIC_Send_Byte(simiic,reg);   //发送低地址
+	if (IIC_Wait_Ack(simiic))
+	{
+		return 1;
+	}
+    IIC_Start(simiic);  	 	   
+    IIC_Send_Byte(simiic,(simiic->Addr << 1)+1);           //进入接收模式			   
+	if (IIC_Wait_Ack(simiic))
+	{
+		return 1;
+	}
+	*pbuffer =IIC_Read_Byte(simiic,0);
+    IIC_Stop(simiic);//产生一个停止条件	    
+    return 0;
+}
+uint8_t IIC_Read(SimIIC_Typedef *simiic, uint8_t reg,uint8_t *pbuffer, uint8_t len)
+{
+
+	IIC_Start(simiic);
+	IIC_Send_Byte(simiic,simiic->Addr << 1);   //发送器件地址0XA0,写数据 	 
+	if (IIC_Wait_Ack(simiic))
+	{
+		return 1;
+	}
+	IIC_Send_Byte(simiic,reg);   //发送低地址
+	if (IIC_Wait_Ack(simiic))
+	{
+		return 1;
+	}
+        IIC_Start(simiic);
+        IIC_Send_Byte(simiic,(simiic->Addr << 1)|1); 
+        if (IIC_Wait_Ack(simiic))
+		{
+			return 1;
+		}
+	while (len)
+	{
+	if(len==1)*pbuffer = IIC_Read_Byte(simiic,0);
+        else	*pbuffer = IIC_Read_Byte(simiic,1);		         			   	
+        pbuffer++;
+        len--;
+	}
+	IIC_Stop(simiic);//产生一个停止条件	    
+	return 0;
+}
+uint8_t IIC_Write(SimIIC_Typedef *simiic, uint8_t reg, uint8_t *Data, uint8_t len)
+{
+	IIC_Start(simiic);
+	IIC_Send_Byte(simiic,simiic->Addr << 1);
+	if (IIC_Wait_Ack(simiic))
+	{
+		return 1;
+	}
+	IIC_Send_Byte(simiic,reg);
+	if (IIC_Wait_Ack(simiic))
+	{
+		return 1;
+	}
+	while (len)
+	{
+		IIC_Send_Byte(simiic,*Data);
+		if (IIC_Wait_Ack(simiic))
+		{
+			return 1;
+		}
+		Data++;
+		len--;
+	}
+	IIC_Stop(simiic);
+	return 0;
+}
 
 
 

@@ -7,7 +7,7 @@ void Bsp_GPIO_Init(void)
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC| RCC_AHB1Periph_GPIOB |RCC_AHB1Periph_GPIOA, ENABLE);
 
 //led1
-	GPIO_StructInit(&gpio);
+
 	gpio.GPIO_Mode							= GPIO_Mode_OUT;
 	gpio.GPIO_OType							= GPIO_OType_PP;
 	gpio.GPIO_Pin							= GPIO_Pin_12;
@@ -15,46 +15,40 @@ void Bsp_GPIO_Init(void)
 	gpio.GPIO_Speed							= GPIO_Speed_100MHz;
 	GPIO_Init(GPIOC, &gpio);
 	GPIO_SetBits(GPIOC,GPIO_Pin_12);
-//usart1
-	GPIO_StructInit(&gpio);
-	gpio.GPIO_Mode = GPIO_Mode_AF;
-	gpio.GPIO_OType = GPIO_OType_PP;
-	gpio.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10;
-	gpio.GPIO_PuPd = GPIO_PuPd_UP;
-	gpio.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init(GPIOA, &gpio);
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_USART1);
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_USART1);
-//usart3
-	GPIO_StructInit(&gpio);
-	gpio.GPIO_Mode = GPIO_Mode_AF;
-	gpio.GPIO_OType = GPIO_OType_PP;
-	gpio.GPIO_Pin = GPIO_Pin_10| GPIO_Pin_11;
-	gpio.GPIO_PuPd = GPIO_PuPd_UP;
-	gpio.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init(GPIOC, &gpio);
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_USART3);
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource11, GPIO_AF_USART3);
-//can1
-	GPIO_StructInit(&gpio);
-	gpio.GPIO_Mode							= GPIO_Mode_AF;
-	gpio.GPIO_OType							= GPIO_OType_PP;
-	gpio.GPIO_Pin							= GPIO_Pin_11 | GPIO_Pin_12;
-	gpio.GPIO_PuPd							= GPIO_PuPd_UP;
-	gpio.GPIO_Speed							= GPIO_Speed_100MHz;
-	GPIO_Init(GPIOA, &gpio);
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource11, GPIO_AF_CAN1);
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource12, GPIO_AF_CAN1);
-	
-	//陀螺仪中断
-	GPIO_StructInit(&gpio);
-	gpio.GPIO_Mode=SPIX_IRQ_MODE;
-  gpio.GPIO_Pin = SPIX_IRQ_PIN;
-  GPIO_Init(SPIX_IRQ_GPIO,&gpio);
-	
+////usart1
+
+//	gpio.GPIO_Mode = GPIO_Mode_AF;
+//	gpio.GPIO_OType = GPIO_OType_PP;
+//	gpio.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10;
+//	gpio.GPIO_PuPd = GPIO_PuPd_UP;
+//	gpio.GPIO_Speed = GPIO_Speed_2MHz;
+//	GPIO_Init(GPIOA, &gpio);
+//	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_USART1);
+//	GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_USART1);
+////usart3
+
+//	gpio.GPIO_Mode = GPIO_Mode_AF;
+//	gpio.GPIO_OType = GPIO_OType_PP;
+//	gpio.GPIO_Pin = GPIO_Pin_10| GPIO_Pin_11;
+//	gpio.GPIO_PuPd = GPIO_PuPd_UP;
+//	gpio.GPIO_Speed = GPIO_Speed_2MHz;
+//	GPIO_Init(GPIOC, &gpio);
+//	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_USART3);
+//	GPIO_PinAFConfig(GPIOC, GPIO_PinSource11, GPIO_AF_USART3);
+////can1
+
+//	gpio.GPIO_Mode							= GPIO_Mode_AF;
+//	gpio.GPIO_OType							= GPIO_OType_PP;
+//	gpio.GPIO_Pin							= GPIO_Pin_11 | GPIO_Pin_12;
+//	gpio.GPIO_PuPd							= GPIO_PuPd_UP;
+//	gpio.GPIO_Speed							= GPIO_Speed_100MHz;
+//	GPIO_Init(GPIOA, &gpio);
+//	GPIO_PinAFConfig(GPIOA, GPIO_PinSource11, GPIO_AF_CAN1);
+//	GPIO_PinAFConfig(GPIOA, GPIO_PinSource12, GPIO_AF_CAN1);
+
+#if	USE_ICM20602	
 //SPI(陀螺仪)
-//片选
-	GPIO_StructInit(&gpio);
+//片选	
 	gpio.GPIO_Mode							= SPIX_NSS_MODE;
 	gpio.GPIO_OType							= SPIX_NSS_OTYPE;
 	gpio.GPIO_Pin								= SPIX_NSS_PIN;
@@ -63,7 +57,6 @@ void Bsp_GPIO_Init(void)
 	GPIO_Init(SPIX_NSS_GPIO, &gpio);
 	GPIO_SetBits(SPIX_NSS_GPIO,SPIX_NSS_PIN);
 	
-	GPIO_StructInit(&gpio);
   gpio.GPIO_Mode							= SPIX_SCK_MODE;
 	gpio.GPIO_OType							= SPIX_SCK_OTYPE;
 	gpio.GPIO_Pin								= SPIX_SCK_PIN | SPIX_MISO_PIN	|	SPIX_MOSI_PIN;
@@ -73,10 +66,18 @@ void Bsp_GPIO_Init(void)
 	GPIO_PinAFConfig(SPIX_SCK_GPIO, SPIX_SCK_PinSource, GPIO_AF_SPIX);
 	GPIO_PinAFConfig(SPIX_MISO_GPIO, SPIX_MISO_PinSource, GPIO_AF_SPIX);
 	GPIO_PinAFConfig(SPIX_MOSI_GPIO, SPIX_MOSI_PinSource, GPIO_AF_SPIX);
-	
+	//陀螺仪中断
 
-	//	GPIO_PinAFConfig(I2CI_SCL_GPIO, I2CI_SCL_PinSource, GPIO_AF_I2CI);
-	//	GPIO_PinAFConfig(I2CI_SDA_GPIO, I2CI_SDA_PinSource, GPIO_AF_I2CI);
+	gpio.GPIO_Mode=SPIX_IRQ_MODE;
+  gpio.GPIO_OType = SPIX_IRQ_OTYPE;
+  gpio.GPIO_Pin = SPIX_IRQ_PIN;
+  gpio.GPIO_PuPd = GPIO_PuPd_UP;
+  gpio.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(SPIX_IRQ_GPIO,&gpio);
+#endif
+
+
+#if	USE_IST8310
 	//磁力计中断
 	GPIO_StructInit(&gpio);
 	gpio.GPIO_Mode=IST8310_INT_MODE;
@@ -90,7 +91,7 @@ void Bsp_GPIO_Init(void)
 	gpio.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	gpio.GPIO_Speed = GPIO_Speed_2MHz;
 	GPIO_Init(IST8310_RST_GPIO, &gpio);
-
+	GPIO_SetBits(IST8310_RST_GPIO,IST8310_RST_PIN);
 
 	//磁力计IIC
 	//SCL
@@ -111,6 +112,8 @@ void Bsp_GPIO_Init(void)
 	ist8310IIC.sda_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
 	ist8310IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(ist8310IIC.gpioSda, &ist8310IIC.sda_gpio_init);
+#endif
+#if	USE_MS5611
 	//气压计IIC
 	//SCL
 	GPIO_StructInit(&ms5611IIC.scl_gpio_init);
@@ -130,6 +133,8 @@ void Bsp_GPIO_Init(void)
 	ms5611IIC.sda_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
 	ms5611IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(ms5611IIC.gpioSda, &ms5611IIC.sda_gpio_init);
+#endif
+
 	
 }
 

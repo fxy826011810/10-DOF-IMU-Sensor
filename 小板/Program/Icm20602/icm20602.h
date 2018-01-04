@@ -78,7 +78,7 @@
 //Register 107 (0x41) Power Management 1
 //Register 117 (0x12) WHO_AM_I
 
-#define	ICM20602_WHO_AM_I		         0x75	
+//#define	ICM20602_WHO_AM_I		         0x75	
 
 
 #define ICM20602_WHO_AM_I_CONST		(0X12)//WHO_AM_I±àÂë

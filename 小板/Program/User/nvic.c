@@ -7,19 +7,19 @@ void Bsp_NVIC_Init(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
 
-	//usart1
-	nvic.NVIC_IRQChannel											= USART1_IRQn;
-	nvic.NVIC_IRQChannelCmd										= ENABLE;
-	nvic.NVIC_IRQChannelPreemptionPriority		= 0;
-	nvic.NVIC_IRQChannelSubPriority						= 0;
-	NVIC_Init(&nvic);
+//	//usart1
+//	nvic.NVIC_IRQChannel											= USART1_IRQn;
+//	nvic.NVIC_IRQChannelCmd										= ENABLE;
+//	nvic.NVIC_IRQChannelPreemptionPriority		= 0;
+//	nvic.NVIC_IRQChannelSubPriority						= 0;
+//	NVIC_Init(&nvic);
 
-	//usart3
-	nvic.NVIC_IRQChannel 											= USART3_IRQn;
-	nvic.NVIC_IRQChannelCmd 									= ENABLE;
-	nvic.NVIC_IRQChannelPreemptionPriority 		= 0;
-	nvic.NVIC_IRQChannelSubPriority 					= 1;
-	NVIC_Init(&nvic);
+//	//usart3
+//	nvic.NVIC_IRQChannel 											= USART3_IRQn;
+//	nvic.NVIC_IRQChannelCmd 									= ENABLE;
+//	nvic.NVIC_IRQChannelPreemptionPriority 		= 0;
+//	nvic.NVIC_IRQChannelSubPriority 					= 1;
+//	NVIC_Init(&nvic);
 
 
 //	//can1
@@ -43,11 +43,11 @@ void Bsp_NVIC_Init(void)
 	nvic.NVIC_IRQChannelPreemptionPriority		= 1;
 	nvic.NVIC_IRQChannelSubPriority						= 3;
 	NVIC_Init(&nvic);
-	
-		//ÍÓÂÝÒÇÖÐ¶Ï
-  nvic.NVIC_IRQChannel = EXTI3_IRQn;
-  nvic.NVIC_IRQChannelCmd = ENABLE;
-  nvic.NVIC_IRQChannelPreemptionPriority = 0;
-  nvic.NVIC_IRQChannelSubPriority = 2;
-  NVIC_Init(&nvic);
+//	
+//		//ÍÓÂÝÒÇÖÐ¶Ï
+//  nvic.NVIC_IRQChannel = EXTI3_IRQn;
+//  nvic.NVIC_IRQChannelCmd = ENABLE;
+//  nvic.NVIC_IRQChannelPreemptionPriority = 0;
+//  nvic.NVIC_IRQChannelSubPriority = 2;
+//  NVIC_Init(&nvic);
 }

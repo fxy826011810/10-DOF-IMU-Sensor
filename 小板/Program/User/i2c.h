@@ -16,14 +16,14 @@ typedef struct SimIIC_Typedef
 }SimIIC_Typedef;
 
 extern SimIIC_Typedef ist8310IIC;
-extern SimIIC_Typedef ms5611IIC;
+//extern SimIIC_Typedef ms5611IIC;
 
 void Bsp_IIC_Init(void);
 
-//uint8_t IIC_WriteByte(SimIIC_Typedef *simiic,uint8_t reg,uint8_t Data);//写单个字节
-//uint8_t IIC_ReadByte(SimIIC_Typedef *simiic,uint8_t reg, uint8_t *pbuffer);//读单个字节
-//uint8_t IIC_Read(SimIIC_Typedef *simiic, uint8_t reg,uint8_t *pbuffer, uint8_t len);//读多个字节
-//uint8_t IIC_Write(SimIIC_Typedef *simiic, uint8_t reg, uint8_t *Data, uint8_t len);//写多个字节
+uint8_t IIC_WriteByte(SimIIC_Typedef *simiic,uint8_t reg,uint8_t Data);//写单个字节
+uint8_t IIC_ReadByte(SimIIC_Typedef *simiic,uint8_t reg, uint8_t *pbuffer);//读单个字节
+uint8_t IIC_Read(SimIIC_Typedef *simiic, uint8_t reg,uint8_t *pbuffer, uint8_t len);//读多个字节
+uint8_t IIC_Write(SimIIC_Typedef *simiic, uint8_t reg, uint8_t *Data, uint8_t len);//写多个字节
 
 void IIC_SCL(SimIIC_Typedef *simiic,uint8_t x);
 void IIC_SDA(SimIIC_Typedef *simiic,uint8_t x);
