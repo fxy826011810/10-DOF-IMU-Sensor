@@ -11,12 +11,6 @@ void Icm20602IntInit(void)
   exti.EXTI_Mode = EXTI_Mode_Interrupt;
   exti.EXTI_Trigger = EXTI_Trigger_Rising;
   EXTI_Init(&exti);
-//	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource3);
-//  exti.EXTI_Line = EXTI_Line3;
-//  exti.EXTI_LineCmd = ENABLE;
-//  exti.EXTI_Mode = EXTI_Mode_Interrupt;
-//  exti.EXTI_Trigger = EXTI_Trigger_Rising;
-//  EXTI_Init(&exti);
 }
 
 

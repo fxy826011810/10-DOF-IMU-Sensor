@@ -49,7 +49,7 @@
 #define SPIX_IRQ_GPIO  GPIOA
 #define SPIX_IRQ_PIN  GPIO_Pin_3
 #define SPIX_IRQ_MODE  GPIO_Mode_IN
-#define SPIX_IRQ_OTYPE  GPIO_OType_PP
+//#define SPIX_IRQ_OTYPE  GPIO_OType_PP
 //Ƭѡ
 #define SPIX_NSS_GPIO  GPIOA
 #define SPIX_NSS_PIN  GPIO_Pin_4

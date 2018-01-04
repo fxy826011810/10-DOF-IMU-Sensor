@@ -35,6 +35,13 @@ int main(void)
   system_init();//系统初始化
 	while (1)
 	{
+		if(Icm20602_GetIntData())
+		{
+			LED(0);
+		Icm20602_GetData(&icmdata);
+		ICM20602_Monitor.time++;
+			LED(1);
+		}
 #if	USE_IST8310
 		if(IST8310_GetIntData())
 		{
@@ -42,6 +49,8 @@ int main(void)
 		MAG_Monitor.time++;
 		}
 #endif
+		
+		
 		
 #if WHILE_DEBUG
 		LED_HEAT();

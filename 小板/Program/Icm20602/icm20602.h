@@ -79,9 +79,20 @@
 //Register 117 (0x12) WHO_AM_I
 
 //#define	ICM20602_WHO_AM_I		         0x75	
-
-
+typedef struct 
+{
+	int16_t ax;
+	int16_t ay;
+	int16_t az;
+	int16_t gx;
+	int16_t gy;
+	int16_t gz;
+	int16_t temp;
+}Icm20602Datadef;
+extern Icm20602Datadef  icmdata;
 #define ICM20602_WHO_AM_I_CONST		(0X12)//WHO_AM_I±àÂë
 
 uint8_t Icm20602_init(void);
+uint8_t Icm20602_GetIntData(void);
+void Icm20602_GetData(Icm20602Datadef *icmdata);
 #endif

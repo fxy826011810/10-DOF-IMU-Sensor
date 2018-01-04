@@ -2,7 +2,7 @@
 FormatTrans FT;//用于float类型转化为char[4]类型
 
 
-System_Monitor_t IMURec_Monitor=Monitor_default;
+System_Monitor_t ICM20602_Monitor=Monitor_default;
 System_Monitor_t MAG_Monitor=Monitor_default;
 System_Monitor_t System_Monitor=Monitor_default;
 System_Monitor_t CanP_Monitor=Monitor_default;
@@ -23,7 +23,7 @@ void Monitor_Calc(System_Monitor_t *mon)
 
 void Monitor_Update(void)
 {
-	IMURec_Monitor.upd(&IMURec_Monitor);
+	ICM20602_Monitor.upd(&ICM20602_Monitor);
 	
 	MAG_Monitor.upd(&MAG_Monitor);
 	System_Monitor.upd(&System_Monitor);

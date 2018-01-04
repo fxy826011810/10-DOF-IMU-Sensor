@@ -26,7 +26,7 @@ typedef struct System_Monitor_t
 	void(*upd)(struct System_Monitor_t *mon);
 }System_Monitor_t;
 
-extern System_Monitor_t IMURec_Monitor;
+extern System_Monitor_t ICM20602_Monitor;
 extern System_Monitor_t Imu_Int_Monitor;
 extern System_Monitor_t MAG_Monitor;
 extern System_Monitor_t System_Monitor;

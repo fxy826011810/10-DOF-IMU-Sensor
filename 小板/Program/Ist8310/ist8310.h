@@ -23,12 +23,12 @@ typedef struct
 	int16_t mx;
 	int16_t my;
 	int16_t mz;
-}magDatedef;
-extern magDatedef mag;
+}magDatadef;
+extern magDatadef mag;
 void Ist8310_Init(void);
 void IST8310_ReadByte(uint8_t reg, uint8_t *pbuffer);
 void IST8310_Read(uint8_t reg,  uint8_t *pbuffer, uint8_t len);
 void IST8310_WriteByte(uint8_t reg, uint8_t pbuffer);
-void IST8310_GetData(magDatedef *m);
+void IST8310_GetData(magDatadef *m);
 uint8_t IST8310_GetIntData(void);
 #endif

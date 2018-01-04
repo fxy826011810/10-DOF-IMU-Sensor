@@ -32,8 +32,8 @@ void IST8310_GetMagData(uint8_t *data)
 	IST8310_Read(IST8310_R_XL,data,6);
 	IST8310_WriteByte(IST8310_R_CONFA,IST8310_ODR_MODE);
 }
-magDatedef mag;
-void IST8310_GetData(magDatedef *m)
+magDatadef mag;
+void IST8310_GetData(magDatadef *m)
 {
 	uint8_t data[6];
 	IST8310_GetMagData(data);

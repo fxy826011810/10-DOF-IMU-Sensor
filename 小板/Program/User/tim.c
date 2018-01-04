@@ -9,7 +9,7 @@ void Bsp_Tim_Init(void)
 				TIM_TimeBaseStructInit(&tim);
 				tim.TIM_ClockDivision = TIM_CKD_DIV1;
 				tim.TIM_CounterMode = TIM_CounterMode_Up;
-				tim.TIM_Period = 1000;
+				tim.TIM_Period = 999;
 				tim.TIM_Prescaler = 84-1;
 				TIM_TimeBaseInit(TIM6,&tim);
 ////用于陀螺仪积分						
