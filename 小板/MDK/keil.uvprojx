@@ -538,6 +538,13 @@
         </Group>
         <Group>
           <GroupName>Ms5611</GroupName>
+          <Files>
+            <File>
+              <FileName>ms5611.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Ms5611\ms5611.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>User</GroupName>

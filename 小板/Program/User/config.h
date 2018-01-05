@@ -1,6 +1,19 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
-#include "stm32f4xx.h"
+
+
+#define WHILE_DEBUG   0					//主循环调试
+#define TIM_DEBUG			0					//tim循环
+#define USE_TIM				1					//使用tim
+#define USE_IST8310		1					//使用磁力计
+#define USE_ICM20602	1					//使用陀螺仪
+#define USE_MS5611		0					//使用气压计
+
+
+
+
+
+
 /*			I2C			*/
 #define I2CX  I2C1
 #define GPIO_AF_I2CX GPIO_AF_I2C1

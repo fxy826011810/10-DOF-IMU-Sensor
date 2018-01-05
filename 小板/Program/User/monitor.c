@@ -1,4 +1,6 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include "monitor.h" 
+#include "config.h"
 FormatTrans FT;//用于float类型转化为char[4]类型
 
 

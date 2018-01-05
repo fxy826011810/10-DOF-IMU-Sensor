@@ -1,14 +1,15 @@
+#include "stm32f4xx.h"
+#include "monitor.h" 
+#include "control.h"
+#include "config.h"
 #include "main.h"
 
-
-uint32_t heart=0;//心跳灯
 void controlLoop(void)
 {
-		heart++;
-		if(heart%1000==0)//初始化快闪正常0.5秒闪一次
+		cmd.heart++;
+		if(cmd.heart%1000==0)//初始化快闪正常0.5秒闪一次
 	{
 		Monitor_Update();
-
 	}
 	#if TIM_DEBUG
 		LED_HEAT();

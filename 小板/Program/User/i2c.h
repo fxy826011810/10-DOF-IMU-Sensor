@@ -1,10 +1,11 @@
 #ifndef __I2C_H
 #define __I2C_H
-//#include "stm32f4xx.h"
+#include "stm32f4xx.h"
 
 typedef struct SimIIC_Typedef
 {
 	uint8_t Addr;
+	uint8_t writedataflag;
 	GPIO_TypeDef *gpioSda;
 	GPIO_TypeDef *gpioScl;
 	GPIO_InitTypeDef	sda_gpio_init;

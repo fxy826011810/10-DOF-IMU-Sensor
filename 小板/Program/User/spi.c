@@ -1,8 +1,8 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include "config.h"
+#include "spi.h"
+#include "config.h"
 
-
-
-uint8_t a;
 void Bsp_Spi_Init(void)
 {
 	SPI_InitTypeDef 						spi;

@@ -1,6 +1,6 @@
 #ifndef __ICM20602_H__
 #define __ICM20602_H__
-
+#include "stm32f4xx.h"
 #define ICM20602_XG_OFFS_TC_H							0x04
 #define ICM20602_XG_OFFS_TC_L							0x05
 #define ICM20602_YG_OFFS_TC_H							0x07
@@ -73,7 +73,7 @@
 #define ICM20602_YA_OFFSET_L								0x7B
 #define ICM20602_ZA_OFFSET_H								0x7D
 #define ICM20602_ZA_OFFSET_L								0x7E
-
+#define ICM20602_WHO_AM_I_CONST		(0X12)//WHO_AM_I±àÂë
 //Register 26 (0x80) CONFIG
 //Register 107 (0x41) Power Management 1
 //Register 117 (0x12) WHO_AM_I
@@ -84,13 +84,11 @@ typedef struct
 	int16_t ax;
 	int16_t ay;
 	int16_t az;
+	int16_t temp;
 	int16_t gx;
 	int16_t gy;
 	int16_t gz;
-	int16_t temp;
 }Icm20602Datadef;
-extern Icm20602Datadef  icmdata;
-#define ICM20602_WHO_AM_I_CONST		(0X12)//WHO_AM_I±àÂë
 
 uint8_t Icm20602_init(void);
 uint8_t Icm20602_GetIntData(void);

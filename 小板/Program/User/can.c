@@ -1,4 +1,5 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include "can.h"
 CanRxMsg		receivemessage;
 
 	void Bsp_Can_Init(void)

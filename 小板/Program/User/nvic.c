@@ -1,4 +1,6 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include "nvic.h"
+#include "config.h"
 void Bsp_NVIC_Init(void)
 {
 	NVIC_InitTypeDef											nvic;

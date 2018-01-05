@@ -1,4 +1,6 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include "delay.h"
+#include "config.h"
 //void delay_ms(uint16_t t)
 //{
 //  u32 i;

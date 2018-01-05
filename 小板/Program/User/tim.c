@@ -1,4 +1,7 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include "tim.h"
+#include "control.h"
+#include "config.h"
 void Bsp_Tim_Init(void)
 {
 				TIM_TimeBaseInitTypeDef      tim;

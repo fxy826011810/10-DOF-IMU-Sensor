@@ -1,5 +1,5 @@
-#ifndef __MONITOR_H
-#define __MONITOR_H
+#ifndef __MONITOR_H__
+#define __MONITOR_H__
 #include "stm32f4xx.h"
 typedef union
 {
@@ -35,7 +35,7 @@ extern System_Monitor_t CanY_Monitor;
 extern System_Monitor_t CanG_Monitor;
 
 void Monitor_Calc(System_Monitor_t *mon);
-
+void Monitor_Update(void);
 #define Monitor_default \
 {\
 	0,\

@@ -1,4 +1,8 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include "i2c.h" 
+#include "config.h"
+#include "delay.h"
+
 SimIIC_Typedef ist8310IIC;
 SimIIC_Typedef ms5611IIC;
 
@@ -46,7 +50,6 @@ void SDA_OUT(SimIIC_Typedef *simiic)
 {
 	simiic->sda_gpio_init.GPIO_Mode							= GPIO_Mode_OUT;
 	simiic->sda_gpio_init.GPIO_OType							= GPIO_OType_PP;
-	simiic->sda_gpio_init.GPIO_Pin								= I2CI_SDA_PIN;
 	simiic->sda_gpio_init.GPIO_PuPd							= GPIO_PuPd_NOPULL;
 	simiic->sda_gpio_init.GPIO_Speed							= GPIO_Speed_50MHz;
 	GPIO_Init(simiic->gpioSda, &simiic->sda_gpio_init);
@@ -182,11 +185,14 @@ uint8_t IIC_WriteByte(SimIIC_Typedef *simiic,uint8_t reg,uint8_t Data)
   {
 	  return 1;
   }
-  IIC_Send_Byte(simiic,Data);
-  if (IIC_Wait_Ack(simiic))
-  {
-	  return 1;
-  }
+	if(simiic->writedataflag==1)
+	{
+		IIC_Send_Byte(simiic,Data);
+		if (IIC_Wait_Ack(simiic))
+		{
+			return 1;
+		}
+	}
   IIC_Stop(simiic);
   return 0;
 }
@@ -228,18 +234,22 @@ uint8_t IIC_Read(SimIIC_Typedef *simiic, uint8_t reg,uint8_t *pbuffer, uint8_t l
 	{
 		return 1;
 	}
-        IIC_Start(simiic);
-        IIC_Send_Byte(simiic,(simiic->Addr << 1)|1); 
-        if (IIC_Wait_Ack(simiic))
-		{
-			return 1;
-		}
+//	if(simiic->writedataflag==0)
+//	{
+//		IIC_Stop(simiic);
+//	}
+   IIC_Start(simiic);
+   IIC_Send_Byte(simiic,(simiic->Addr << 1)+1); 
+   if (IIC_Wait_Ack(simiic))
+	 {
+		return 1;
+	 }
 	while (len)
 	{
-	if(len==1)*pbuffer = IIC_Read_Byte(simiic,0);
-        else	*pbuffer = IIC_Read_Byte(simiic,1);		         			   	
-        pbuffer++;
-        len--;
+		if(len==1)*pbuffer = IIC_Read_Byte(simiic,0);
+		else	*pbuffer = IIC_Read_Byte(simiic,1);		         			   	
+		pbuffer++;
+		len--;
 	}
 	IIC_Stop(simiic);//产生一个停止条件	    
 	return 0;

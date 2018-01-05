@@ -1,5 +1,9 @@
-#include "main.h"
-Icm20602Datadef  icmdata;
+#include "stm32f4xx.h"
+#include "icm20602.h"
+#include "icm20602Dri.h"
+#include "config.h"
+#include "delay.h"
+
 uint8_t Icm20602_init(void)
 {
 	uint8_t len=11;
@@ -46,11 +50,11 @@ void Icm20602_GetRegisterData(uint8_t *data)
 	Icm20602_ReadBytes(ICM20602_ACCEL_XOUT_H,data,14);
 }
 
+
 void Icm20602_GetData(Icm20602Datadef *icmdata)
 {
 	uint8_t data[14];
 	Icm20602_GetRegisterData(data);
-	
 	icmdata->ax=data[0]<<8|data[1];
 	icmdata->ay=data[2]<<8|data[3];
 	icmdata->az=data[4]<<8|data[5];

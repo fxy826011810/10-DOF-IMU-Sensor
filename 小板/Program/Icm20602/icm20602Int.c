@@ -1,5 +1,6 @@
-#include "main.h"
-
+#include "stm32f4xx.h"
+#include "icm20602Int.h"
+#include "config.h"
 void Icm20602IntInit(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);

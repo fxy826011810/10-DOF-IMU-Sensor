@@ -1,4 +1,6 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include <stdio.h>
+#include "usart.h"
 int fputc(int ch,FILE*f)//printf函数重定义
 {
 	USART_SendData(USART3,(unsigned char)ch);

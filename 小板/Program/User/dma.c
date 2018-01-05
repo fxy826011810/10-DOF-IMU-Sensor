@@ -1,4 +1,5 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include "dma.h"
 void Bsp_DMA_Init(void)
 {
 //	DMA_InitTypeDef dma;

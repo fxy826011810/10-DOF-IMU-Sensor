@@ -1,5 +1,8 @@
-#include "main.h"
-
+#include "stm32f4xx.h"
+#include "gpio.h"
+#include "config.h"
+#include "i2c.h" 
+#include "config.h"
 void Bsp_GPIO_Init(void)
 {
 	GPIO_InitTypeDef						gpio;

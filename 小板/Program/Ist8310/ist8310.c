@@ -1,7 +1,12 @@
-#include "main.h"
+#include "stm32f4xx.h"
+#include "ist8310.h"
+#include "config.h"
+#include "delay.h"
+#include "i2c.h" 
 
 void Ist8310_Init(void)
 {
+	ist8310IIC.writedataflag=1;
 	ist8310IIC.Addr=IST8310_ADDR;
 	ist8310IIC.ReadByte=&IIC_ReadByte;
 	ist8310IIC.ReadBytes=&IIC_Read;
@@ -32,7 +37,8 @@ void IST8310_GetMagData(uint8_t *data)
 	IST8310_Read(IST8310_R_XL,data,6);
 	IST8310_WriteByte(IST8310_R_CONFA,IST8310_ODR_MODE);
 }
-magDatadef mag;
+
+
 void IST8310_GetData(magDatadef *m)
 {
 	uint8_t data[6];
