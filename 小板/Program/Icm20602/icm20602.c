@@ -6,20 +6,21 @@
 
 uint8_t Icm20602_init(void)
 {
-	uint8_t len=11;
+	uint8_t len=12;
 	uint8_t i,initdata[][2]={ {ICM20602_PWR_MGMT_1,0x80},\
 															{ICM20602_PWR_MGMT_1,0x01},\
-															{ICM20602_USER_CTRL,0x01},\
-															{ICM20602_SMPLRT_DIV,0x00},\
-															{ICM20602_GYRO_CONFIG,0x18},
+															{ICM20602_INT_PIN_CFG,0x00},\
+															{ICM20602_INT_ENABLE,0x01},\
+															{ICM20602_PWR_MGMT_2,0x00},\
+															{ICM20602_SMPLRT_DIV,0x01},\
+															{ICM20602_GYRO_CONFIG,0x18},\
 															{ICM20602_ACCEL_CONFIG,0x08},\
 															{ICM20602_ACCEL_CONFIG_2,0x03},\
+															{ICM20602_USER_CTRL,0x01},\
 															{ICM20602_CONFIG,0x03},\
-															{ICM20602_INT_PIN_CFG,0x00},\
-															{ICM20602_PWR_MGMT_2,0x00},\
 															{ICM20602_I2C_IF,0x40},\
 														};
-	uint8_t mpu6500_id=0,mpudata[11];	
+	uint8_t mpu6500_id=0,mpudata=0;	
 	Icm20602_ReadByte(ICM20602_WHO_AM_I,&mpu6500_id);	
 														
 	if (mpu6500_id != ICM20602_WHO_AM_I_CONST)
@@ -29,18 +30,18 @@ uint8_t Icm20602_init(void)
 	Icm20602_WriteByte(initdata[i][0],initdata[i][1]);//Õ”¬›“«÷ÿ∆Ù
 	delay_ms(100);
 }
-	for(i=1;i<len;i++)
-{
-	Icm20602_ReadByte(initdata[i][0],&mpudata[i]);	
-	delay_ms(1);
-}
+//	for(i=1;i<len;i++)
+//{
+//	Icm20602_ReadByte(initdata[i][0],&mpudata[i]);	
+//	delay_ms(1);
+//}
+Icm20602_ReadByte(0x56,&mpudata);
 	return 0;
 }
 
 uint8_t Icm20602_GetIntData(void)
 {
 	uint8_t a;
-//	return GPIO_ReadInputDataBit(SPIX_IRQ_GPIO,SPIX_IRQ_PIN);
 	Icm20602_ReadByte(ICM20602_INT_STATUS,&a);
 	return a&0x01;
 }

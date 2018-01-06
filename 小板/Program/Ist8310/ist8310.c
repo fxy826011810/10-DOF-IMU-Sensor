@@ -28,9 +28,17 @@ void Ist8310_Init(void)
 	delay_ms(10);
 	
 }
-uint8_t IST8310_GetIntData(void)
+uint8_t IST8310_GetIntData(uint8_t flag)
 {
+	uint8_t a;
+	if(flag)
 	return GPIO_ReadInputDataBit(IST8310_INT_GPIO,IST8310_INT_PIN);
+	else
+	{
+	 IST8310_ReadByte(IST8310_R_MODE,&a);
+	return a&0x01;
+	}
+	return 0;
 }
 void IST8310_GetMagData(uint8_t *data)
 {

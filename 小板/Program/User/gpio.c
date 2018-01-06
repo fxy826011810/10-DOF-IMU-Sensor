@@ -30,14 +30,14 @@ void Bsp_GPIO_Init(void)
 //	GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_USART1);
 ////usart3
 
-//	gpio.GPIO_Mode = GPIO_Mode_AF;
-//	gpio.GPIO_OType = GPIO_OType_PP;
-//	gpio.GPIO_Pin = GPIO_Pin_10| GPIO_Pin_11;
-//	gpio.GPIO_PuPd = GPIO_PuPd_UP;
-//	gpio.GPIO_Speed = GPIO_Speed_2MHz;
-//	GPIO_Init(GPIOC, &gpio);
-//	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_USART3);
-//	GPIO_PinAFConfig(GPIOC, GPIO_PinSource11, GPIO_AF_USART3);
+	gpio.GPIO_Mode = GPIO_Mode_AF;
+	gpio.GPIO_OType = GPIO_OType_PP;
+	gpio.GPIO_Pin = GPIO_Pin_10| GPIO_Pin_11;
+	gpio.GPIO_PuPd = GPIO_PuPd_UP;
+	gpio.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOC, &gpio);
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_USART3);
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource11, GPIO_AF_USART3);
 ////can1
 
 //	gpio.GPIO_Mode							= GPIO_Mode_AF;
@@ -74,8 +74,8 @@ void Bsp_GPIO_Init(void)
 	gpio.GPIO_Mode=SPIX_IRQ_MODE;
 //  gpio.GPIO_OType = SPIX_IRQ_OTYPE;
   gpio.GPIO_Pin = SPIX_IRQ_PIN;
-//  gpio.GPIO_PuPd = GPIO_PuPd_UP;
-  gpio.GPIO_Speed = GPIO_Speed_50MHz;
+  gpio.GPIO_PuPd = GPIO_PuPd_DOWN;
+//  gpio.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(SPIX_IRQ_GPIO,&gpio);
 #endif
 

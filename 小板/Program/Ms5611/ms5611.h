@@ -1,6 +1,6 @@
 #ifndef __MS5611_H__
 #define __MS5611_H__
-
+#include "stm32f4xx.h"
 #define MS5611_ADDR          	 0x77
 #define RESET          				 0x1E
 #define ADC_READ							 0x00
@@ -27,8 +27,10 @@ typedef struct
 
 typedef enum
 {
-	prepareADC,
-	readADC,
+	prepareTempADC,
+	readTempADC,
+	preparePressureADC,
+	readPressureADC,
 }Ms5611Status;
 
 
@@ -37,7 +39,7 @@ void Ms5611_Init(void);
 //uint8_t Ms5611_ReadBytes(SimIIC_Typedef *simiic,uint8_t *pbuffer,uint8_t len);
 //void Ms5611_Read(uint8_t reg,  uint8_t *pbuffer, uint8_t len);
 //uint8_t Ms5611_WriteByte(SimIIC_Typedef *simiic,uint8_t reg,uint8_t flag);
-uint8_t Ms5611_ReadD(uint8_t reg,uint32_t *trans);
+uint8_t Ms5611_ReadD(Ms5611Status *status,Ms5611DataDef *data);
 //uint8_t Ms5611_Reset(void);
 //uint8_t Ms5611_PromRead(SimIIC_Typedef *simiic,uint8_t reg,uint8_t Data);
 #endif

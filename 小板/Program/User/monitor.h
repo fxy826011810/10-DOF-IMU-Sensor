@@ -24,16 +24,16 @@ typedef struct System_Monitor_t
 	int16_t count;
 	int16_t time;
 	void(*upd)(struct System_Monitor_t *mon);
+	void(*rst)(struct System_Monitor_t *mon);
 }System_Monitor_t;
 
-extern System_Monitor_t ICM20602_Monitor;
+
 extern System_Monitor_t Imu_Int_Monitor;
-extern System_Monitor_t MAG_Monitor;
 extern System_Monitor_t System_Monitor;
 extern System_Monitor_t CanP_Monitor;
 extern System_Monitor_t CanY_Monitor;
 extern System_Monitor_t CanG_Monitor;
-
+void Monitor_Init(void);
 void Monitor_Calc(System_Monitor_t *mon);
 void Monitor_Update(void);
 #define Monitor_default \

@@ -234,10 +234,6 @@ uint8_t IIC_Read(SimIIC_Typedef *simiic, uint8_t reg,uint8_t *pbuffer, uint8_t l
 	{
 		return 1;
 	}
-//	if(simiic->writedataflag==0)
-//	{
-//		IIC_Stop(simiic);
-//	}
    IIC_Start(simiic);
    IIC_Send_Byte(simiic,(simiic->Addr << 1)+1); 
    if (IIC_Wait_Ack(simiic))

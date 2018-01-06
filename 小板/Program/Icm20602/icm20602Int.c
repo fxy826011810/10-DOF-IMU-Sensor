@@ -1,6 +1,7 @@
 #include "stm32f4xx.h"
 #include "icm20602Int.h"
 #include "config.h"
+#include "main.h"
 void Icm20602IntInit(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
@@ -16,12 +17,16 @@ void Icm20602IntInit(void)
 
 
 
-void EXTI3_IRQHandler(void)
+void Icm20602Int_IRQHandler(void)
 {
 	
-	if (EXTI_GetITStatus(EXTI_Line3) != 0)
+	if (EXTI_GetITStatus(EXTI_Line3)!= 0)
 	{
 		EXTI_ClearITPendingBit(EXTI_Line3);
 		EXTI_ClearFlag(EXTI_Line3);
+		#if USE_ICM20602
+		Icm20602_GetData(&cmd.Icm20602.Data);
+		cmd.Icm20602.monitor.time++;
+		#endif
 	}
 }

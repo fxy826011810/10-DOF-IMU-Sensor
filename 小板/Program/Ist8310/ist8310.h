@@ -30,5 +30,5 @@ void IST8310_ReadByte(uint8_t reg, uint8_t *pbuffer);
 void IST8310_Read(uint8_t reg,  uint8_t *pbuffer, uint8_t len);
 void IST8310_WriteByte(uint8_t reg, uint8_t pbuffer);
 void IST8310_GetData(magDatadef *m);
-uint8_t IST8310_GetIntData(void);
+uint8_t IST8310_GetIntData(uint8_t flag);
 #endif
