@@ -12,7 +12,7 @@ uint8_t Icm20602_init(void)
 															{ICM20602_INT_PIN_CFG,0x00},\
 															{ICM20602_INT_ENABLE,0x01},\
 															{ICM20602_PWR_MGMT_2,0x00},\
-															{ICM20602_SMPLRT_DIV,0x01},\
+															{ICM20602_SMPLRT_DIV,0x00},\
 															{ICM20602_GYRO_CONFIG,0x18},\
 															{ICM20602_ACCEL_CONFIG,0x08},\
 															{ICM20602_ACCEL_CONFIG_2,0x03},\
@@ -30,12 +30,51 @@ uint8_t Icm20602_init(void)
 	Icm20602_WriteByte(initdata[i][0],initdata[i][1]);//Õ”¬›“«÷ÿ∆Ù
 	delay_ms(100);
 }
-//	for(i=1;i<len;i++)
-//{
-//	Icm20602_ReadByte(initdata[i][0],&mpudata[i]);	
-//	delay_ms(1);
-//}
-Icm20602_ReadByte(0x56,&mpudata);
+	return 0;
+}
+
+#define calc_time 100
+uint8_t Icm20602_Calc(void)
+{
+	Icm20602Datadef offset;
+	uint8_t i;int16_t temp[6]={0};
+	for(i=0;i<calc_time;i++)
+	{
+		while(Icm20602_GetIntData())
+		{
+		Icm20602_GetData(&offset);
+//		temp[0]=offset.ax;
+//		temp[1]=offset.ay;
+//		temp[2]=offset.az;
+		temp[3]-=offset.gx;
+		temp[4]-=offset.gy;
+		temp[5]-=offset.gz;
+		}
+		delay_ms(10);
+	}
+	temp[3]/=calc_time/2;
+	temp[4]/=calc_time/2;
+	temp[5]/=calc_time/2;
+	if(temp[3]<100&&temp[4]<100&&temp[5]<100)
+	{
+		Icm20602_WriteByte(ICM20602_XG_OFFS_USRH,(uint8_t)(temp[3]>>8));
+		Icm20602_WriteByte(ICM20602_XG_OFFS_USRL,(uint8_t)(temp[3]&0xFF));
+		Icm20602_WriteByte(ICM20602_YG_OFFS_USRH,(uint8_t)(temp[4]>>8));
+		Icm20602_WriteByte(ICM20602_YG_OFFS_USRL,(uint8_t)(temp[4]&0xFF));
+		Icm20602_WriteByte(ICM20602_ZG_OFFS_USRH,(uint8_t)(temp[5]>>8));
+		Icm20602_WriteByte(ICM20602_ZG_OFFS_USRL,(uint8_t)(temp[5]&0xFF));
+	}
+
+}
+#define ICM20602LIMIT_MIN 3
+uint8_t Icm20602_DataLimit(Icm20602Datadef *data)
+{
+	if(data->gx<ICM20602LIMIT_MIN&&data->gx>(-ICM20602LIMIT_MIN))
+		data->gx=0;
+	if(data->gy<ICM20602LIMIT_MIN&&data->gy>(-ICM20602LIMIT_MIN))
+		data->gy=0;
+	if(data->gz<ICM20602LIMIT_MIN&&data->gz>(-ICM20602LIMIT_MIN))
+		data->gz=0;
 	return 0;
 }
 

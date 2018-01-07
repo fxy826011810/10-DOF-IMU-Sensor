@@ -2,6 +2,8 @@
 #include "ist8310.h"
 #include "config.h"
 #include "delay.h"
+#include "gpio.h"
+#include "main.h"
 #include "i2c.h" 
 
 void Ist8310_Init(void)
@@ -42,11 +44,20 @@ uint8_t IST8310_GetIntData(uint8_t flag)
 }
 void IST8310_GetMagData(uint8_t *data)
 {
+//	LED(0);
 	IST8310_Read(IST8310_R_XL,data,6);
+//	LED(1);
 	IST8310_WriteByte(IST8310_R_CONFA,IST8310_ODR_MODE);
+	
 }
-
-
+uint8_t IST8310_GetStatus(void)
+{
+	return cmd.Ist8310.status;
+}
+void IST8310_SetStatus(uint8_t x)
+{
+	cmd.Ist8310.status=x;
+}
 void IST8310_GetData(magDatadef *m)
 {
 	uint8_t data[6];

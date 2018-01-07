@@ -25,6 +25,7 @@ typedef struct System_Monitor_t
 	int16_t time;
 	void(*upd)(struct System_Monitor_t *mon);
 	void(*rst)(struct System_Monitor_t *mon);
+	void(*set)(struct System_Monitor_t *mon);
 }System_Monitor_t;
 
 
@@ -36,11 +37,15 @@ extern System_Monitor_t CanG_Monitor;
 void Monitor_Init(void);
 void Monitor_Calc(System_Monitor_t *mon);
 void Monitor_Update(void);
+void Monitor_Reset(System_Monitor_t *mon);
+void Monitor_Set(System_Monitor_t *mon);
 #define Monitor_default \
 {\
 	0,\
 	0,\
 	&Monitor_Calc,\
+	&Monitor_Reset,\
+	&Monitor_Set,\
 }
 
 #endif

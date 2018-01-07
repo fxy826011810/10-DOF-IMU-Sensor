@@ -42,7 +42,7 @@ void Bsp_NVIC_Init(void)
 	//tim6
 	nvic.NVIC_IRQChannel											= TIM6_DAC_IRQn;
 	nvic.NVIC_IRQChannelCmd										= ENABLE;
-	nvic.NVIC_IRQChannelPreemptionPriority		= 1;
+	nvic.NVIC_IRQChannelPreemptionPriority		= 0;
 	nvic.NVIC_IRQChannelSubPriority						= 3;
 	NVIC_Init(&nvic);
 //	

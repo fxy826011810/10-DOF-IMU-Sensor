@@ -91,6 +91,8 @@ typedef struct
 }Icm20602Datadef;
 
 uint8_t Icm20602_init(void);
+uint8_t Icm20602_Calc(void);
+uint8_t Icm20602_DataLimit(Icm20602Datadef *data);
 uint8_t Icm20602_GetIntData(void);
 void Icm20602_GetData(Icm20602Datadef *icmdata);
 #endif

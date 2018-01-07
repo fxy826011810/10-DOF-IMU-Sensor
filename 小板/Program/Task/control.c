@@ -6,16 +6,17 @@
 #include "gpio.h"
 void controlLoop(void)
 {
-		cmd.heart_t.heart++;
-	if(cmd.heart_t.heart%10==0)//初始化快闪正常0.5秒闪一次
+		cmd.heart++;
+	if(cmd.heart%10==0)//初始化快闪正常0.5秒闪一次
 	{
+#if USE_MS5611
 			Ms5611_ReadD(&cmd.Ms5611.Status,&cmd.Ms5611.Data);
-			cmd.Ms5611.monitor.time++;
+			cmd.Ms5611.monitor.set(&cmd.Ms5611.monitor);
+#endif
 	}
-		if(cmd.heart_t.heart%1000==0)//初始化快闪正常0.5秒闪一次
+		if(cmd.heart%1000==0)//初始化快闪正常0.5秒闪一次
 	{
 		Monitor_Update();
-		LED_HEAT();
 	}
 	#if USE_MS5611
 	

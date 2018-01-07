@@ -23,12 +23,15 @@ void Monitor_Reset(System_Monitor_t *mon)
 void Monitor_Init(void)
 {
 	cmd.Icm20602.monitor.rst=&Monitor_Reset;
+	cmd.Icm20602.monitor.set=&Monitor_Set;
 	cmd.Icm20602.monitor.rst(&cmd.Icm20602.monitor);
 	
 	cmd.Ist8310.monitor.rst=&Monitor_Reset;
+	cmd.Ist8310.monitor.set=&Monitor_Set;
 	cmd.Ist8310.monitor.rst(&cmd.Ist8310.monitor);
 	
 	cmd.Ms5611.monitor.rst=&Monitor_Reset;
+	cmd.Ms5611.monitor.set=&Monitor_Set;
 	cmd.Ms5611.monitor.rst(&cmd.Ms5611.monitor);
 }
 
@@ -38,6 +41,10 @@ void Monitor_Calc(System_Monitor_t *mon)
 {
 	mon->count=mon->time;
 	mon->time=0;
+}
+void Monitor_Set(System_Monitor_t *mon)
+{
+	mon->time++;
 }
 
 void Monitor_Update(void)

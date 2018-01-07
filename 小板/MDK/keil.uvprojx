@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40XX,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Program\Core;..\Program\Icm20602;..\Program\inc;..\Program\Ist8310;..\Program\Ms5611;..\Program\System;..\Program\User</IncludePath>
+              <IncludePath>..\Program\Core;..\Program\Icm20602;..\Program\inc;..\Program\Ist8310;..\Program\Ms5611;..\Program\System;..\Program\User;..\Program\Task</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -465,9 +465,19 @@
           <GroupName>Task</GroupName>
           <Files>
             <File>
+              <FileName>imu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Task\imu.c</FilePath>
+            </File>
+            <File>
               <FileName>control.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\User\control.c</FilePath>
+              <FilePath>..\Program\Task\control.c</FilePath>
+            </File>
+            <File>
+              <FileName>ahrs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Task\ahrs.c</FilePath>
             </File>
           </Files>
         </Group>

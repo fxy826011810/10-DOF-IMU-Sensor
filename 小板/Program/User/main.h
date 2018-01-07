@@ -6,15 +6,10 @@
 #include "ist8310.h"
 #include "ms5611.h"
 #include "monitor.h"
-
+#include "ahrs.h"
 typedef struct
 {
-	struct
-	{
 	uint32_t heart;
-	uint32_t last_heart;
-	uint16_t differ;
-	}heart_t;
 	struct 
 	{
 	Icm20602Datadef 		Data;
@@ -22,6 +17,7 @@ typedef struct
 	}Icm20602;
 	struct 
 	{
+		uint8_t						status;
 		magDatadef				Data;
 		System_Monitor_t 	monitor;	
 	}Ist8310;
@@ -31,7 +27,7 @@ typedef struct
 		Ms5611Status			Status;
 		System_Monitor_t 	monitor;
 	}Ms5611;
-	
+	ahrs_t ahrs;
 }cmd_t;
 
 extern cmd_t cmd;

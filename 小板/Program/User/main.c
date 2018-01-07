@@ -12,6 +12,7 @@
 #include "usart.h"
 #include "nvic.h"
 #include "gpio.h"
+#include "ahrs.h"
 #include "can.h"
 #include "dma.h"
 #include "tim.h"
@@ -26,6 +27,7 @@ uint32_t ms5611_temp;
 uint32_t ms5611_pressure;
 void system_init(void)
 {
+	AHRS_Init(&cmd.ahrs);
 	Monitor_Init();
   Bsp_NVIC_Init();
 	Bsp_GPIO_Init();
@@ -37,6 +39,8 @@ void system_init(void)
 #if	USE_ICM20602	
 	Bsp_Spi_Init();
 	Icm20602_init();
+	
+	Icm20602_Calc();
 	Icm20602IntInit();
 #endif	
 	
@@ -59,24 +63,23 @@ int main(void)
   system_init();//系统初始化
 	while (1)
 	{
-#if	USE_IST8310
-		if(IST8310_GetIntData(1))
-		{
-			__disable_irq();
-		IST8310_GetData(&cmd.Ist8310.Data);
-		cmd.Ist8310.monitor.time++;
-			__enable_irq();
-		}
-#endif
-		
-
-//		if(Icm20602_GetIntData())
+//				if(Icm20602_GetIntData())
 //		{
 //			__disable_irq();
 //		Icm20602_GetData(&cmd.Icm20602.Data);
 //		cmd.Icm20602.monitor.time++;
 //			__enable_irq();
 //		}
+#if	USE_IST8310
+		if(IST8310_GetIntData(1))
+		{
+			__disable_irq();
+		IST8310_GetData(&cmd.Ist8310.Data);
+		IST8310_SetStatus(1);
+		cmd.Ist8310.monitor.set(&cmd.Ist8310.monitor);
+			__enable_irq();
+		}
+#endif
 
 #if WHILE_DEBUG
 		LED_HEAT();

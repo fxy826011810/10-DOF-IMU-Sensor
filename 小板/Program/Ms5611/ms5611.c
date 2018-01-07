@@ -70,12 +70,9 @@ uint8_t Ms5611_ReadD(Ms5611Status *status,Ms5611DataDef *data)
 	
 	else if(*status==readPressureADC)
 	{
-//		readdata[0]=readdata[1]=readdata[2]=0;
 		Ms5611_Read(ADC_READ,ms5611Registerdata,3);
 		data->pressure=ms5611Registerdata[0]<<16|ms5611Registerdata[1]<<8|ms5611Registerdata[2];
 		*status=prepareTempADC;
-		
-//		cmd.Ms5611.monitor.time++;
 	}
 	if(*status==prepareTempADC)
 	{

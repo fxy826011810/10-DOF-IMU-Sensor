@@ -104,7 +104,7 @@ void Bsp_GPIO_Init(void)
 	ist8310IIC.scl_gpio_init.GPIO_OType = I2CI_SCL_OTYPE;
 	ist8310IIC.scl_gpio_init.GPIO_Pin = I2CI_SCL_PIN;
 	ist8310IIC.scl_gpio_init.GPIO_PuPd = GPIO_PuPd_DOWN;
-	ist8310IIC.scl_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
+	ist8310IIC.scl_gpio_init.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_Init(ist8310IIC.gpioScl, &ist8310IIC.scl_gpio_init);
 	//SDA
 	GPIO_StructInit(&ist8310IIC.sda_gpio_init);
@@ -113,7 +113,7 @@ void Bsp_GPIO_Init(void)
 	ist8310IIC.sda_gpio_init.GPIO_OType = I2CI_SDA_OTYPE;
 	ist8310IIC.sda_gpio_init.GPIO_Pin = I2CI_SDA_PIN;
 	ist8310IIC.sda_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
-	ist8310IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
+	ist8310IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_Init(ist8310IIC.gpioSda, &ist8310IIC.sda_gpio_init);
 #endif
 #if	USE_MS5611
