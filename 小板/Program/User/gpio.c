@@ -20,15 +20,15 @@ void Bsp_GPIO_Init(void)
 	GPIO_SetBits(GPIOC,GPIO_Pin_12);
 ////usart1
 
-//	gpio.GPIO_Mode = GPIO_Mode_AF;
-//	gpio.GPIO_OType = GPIO_OType_PP;
-//	gpio.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10;
-//	gpio.GPIO_PuPd = GPIO_PuPd_UP;
-//	gpio.GPIO_Speed = GPIO_Speed_2MHz;
-//	GPIO_Init(GPIOA, &gpio);
-//	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_USART1);
-//	GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_USART1);
-////usart3
+	gpio.GPIO_Mode = GPIO_Mode_AF;
+	gpio.GPIO_OType = GPIO_OType_PP;
+	gpio.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10;
+	gpio.GPIO_PuPd = GPIO_PuPd_UP;
+	gpio.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOA, &gpio);
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_USART1);
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_USART1);
+//usart3
 
 	gpio.GPIO_Mode = GPIO_Mode_AF;
 	gpio.GPIO_OType = GPIO_OType_PP;

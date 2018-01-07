@@ -74,11 +74,11 @@
 #define ICM20602_ZA_OFFSET_H								0x7D
 #define ICM20602_ZA_OFFSET_L								0x7E
 #define ICM20602_WHO_AM_I_CONST		(0X12)//WHO_AM_I±àÂë
-//Register 26 (0x80) CONFIG
-//Register 107 (0x41) Power Management 1
-//Register 117 (0x12) WHO_AM_I
 
-//#define	ICM20602_WHO_AM_I		         0x75	
+
+#define ICM20602LIMIT_MIN 3
+#define calc_time 100
+
 typedef struct 
 {
 	int16_t ax;
@@ -89,10 +89,21 @@ typedef struct
 	int16_t gy;
 	int16_t gz;
 }Icm20602Datadef;
-
+typedef enum
+{
+	PinInt,
+	SPIInt,
+	Lost,
+}Icm20602Status;
 uint8_t Icm20602_init(void);
 uint8_t Icm20602_Calc(void);
+void IMU_Filter(Icm20602Datadef *data,Icm20602Datadef *out);
 uint8_t Icm20602_DataLimit(Icm20602Datadef *data);
+
+void Icm20602_SetDataStatus(uint8_t x);
+uint8_t Icm20602_GetDataStatus(void);
+
 uint8_t Icm20602_GetIntData(void);
+
 void Icm20602_GetData(Icm20602Datadef *icmdata);
 #endif

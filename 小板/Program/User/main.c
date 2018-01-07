@@ -8,7 +8,7 @@
 #include "monitor.h" 
 #include "config.h"
 #include "delay.h"
-#include <stdio.h>
+#include "stdio.h"
 #include "usart.h"
 #include "nvic.h"
 #include "gpio.h"
@@ -20,7 +20,7 @@
 #include "main.h" 
 #include "spi.h"
 cmd_t cmd={0};
-char saychar[17];uint8_t testchar[]={"i loce you"};
+char saychar[17];uint8_t testchar[]={"I love you\r\n"};
 uint16_t saycharsize=0,i;
 
 uint32_t ms5611_temp;
@@ -63,20 +63,26 @@ int main(void)
   system_init();//系统初始化
 	while (1)
 	{
-//				if(Icm20602_GetIntData())
-//		{
-//			__disable_irq();
-//		Icm20602_GetData(&cmd.Icm20602.Data);
-//		cmd.Icm20602.monitor.time++;
-//			__enable_irq();
-//		}
+#if	USE_ICM20602
+		if(cmd.Icm20602.Status==SPIInt)
+		{
+				if(Icm20602_GetIntData())
+		{
+			__disable_irq();
+		Icm20602_GetData(&cmd.Icm20602.Data);
+		Icm20602_SetDataStatus(1);
+		cmd.Icm20602.monitor.set(&cmd.Icm20602.monitor);;
+			__enable_irq();
+		}
+		}
+#endif
 #if	USE_IST8310
 		if(IST8310_GetIntData(1))
 		{
 			__disable_irq();
-		IST8310_GetData(&cmd.Ist8310.Data);
-		IST8310_SetStatus(1);
-		cmd.Ist8310.monitor.set(&cmd.Ist8310.monitor);
+			IST8310_GetData(&cmd.Ist8310.Data);
+			IST8310_SetStatus(1);
+			cmd.Ist8310.monitor.set(&cmd.Ist8310.monitor);
 			__enable_irq();
 		}
 #endif

@@ -3,9 +3,11 @@
 #include "icm20602Dri.h"
 #include "config.h"
 #include "delay.h"
-
+#include "main.h"
 uint8_t Icm20602_init(void)
 {
+	cmd.Icm20602.Status=PinInt;
+	cmd.Icm20602.DataStatus=0;
 	uint8_t len=12;
 	uint8_t i,initdata[][2]={ {ICM20602_PWR_MGMT_1,0x80},\
 															{ICM20602_PWR_MGMT_1,0x01},\
@@ -32,8 +34,17 @@ uint8_t Icm20602_init(void)
 }
 	return 0;
 }
-
-#define calc_time 100
+void Icm20602_SetDataStatus(uint8_t x)
+{
+	if(x)
+	cmd.Icm20602.DataStatus=1;
+	else
+	cmd.Icm20602.DataStatus=0;
+}
+uint8_t Icm20602_GetDataStatus(void)
+{
+	return cmd.Icm20602.DataStatus;
+}
 uint8_t Icm20602_Calc(void)
 {
 	Icm20602Datadef offset;
@@ -66,7 +77,19 @@ uint8_t Icm20602_Calc(void)
 	}
 
 }
-#define ICM20602LIMIT_MIN 3
+
+#define Filter_time 5
+void IMU_Filter(Icm20602Datadef *data,Icm20602Datadef *out)
+{
+	out->ax=((Filter_time-1)*out->ax+data->ax)/Filter_time;
+	out->ay=((Filter_time-1)*out->ay+data->ay)/Filter_time;
+	out->az=((Filter_time-1)*out->az+data->az)/Filter_time;
+	out->gx=((Filter_time-1)*out->gx+data->gx)/Filter_time;
+	out->gy=((Filter_time-1)*out->gy+data->gy)/Filter_time;
+	out->gz=((Filter_time-1)*out->gz+data->gz)/Filter_time;
+	out->temp=((Filter_time-1)*out->temp+data->temp)/Filter_time;
+}
+
 uint8_t Icm20602_DataLimit(Icm20602Datadef *data)
 {
 	if(data->gx<ICM20602LIMIT_MIN&&data->gx>(-ICM20602LIMIT_MIN))

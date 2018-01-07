@@ -24,6 +24,6 @@ void Icm20602Int_IRQHandler(void)
 	{
 		EXTI_ClearITPendingBit(EXTI_Line3);
 		EXTI_ClearFlag(EXTI_Line3);
-		Imu_Update();
+		ICM20602_Update();
 	}
 }

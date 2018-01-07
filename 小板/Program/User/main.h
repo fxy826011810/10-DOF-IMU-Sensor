@@ -12,7 +12,10 @@ typedef struct
 	uint32_t heart;
 	struct 
 	{
+	uint8_t							DataStatus;
+	Icm20602Datadef			original;
 	Icm20602Datadef 		Data;
+	Icm20602Status			Status;
 	System_Monitor_t 		monitor;	
 	}Icm20602;
 	struct 
