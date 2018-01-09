@@ -7,6 +7,7 @@ typedef union
     float F;
     int I;
 }FormatTrans;
+
 extern FormatTrans FT;
 
 #define VAL_LIMIT(val, min, max)\

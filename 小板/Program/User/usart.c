@@ -1,6 +1,7 @@
 #include "stm32f4xx.h"
 #include <stdio.h>
 #include "usart.h"
+#include "monitor.h"
 int fputc(int ch,FILE*f)//printf函数重定义
 {
 	USART_SendData(USART3,(unsigned char)ch);
@@ -49,7 +50,7 @@ void Bsp_Usart_Init(void)
 #define BYTE1(dwTemp)       ( *( (char *)(&dwTemp) + 1) )
 #define BYTE2(dwTemp)       ( *( (char *)(&dwTemp) + 2) )
 #define BYTE3(dwTemp)       ( *( (char *)(&dwTemp) + 3) )
-char data_to_send[50];	//发送数据缓存
+uint8_t data_to_send[50];	//发送数据缓存
 void usart3_dma_upgrade(uint8_t* data,u8 len)
 {
 		if(DMA1_Stream3->NDTR)
@@ -89,6 +90,150 @@ void Usart_DMASend(USART_TypeDef* USARTx,uint8_t *send,uint8_t len)//各种数据
 		usart1_dma_upgrade(send, len);
 	}
 }
+
+
+void Usart_Send_Status(USART_TypeDef* USARTx,float angle_rol, float angle_pit, float angle_yaw, s32 alt, u8 fly_model, u8 armed)//上位机接收的
+{
+	u8 _cnt=0;
+	vs16 _temp;
+	vs32 _temp2 = alt;
+
+	data_to_send[_cnt++]=0xAA;
+	data_to_send[_cnt++]=0xAA;
+	data_to_send[_cnt++]=0x01;
+	data_to_send[_cnt++]=0;
+	
+	_temp = (int)(angle_rol*100);
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = (int)(angle_pit*100);
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = (int)(angle_yaw*100);
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	
+	data_to_send[_cnt++]=BYTE3(_temp2);
+	data_to_send[_cnt++]=BYTE2(_temp2);
+	data_to_send[_cnt++]=BYTE1(_temp2);
+	data_to_send[_cnt++]=BYTE0(_temp2);
+	
+	data_to_send[_cnt++] = fly_model;
+	
+	data_to_send[_cnt++] = armed;
+	
+	data_to_send[3] = _cnt-4;
+	
+	u8 sum = 0;
+	for(u8 i=0;i<_cnt;i++)
+		sum += data_to_send[i];
+	data_to_send[_cnt++]=sum;
+	if(USARTx==USART1)
+	{
+	usart1_dma_upgrade(data_to_send, _cnt);
+	}
+	else if(USARTx==USART3)
+	{
+		usart3_dma_upgrade(data_to_send, _cnt);
+	}
+}
+
+
+void Usart_Send_Angle(USART_TypeDef* USARTx,float angle_rol, float angle_pit, float angle_yaw)//上位机接收的
+{
+	u8 _cnt=0;
+	vs16 _temp;
+
+	
+	data_to_send[_cnt++]=0xAA;
+	
+	FT.F=angle_rol;
+	data_to_send[_cnt++]=FT.U[0];
+	data_to_send[_cnt++]=FT.U[1];
+	data_to_send[_cnt++]=FT.U[2];
+	data_to_send[_cnt++]=FT.U[3];
+	
+	FT.F=angle_pit;
+	data_to_send[_cnt++]=FT.U[0];
+	data_to_send[_cnt++]=FT.U[1];
+	data_to_send[_cnt++]=FT.U[2];
+	data_to_send[_cnt++]=FT.U[3];
+	
+	FT.F=angle_yaw;
+	data_to_send[_cnt++]=FT.U[0];
+	data_to_send[_cnt++]=FT.U[1];
+	data_to_send[_cnt++]=FT.U[2];
+	data_to_send[_cnt++]=FT.U[3];
+	data_to_send[_cnt++]=0;
+	data_to_send[_cnt++]=0xBB;
+	if(USARTx==USART1)
+	{
+	usart1_dma_upgrade(data_to_send, _cnt);
+	}
+	else if(USARTx==USART3)
+	{
+		usart3_dma_upgrade(data_to_send, _cnt);
+	}
+}
+
+
+void Usart_Send_Senser(USART_TypeDef* USARTx,s16 a_x,s16 a_y,s16 a_z,s16 g_x,s16 g_y,s16 g_z,s16 m_x,s16 m_y,s16 m_z,s32 bar)//各种数据
+{
+	u8 _cnt=0;
+	vs16 _temp;
+	
+	data_to_send[_cnt++]=0xAA;
+	data_to_send[_cnt++]=0xAA;
+	data_to_send[_cnt++]=0x02;
+	data_to_send[_cnt++]=0;
+	
+	_temp = a_x;
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = a_y;
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = a_z;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	
+	_temp = g_x;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = g_y;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = g_z;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	
+	_temp = m_x;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = m_y;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = m_z;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+
+	data_to_send[3] = _cnt-4;
+	
+	u8 sum = 0;
+	for(u8 i=0;i<_cnt;i++)
+	sum += data_to_send[i];
+	data_to_send[_cnt++] = sum;
+	if(USARTx==USART1)
+	{
+	usart1_dma_upgrade(data_to_send, _cnt);
+	}
+	else if(USARTx==USART3)
+	{
+		usart3_dma_upgrade(data_to_send, _cnt);
+	}
+}
+
+
 
 void USART1_IRQHandler(void)//接收遥控器值
 {

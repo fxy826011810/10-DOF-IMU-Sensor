@@ -18,6 +18,7 @@ float invSqrt(float x)
 
 void AHRS_Init(ahrs_t *ahrs)
 {
+	ahrs->DataStatus=0;
 	ahrs->q[0]=1.0f;
 	ahrs->q[1]=0.0f;
 	ahrs->q[2]=0.0f;
@@ -134,8 +135,8 @@ void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
     ax = (float)imu->ax/16534*9.8f;
     ay = (float)imu->ay/16534*9.8f;
     az = (float)imu->az/16534*9.8f;
-    mx = (float)m->mx;
-    my = (float)m->my;
+    mx = (float)m->my;
+    my = -(float)m->mx;
     mz = (float)m->mz;		
 		
     now = Get_Time_Micros();  //读取时间 单位是us   

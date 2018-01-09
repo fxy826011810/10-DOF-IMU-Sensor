@@ -69,7 +69,12 @@ int main(void)
 				if(Icm20602_GetIntData())
 		{
 			__disable_irq();
-		Icm20602_GetData(&cmd.Icm20602.Data);
+		Icm20602_GetData(&cmd.Icm20602.original);
+		IMU_Filter(&cmd.Icm20602.original,&cmd.Icm20602.Data);
+			
+//		Icm20602_GetData(&cmd.Icm20602.Data);
+			
+		Icm20602_DataLimit(&cmd.Icm20602.Data);
 		Icm20602_SetDataStatus(1);
 		cmd.Icm20602.monitor.set(&cmd.Icm20602.monitor);;
 			__enable_irq();
