@@ -164,7 +164,7 @@ void Usart_Send_Angle(USART_TypeDef* USARTx,float angle_rol, float angle_pit, fl
 	data_to_send[_cnt++]=FT.U[1];
 	data_to_send[_cnt++]=FT.U[2];
 	data_to_send[_cnt++]=FT.U[3];
-	data_to_send[_cnt++]=0;
+	data_to_send[_cnt++]=2;
 	data_to_send[_cnt++]=0xBB;
 	if(USARTx==USART1)
 	{
