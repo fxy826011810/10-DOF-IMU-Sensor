@@ -1,0 +1,9 @@
+<map id="Icm20690 driver" name="Icm20690 driver">
+<area shape="rect" id="node1" href="$a00140.html" title="Low&#45;level function to control a Icm20690 device. " alt="" coords="299,5,419,35"/>
+<area shape="rect" id="node2" href="$a00141.html" title="Interface for low&#45;level serial (I2C/SPI) access. " alt="" coords="289,59,428,88"/>
+<area shape="rect" id="node3" href="$a00138.html" title="Low&#45;level Icm20690 aux sensor access. " alt="" coords="277,111,440,158"/>
+<area shape="rect" id="node4" href="$a00144.html" title="Low&#45;level drivers for InvenSense devices. " alt="" coords="5,151,67,180"/>
+<area shape="rect" id="node5" href="$a00142.html" title="Low&#45;level function to setup an Icm20690 device. " alt="" coords="285,181,432,211"/>
+<area shape="rect" id="node6" href="$a00143.html" title="Low&#45;level Icm20690 register access. " alt="" coords="276,235,441,264"/>
+<area shape="rect" id="node7" href="$a00139.html" title="Low&#45;level Icm20690 secondary interface access. " alt="" coords="288,287,429,334"/>
+</map>

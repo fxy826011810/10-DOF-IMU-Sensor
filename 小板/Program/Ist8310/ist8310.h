@@ -18,6 +18,30 @@
 #define IST8310_PDCNTL            0x42
 
 #define IST8310_ODR_MODE          0x01
+
+/*---IST8310 cross-axis matrix Address-----------------danny-----*/
+#define IST8310_REG_XX_CROSS_L       0x9C   //cross axis xx low byte
+#define IST8310_REG_XX_CROSS_H       0x9D   //cross axis xx high byte
+#define IST8310_REG_XY_CROSS_L       0x9E   //cross axis xy low byte
+#define IST8310_REG_XY_CROSS_H       0x9F   //cross axis xy high byte
+#define IST8310_REG_XZ_CROSS_L       0xA0   //cross axis xz low byte
+#define IST8310_REG_XZ_CROSS_H       0xA1   //cross axis xz high byte
+
+#define IST8310_REG_YX_CROSS_L       0xA2   //cross axis yx low byte
+#define IST8310_REG_YX_CROSS_H       0xA3   //cross axis yx high byte
+#define IST8310_REG_YY_CROSS_L       0xA4   //cross axis yy low byte
+#define IST8310_REG_YY_CROSS_H       0xA5   //cross axis yy high byte
+#define IST8310_REG_YZ_CROSS_L       0xA6   //cross axis yz low byte
+#define IST8310_REG_YZ_CROSS_H       0xA7   //cross axis yz high byte
+
+#define IST8310_REG_ZX_CROSS_L       0xA8   //cross axis zx low byte
+#define IST8310_REG_ZX_CROSS_H       0xA9   //cross axis zx high byte
+#define IST8310_REG_ZY_CROSS_L       0xAA   //cross axis zy low byte
+#define IST8310_REG_ZY_CROSS_H       0xAB   //cross axis zy high byte
+#define IST8310_REG_ZZ_CROSS_L       0xAC   //cross axis zz low byte
+#define IST8310_REG_ZZ_CROSS_H       0xAD   //cross axis zz high byte
+
+
 typedef struct 
 {
 	int16_t mx;
@@ -25,9 +49,6 @@ typedef struct
 	int16_t mz;
 }magDatadef;
 void Ist8310_Init(void);
-void IST8310_ReadByte(uint8_t reg, uint8_t *pbuffer);
-void IST8310_Read(uint8_t reg,  uint8_t *pbuffer, uint8_t len);
-void IST8310_WriteByte(uint8_t reg, uint8_t pbuffer);
 void IST8310_GetData(magDatadef *m);
 void IST8310_SetStatus(uint8_t x);
 uint8_t IST8310_GetStatus(void);

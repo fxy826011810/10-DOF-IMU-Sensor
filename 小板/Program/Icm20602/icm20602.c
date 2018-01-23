@@ -78,7 +78,7 @@ uint8_t Icm20602_Calc(void)
 
 }
 
-#define Filter_time 5
+#define Filter_time 200
 void IMU_Filter(Icm20602Datadef *data,Icm20602Datadef *out)
 {
 	out->ax=((Filter_time-1)*out->ax+data->ax)/Filter_time;

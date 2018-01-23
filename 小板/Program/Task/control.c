@@ -3,7 +3,6 @@
 #include "control.h"
 #include "config.h"
 #include "main.h"
-#include "gpio.h"
 #include "usart.h"
 void controlLoop(void)
 {

@@ -1,0 +1,5 @@
+<map id="inv_device" name="inv_device">
+<area shape="rect" id="node2" href="$a00025.html" title="Device virtual table definition. " alt="" coords="5,101,101,131"/>
+<area shape="rect" id="node4" href="$a00060.html" title="Sensor event listener definition. " alt="" coords="125,101,256,131"/>
+<area shape="rect" id="node6" href="$a00059.html" title="Sensor event definition. " alt="" coords="131,5,251,35"/>
+</map>

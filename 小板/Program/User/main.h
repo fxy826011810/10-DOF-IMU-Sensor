@@ -7,6 +7,11 @@
 #include "ms5611.h"
 #include "monitor.h"
 #include "ahrs.h"
+
+
+#define	LED_HEAT() GPIOC->ODR^=GPIO_Pin_12
+#define LED(x)	x ? GPIO_SetBits(GPIOC,GPIO_Pin_12):GPIO_ResetBits(GPIOC,GPIO_Pin_12)
+
 typedef struct
 {
 	uint32_t heart;

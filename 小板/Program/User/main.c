@@ -20,8 +20,6 @@
 #include "main.h" 
 #include "spi.h"
 cmd_t cmd={0};
-char saychar[17];uint8_t testchar[]={"I love you\r\n"};
-uint16_t saycharsize=0,i;
 
 uint32_t ms5611_temp;
 uint32_t ms5611_pressure;
@@ -33,7 +31,7 @@ void system_init(void)
 	Bsp_GPIO_Init();
 	Bsp_DMA_Init();
 	Bsp_Usart_Init();
-//	Bsp_IIC_Init();
+
 	delay_ms(1000);
 
 #if	USE_ICM20602	
@@ -69,11 +67,12 @@ int main(void)
 				if(Icm20602_GetIntData())
 		{
 			__disable_irq();
-		Icm20602_GetData(&cmd.Icm20602.original);
-		IMU_Filter(&cmd.Icm20602.original,&cmd.Icm20602.Data);
-			
-//		Icm20602_GetData(&cmd.Icm20602.Data);
-			
+			{
+				Icm20602_GetData(&cmd.Icm20602.original);
+				IMU_Filter(&cmd.Icm20602.original,&cmd.Icm20602.Data);
+					
+		//		Icm20602_GetData(&cmd.Icm20602.Data);
+			}
 		Icm20602_DataLimit(&cmd.Icm20602.Data);
 		Icm20602_SetDataStatus(1);
 		cmd.Icm20602.monitor.set(&cmd.Icm20602.monitor);;

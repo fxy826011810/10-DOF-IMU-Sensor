@@ -31,8 +31,8 @@ void AHRS_Init(ahrs_t *ahrs)
 	ahrs->kp[0]=2.0f;
 	ahrs->ki[0]=0.0000001f;
 	
-	ahrs->kp[1]=200.0f;
-	ahrs->ki[1]=0.0001f;
+	ahrs->kp[1]=2.0f;
+	ahrs->ki[1]=0.001f;
 }
 
 
@@ -106,10 +106,11 @@ void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs)
     ahrs->q[1] = tempq1 * norm;
     ahrs->q[2] = tempq2 * norm;
     ahrs->q[3] = tempq3 * norm;
-		ahrs->angle[0] = -atan2	(	2 * ahrs->q[1] * ahrs->q[2] + 2 * ahrs->q[0] * ahrs->q[3], -2 * ahrs->q[2] * ahrs->q[2] - 2 * ahrs->q[3] * ahrs->q[3] + 1) * 180 / M_PI; // yaw        -pi----pi
-		ahrs->angle[1] = -asin	(-2 * ahrs->q[1] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[2]) * 180 / M_PI; // pitch    -pi/2    --- pi/2 
+		ahrs->angle[0] = 	-atan2	(	2 * ahrs->q[1] * ahrs->q[2] + 2 * ahrs->q[0] * ahrs->q[3], -2 * ahrs->q[2] * ahrs->q[2] - 2 * ahrs->q[3] * ahrs->q[3] + 1) * 180 / M_PI; // yaw        -pi----pi
+		ahrs->angle[1] = 	-asin	(-2 * ahrs->q[1] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[2]) * 180 / M_PI; // pitch    -pi/2    --- pi/2 
 		ahrs->angle[2] = 	atan2	(	2 * ahrs->q[2] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[1], -2 * ahrs->q[1] * ahrs->q[1] - 2 * ahrs->q[2] * ahrs->q[2] + 1) * 180 / M_PI; // roll       -pi-----pi  
 	}
+	int8_t a=1,b=1,c=1;
 void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs) 
 	{
 		float norm;
@@ -132,12 +133,12 @@ void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
     gx = (float)imu->gx*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
     gy = (float)imu->gy*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
     gz = (float)imu->gz*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
-    ax = (float)imu->ax/16534*9.8f;
-    ay = (float)imu->ay/16534*9.8f;
-    az = (float)imu->az/16534*9.8f;
-    mx = (float)m->my;
-    my = -(float)m->mx;
-    mz = (float)m->mz;		
+    ax = (float)imu->ax/8192*9.8f;
+    ay = (float)imu->ay/8192*9.8f;
+    az = (float)imu->az/8192*9.8f;
+    mx = (float)m->my*a;
+    my = (float)m->mx*b;
+    mz = (float)m->mz*c;		
 		
     now = Get_Time_Micros();  //读取时间 单位是us   
 		if(now>=lastUpdate)	

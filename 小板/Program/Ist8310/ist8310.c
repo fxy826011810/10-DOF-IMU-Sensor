@@ -1,11 +1,20 @@
+#include "ist8310Dri.h"
 #include "stm32f4xx.h"
 #include "ist8310.h"
 #include "config.h"
 #include "delay.h"
-#include "gpio.h"
+//#include "gpio.h"
 #include "main.h"
 #include "i2c.h" 
-
+uint8_t crossxbuf[6];
+uint8_t crossybuf[6];
+uint8_t crosszbuf[6];
+void IST8310_GetCrossaxisData(void)
+{
+	IST8310_Read(IST8310_REG_XX_CROSS_L,crossxbuf,6);
+	IST8310_Read(IST8310_REG_YX_CROSS_L,crossybuf,6);
+	IST8310_Read(IST8310_REG_ZX_CROSS_L,crosszbuf,6);
+}
 void Ist8310_Init(void)
 {
 	ist8310IIC.writedataflag=1;
@@ -28,6 +37,7 @@ void Ist8310_Init(void)
 	delay_ms(10);
 	IST8310_WriteByte(IST8310_R_CONFA,IST8310_ODR_MODE);
 	delay_ms(10);
+	IST8310_GetCrossaxisData();
 	
 }
 uint8_t IST8310_GetIntData(uint8_t flag)
@@ -67,17 +77,8 @@ void IST8310_GetData(magDatadef *m)
 	m->mz=data[5]<<8|data[4];
 }
 
-void IST8310_ReadByte(uint8_t reg, uint8_t *pbuffer)
-{
-	ist8310IIC.ReadByte(&ist8310IIC,reg,pbuffer);
-}
 
-void IST8310_Read(uint8_t reg,  uint8_t *pbuffer, uint8_t len)
-{
-	ist8310IIC.ReadBytes(&ist8310IIC,reg,pbuffer,len);
-}
-void IST8310_WriteByte(uint8_t reg, uint8_t pbuffer)
-{
-	ist8310IIC.WriteByte(&ist8310IIC,reg,pbuffer);
-}
+
+
+
 

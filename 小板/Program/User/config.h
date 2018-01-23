@@ -1,7 +1,7 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-
+#include "stm32f4xx.h" 
 #define WHILE_DEBUG   0					//主循环调试
 #define TIM_DEBUG			0					//tim循环
 #define USE_TIM				1 				//使用tim

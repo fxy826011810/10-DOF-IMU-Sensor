@@ -565,6 +565,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\Ist8310\ist8310.c</FilePath>
             </File>
+            <File>
+              <FileName>ist8310Dri.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Ist8310\ist8310Dri.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -574,6 +579,11 @@
               <FileName>ms5611.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\Ms5611\ms5611.c</FilePath>
+            </File>
+            <File>
+              <FileName>ms5611Dri.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Ms5611\ms5611Dri.c</FilePath>
             </File>
           </Files>
         </Group>

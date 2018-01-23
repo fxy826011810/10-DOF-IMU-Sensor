@@ -1,0 +1,6 @@
+<map id="inv_icm20602" name="inv_icm20602">
+<area shape="rect" id="node2" href="$a00031.html" title="secondary device support " alt="" coords="317,14,504,61"/>
+<area shape="rect" id="node4" href="$a00030.html" title="secondary register mapping " alt="" coords="5,5,224,69"/>
+<area shape="rect" id="node6" href="$a00033.html" title="icm20602 internal state structure " alt="" coords="317,83,504,130"/>
+<area shape="rect" id="node8" href="$a00032.html" title="basesensor serial interface " alt="" coords="345,157,476,187"/>
+</map>

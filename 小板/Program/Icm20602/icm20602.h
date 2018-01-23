@@ -76,7 +76,7 @@
 #define ICM20602_WHO_AM_I_CONST		(0X12)//WHO_AM_I±àÂë
 
 
-#define ICM20602LIMIT_MIN 3
+#define ICM20602LIMIT_MIN 2
 #define calc_time 100
 
 typedef struct 

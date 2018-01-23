@@ -21,6 +21,7 @@
 
 typedef struct 
 {
+	uint16_t prom[8];
 	uint32_t temp;
 	uint32_t pressure;
 }Ms5611DataDef;
@@ -36,10 +37,7 @@ typedef enum
 
 
 void Ms5611_Init(void);
-//uint8_t Ms5611_ReadBytes(SimIIC_Typedef *simiic,uint8_t *pbuffer,uint8_t len);
-//void Ms5611_Read(uint8_t reg,  uint8_t *pbuffer, uint8_t len);
-//uint8_t Ms5611_WriteByte(SimIIC_Typedef *simiic,uint8_t reg,uint8_t flag);
 uint8_t Ms5611_ReadD(Ms5611Status *status,Ms5611DataDef *data);
-//uint8_t Ms5611_Reset(void);
-//uint8_t Ms5611_PromRead(SimIIC_Typedef *simiic,uint8_t reg,uint8_t Data);
+uint8_t Ms5611_Reset(void);
+
 #endif
