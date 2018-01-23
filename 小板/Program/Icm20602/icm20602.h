@@ -76,8 +76,7 @@
 #define ICM20602_WHO_AM_I_CONST		(0X12)//WHO_AM_I±àÂë
 
 
-#define ICM20602LIMIT_MIN 2
-#define calc_time 100
+
 
 typedef struct 
 {
@@ -95,15 +94,22 @@ typedef enum
 	SPIInt,
 	Lost,
 }Icm20602Status;
+
 uint8_t Icm20602_init(void);
 uint8_t Icm20602_Calc(void);
-void IMU_Filter(Icm20602Datadef *data,Icm20602Datadef *out);
+void ICM20602_DataUpdate(void);
+
 uint8_t Icm20602_DataLimit(Icm20602Datadef *data);
+void Icm20602_GetData(Icm20602Datadef *icmdata);
+
+void Icm20602DataFilter(Icm20602Datadef *data,Icm20602Datadef *out);
+
+uint8_t Icm20602_GetIntStatus(void);
 
 void Icm20602_SetDataStatus(uint8_t x);
 uint8_t Icm20602_GetDataStatus(void);
 
-uint8_t Icm20602_GetIntData(void);
+Icm20602Status Icm20602_GetStatus(void);
+void Icm20602_SetStatus(Icm20602Status x);
 
-void Icm20602_GetData(Icm20602Datadef *icmdata);
 #endif

@@ -8,9 +8,14 @@ float q[4];
 float angle[3];
 float kp[2];
 float ki[2];
-uint8_t DataStatus;
+uint8_t dataStatus;
 }ahrs_t;
 void AHRS_Init(ahrs_t *ahrs);
-void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs);
-void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs);
+void AHRS_Update(void);
+
+uint8_t AHRS_GetDataStatus(void);
+void AHRS_SetDataStatus(uint8_t x);
+
+//void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs);
+//void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs);
 #endif

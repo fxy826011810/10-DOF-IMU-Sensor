@@ -17,16 +17,26 @@ typedef struct
 	uint32_t heart;
 	struct 
 	{
-	uint8_t							DataStatus;
-	Icm20602Datadef			original;
-	Icm20602Datadef 		Data;
-	Icm20602Status			Status;
+	uint8_t							dataStatus;
+		struct
+		{
+			Icm20602Datadef			original;
+			Icm20602Datadef 		calc;
+		}Data;
+	
+	Icm20602Status			status;
 	System_Monitor_t 		monitor;	
 	}Icm20602;
 	struct 
 	{
+		float Crossaxis[9];
 		uint8_t						status;
-		magDatadef				Data;
+		uint8_t						dataStatus;
+		struct
+		{
+			magDatadef				original;
+			magDatadef				calc;
+		}Data;
 		System_Monitor_t 	monitor;	
 	}Ist8310;
 	struct 

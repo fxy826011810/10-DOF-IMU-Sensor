@@ -50,7 +50,13 @@ typedef struct
 }magDatadef;
 void Ist8310_Init(void);
 void IST8310_GetData(magDatadef *m);
+void Ist8310_CrossaxisTransformation(float crossaxis_inv[9],magDatadef *m,magDatadef *o);
+void Ist8310_DataUpdate(void);
+
 void IST8310_SetStatus(uint8_t x);
 uint8_t IST8310_GetStatus(void);
-uint8_t IST8310_GetIntData(uint8_t flag);
+void IST8310_SetDataStatus(uint8_t x);
+uint8_t IST8310_GetDataStatus(void);
+
+uint8_t IST8310_GetIntStatus(uint8_t flag);
 #endif

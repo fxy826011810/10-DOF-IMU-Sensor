@@ -37,7 +37,6 @@ typedef enum
 
 
 void Ms5611_Init(void);
-uint8_t Ms5611_ReadD(Ms5611Status *status,Ms5611DataDef *data);
-uint8_t Ms5611_Reset(void);
+void Ms5611_DataUpdate(void);
 
 #endif

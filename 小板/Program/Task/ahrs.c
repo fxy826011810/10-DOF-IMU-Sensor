@@ -3,7 +3,7 @@
 #include "ist8310.h"
 #include "math.h"
 #include "tim.h"
-
+#include "main.h"
 
 float invSqrt(float x) 
 {
@@ -18,7 +18,7 @@ float invSqrt(float x)
 
 void AHRS_Init(ahrs_t *ahrs)
 {
-	ahrs->DataStatus=0;
+	ahrs->dataStatus=0;
 	ahrs->q[0]=1.0f;
 	ahrs->q[1]=0.0f;
 	ahrs->q[2]=0.0f;
@@ -32,15 +32,15 @@ void AHRS_Init(ahrs_t *ahrs)
 	ahrs->ki[0]=0.0000001f;
 	
 	ahrs->kp[1]=2.0f;
-	ahrs->ki[1]=0.001f;
+	ahrs->ki[1]=0.0000001f;
 }
 
 
 #define M_PI (float)3.1415926535
 uint32_t lastUpdate, now; // 采样周期计数 单位 us 
 float exInt, eyInt, ezInt;  // 误差积分
-void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs) 
-	{
+static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs) 
+{
 		float norm;
     float vx, vy, vz;//vxyz为重力坐标系转到机体坐标系的分量
     float ex, ey, ez;//重力转换分量和加速度计各轴的分量做叉积作为误差
@@ -109,10 +109,10 @@ void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs)
 		ahrs->angle[0] = 	-atan2	(	2 * ahrs->q[1] * ahrs->q[2] + 2 * ahrs->q[0] * ahrs->q[3], -2 * ahrs->q[2] * ahrs->q[2] - 2 * ahrs->q[3] * ahrs->q[3] + 1) * 180 / M_PI; // yaw        -pi----pi
 		ahrs->angle[1] = 	-asin	(-2 * ahrs->q[1] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[2]) * 180 / M_PI; // pitch    -pi/2    --- pi/2 
 		ahrs->angle[2] = 	atan2	(	2 * ahrs->q[2] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[1], -2 * ahrs->q[1] * ahrs->q[1] - 2 * ahrs->q[2] * ahrs->q[2] + 1) * 180 / M_PI; // roll       -pi-----pi  
-	}
-	int8_t a=1,b=1,c=1;
-void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs) 
-	{
+}
+int8_t a=1,b=1,c=1;
+static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs) 
+{
 		float norm;
     float hx, hy, hz, bx, bz;//hxyz为地坐标系转到机体坐标系的各个分量
     float vx, vy, vz, wx, wy, wz;//vxyz为重力坐标系转到机体坐标系的分量
@@ -200,4 +200,30 @@ void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
 		ahrs->angle[0] = -atan2(2 * ahrs->q[1] * ahrs->q[2] + 2 * ahrs->q[0] * ahrs->q[3], -2 * ahrs->q[2] * ahrs->q[2] - 2 * ahrs->q[3] * ahrs->q[3] + 1) * 180 / M_PI; // yaw        -pi----pi
 		ahrs->angle[1] = -asin(-2 * ahrs->q[1] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[2]) * 180 / M_PI; // pitch    -pi/2    --- pi/2 
 		ahrs->angle[2] = atan2(2 * ahrs->q[2] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[1], -2 * ahrs->q[1] * ahrs->q[1] - 2 * ahrs->q[2] * ahrs->q[2] + 1) * 180 / M_PI; // roll       -pi-----pi  
+}
+	
+void AHRS_Update(void)
+{
+	if(IST8310_GetStatus()==1&&IST8310_GetDataStatus()==1&&Icm20602_GetDataStatus()==1&&Icm20602_GetStatus()!=Lost)
+	{
+		_9AxisAHRSupdate(&cmd.Icm20602.Data.calc,&cmd.Ist8310.Data.calc,&cmd.ahrs);
+		Icm20602_SetDataStatus(0);
+		IST8310_SetDataStatus(0);
+		AHRS_SetDataStatus(1);
 	}
+	else if(Icm20602_GetDataStatus()==1&&IST8310_GetDataStatus()==0&&Icm20602_GetStatus()!=Lost)
+	{
+		_6AxisAHRSupdate(&cmd.Icm20602.Data.calc,&cmd.ahrs);
+		Icm20602_SetDataStatus(0);
+		AHRS_SetDataStatus(1);
+	}
+}	
+	
+uint8_t AHRS_GetDataStatus(void)
+{
+	return cmd.ahrs.dataStatus;
+}
+void AHRS_SetDataStatus(uint8_t x)
+{
+	cmd.ahrs.dataStatus=x;
+}

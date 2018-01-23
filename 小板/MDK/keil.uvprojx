@@ -460,6 +460,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\System\system_stm32f4xx.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Program\System\stm32f4xx_conf.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -534,6 +539,11 @@
               <FileName>dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\User\dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\User\common.c</FilePath>
             </File>
           </Files>
         </Group>

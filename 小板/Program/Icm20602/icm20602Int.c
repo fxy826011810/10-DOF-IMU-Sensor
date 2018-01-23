@@ -1,5 +1,6 @@
 #include "stm32f4xx.h"
 #include "icm20602Int.h"
+#include "icm20602.h"
 #include "main.h"
 #include "imu.h"
 void Icm20602IntInit(void)
@@ -24,6 +25,13 @@ void Icm20602Int_IRQHandler(void)
 	{
 		EXTI_ClearITPendingBit(EXTI_Line3);
 		EXTI_ClearFlag(EXTI_Line3);
-		ICM20602_Update();
+		
+#if USE_ICM20602
+		cmd.Icm20602.status=PinInt;
+		if(Icm20602_GetStatus()==PinInt)
+		{
+			ICM20602_DataUpdate();
+		}	
+#endif
 	}
 }
