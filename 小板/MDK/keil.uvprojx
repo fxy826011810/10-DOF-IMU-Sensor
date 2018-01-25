@@ -545,6 +545,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\User\common.c</FilePath>
             </File>
+            <File>
+              <FileName>kalman.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\User\kalman.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

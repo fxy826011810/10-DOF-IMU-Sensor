@@ -1,15 +1,11 @@
 #include "stm32f4xx.h"
-
 #include "icm20602Int.h"
 #include "icm20602Dri.h"
 #include "icm20602.h"
-
 #include "ist8310.h"
 #include "ist8310Dri.h"
-
 #include "ms5611.h"
 #include "ms5611Dri.h"
-
 #include "monitor.h" 
 #include "config.h"
 #include "delay.h"
@@ -23,10 +19,10 @@
 #include "i2c.h" 
 #include "main.h" 
 #include "spi.h"
-
 #include "ahrs.h"
 #include "control.h"
 #include "imu.h"
+#include "kalman.h"
 
 cmd_t cmd={0};
 
@@ -34,6 +30,7 @@ uint32_t ms5611_temp;
 uint32_t ms5611_pressure;
 void system_init(void)
 {
+	kalmanInit();
 	AHRS_Init(&cmd.ahrs);
 	Monitor_Init();
   Bsp_NVIC_Init();

@@ -4,7 +4,7 @@
 #include "math.h"
 #include "tim.h"
 #include "main.h"
-
+#include "kalman.h"
 float invSqrt(float x) 
 {
 	float halfx = 0.5f * x;
@@ -29,16 +29,10 @@ void AHRS_Init(ahrs_t *ahrs)
 	ahrs->angle[2]=0.0f;
 	
 	ahrs->kp[0]=2.0f;
-	ahrs->ki[0]=0.0000001f;
+	ahrs->ki[0]=0.01f;
 	
 	ahrs->kp[1]=2.0f;
-	ahrs->ki[1]=0.0000001f;
-	
-//	ahrs->kp[0]=0.4f;
-//	ahrs->ki[0]=0.001f;
-//	
-//	ahrs->kp[1]=0.4f;
-//	ahrs->ki[1]=0.001f;
+	ahrs->ki[1]=0.01f;
 }
 
 
@@ -210,6 +204,7 @@ static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
 	
 void AHRS_Update(void)
 {
+	kalmanUpdate();
 	if(IST8310_GetStatus()==1&&IST8310_GetDataStatus()==1&&Icm20602_GetDataStatus()==1&&Icm20602_GetStatus()!=Lost)
 	{
 		_9AxisAHRSupdate(&cmd.Icm20602.Data.calc,&cmd.Ist8310.Data.calc,&cmd.ahrs);

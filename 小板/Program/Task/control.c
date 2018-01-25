@@ -43,10 +43,10 @@ void controlLoop(void)
 	}
 	if(cmd.heart%10==0)
 	{
-//		Usart_Send_Senser(USART1,cmd.Icm20602.Data.ax,cmd.Icm20602.Data.ay,cmd.Icm20602.Data.az,cmd.Icm20602.Data.gx,cmd.Icm20602.Data.gy,cmd.Icm20602.Data.gz,cmd.Ist8310.Data.mx,cmd.Ist8310.Data.my,cmd.Ist8310.Data.mz,0);
+//		Usart_Send_Senser(USART1,cmd.Icm20602.Data.calc.ax,cmd.Icm20602.Data.calc.ay,cmd.Icm20602.Data.calc.az,cmd.Icm20602.Data.calc.gx,cmd.Icm20602.Data.calc.gy,cmd.Icm20602.Data.calc.gz,cmd.Ist8310.Data.calc.mx,cmd.Ist8310.Data.calc.my,cmd.Ist8310.Data.calc.mz,0);
 		Usart_Send_Senser(USART1,cmd.Icm20602.Data.calc.ax,cmd.Icm20602.Data.calc.ay,cmd.Icm20602.Data.calc.az,
-														 cmd.Ist8310.Data.original.mx,cmd.Ist8310.Data.original.my,cmd.Ist8310.Data.original.mz,
-														 cmd.Ist8310.Data.calc.mx,cmd.Ist8310.Data.calc.my,cmd.Ist8310.Data.calc.mz,0);
+														 cmd.Icm20602.Data.calc.gx,cmd.Icm20602.Data.calc.gy,cmd.Icm20602.Data.calc.gz,
+														 cmd.Icm20602.Data.original.gx,cmd.Icm20602.Data.original.gy,cmd.Icm20602.Data.original.gz,0);
 	}
 	
 	#if USE_MS5611
