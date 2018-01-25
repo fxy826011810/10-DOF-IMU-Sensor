@@ -29,9 +29,10 @@ typedef struct
 	}Icm20602;
 	struct 
 	{
-		float Crossaxis[9];
+		
 		uint8_t						status;
 		uint8_t						dataStatus;
+		float Crossaxis[9];
 		struct
 		{
 			magDatadef				original;

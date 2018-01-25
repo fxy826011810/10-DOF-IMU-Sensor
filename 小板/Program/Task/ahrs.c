@@ -33,6 +33,12 @@ void AHRS_Init(ahrs_t *ahrs)
 	
 	ahrs->kp[1]=2.0f;
 	ahrs->ki[1]=0.0000001f;
+	
+//	ahrs->kp[0]=0.4f;
+//	ahrs->ki[0]=0.001f;
+//	
+//	ahrs->kp[1]=0.4f;
+//	ahrs->ki[1]=0.001f;
 }
 
 

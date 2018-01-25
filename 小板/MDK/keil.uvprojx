@@ -580,6 +580,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\Ist8310\ist8310Dri.c</FilePath>
             </File>
+            <File>
+              <FileName>ist8310Int.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Ist8310\ist8310Int.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

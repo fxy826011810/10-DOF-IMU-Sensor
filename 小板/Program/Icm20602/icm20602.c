@@ -112,15 +112,23 @@ void Icm20602_GetData(Icm20602Datadef *icmdata)
 	
 }
 
-#define Filter_time 100
+#define Filter_time 200
+#define filter_num 4
+#define filter_rate 0.008
 void Icm20602DataFilter(Icm20602Datadef *data,Icm20602Datadef *out)
 {
-	out->ax=((Filter_time-1)*out->ax+data->ax)/Filter_time;
-	out->ay=((Filter_time-1)*out->ay+data->ay)/Filter_time;
-	out->az=((Filter_time-1)*out->az+data->az)/Filter_time;
-	out->gx=((Filter_time-1)*out->gx+data->gx)/Filter_time;
-	out->gy=((Filter_time-1)*out->gy+data->gy)/Filter_time;
-	out->gz=((Filter_time-1)*out->gz+data->gz)/Filter_time;
+	out->ax=((Filter_time-filter_num)*out->ax+filter_num*data->ax)/Filter_time;
+	out->ay=((Filter_time-filter_num)*out->ay+filter_num*data->ay)/Filter_time;
+	out->az=((Filter_time-filter_num)*out->az+filter_num*data->az)/Filter_time;
+	
+	out->gx=(1-filter_rate)*out->gx+filter_rate*data->gx;
+	out->gy=(1-filter_rate)*out->gy+filter_rate*data->gy;
+	out->gz=(1-filter_rate)*out->gz+filter_rate*data->gz;
+	
+//	out->gx=data->gx;
+//	out->gy=data->gy;
+//	out->gz=data->gz;
+	
 	out->temp=((Filter_time-1)*out->temp+data->temp)/Filter_time;
 }
 

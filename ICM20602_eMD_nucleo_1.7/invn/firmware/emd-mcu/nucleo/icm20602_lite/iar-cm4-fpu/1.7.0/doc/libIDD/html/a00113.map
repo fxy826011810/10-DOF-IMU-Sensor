@@ -1,7 +1,0 @@
-<map id="Device" name="Device">
-<area shape="rect" id="node1" href="$a00115.html" title="emd wrapper implementation for device interface " alt="" coords="115,5,251,35"/>
-<area shape="rect" id="node2" href="$a00116.html" title="Concrete implementation of the &#39;Device&#39; interface for Icm20602 devices. " alt="" coords="125,59,240,88"/>
-<area shape="rect" id="node3" href="$a00117.html" title="Concrete implementation of the &#39;Device&#39; interface for Icm20603 devices. " alt="" coords="125,112,240,141"/>
-<area shape="rect" id="node4" href="$a00118.html" title="Concrete implementation of the &#39;Device&#39; interface for Icm20690 devices. " alt="" coords="125,165,240,195"/>
-<area shape="rect" id="node5" href="$a00114.html" title="Device implementation that connects to other IDD devices and emulates missing motion features using s..." alt="" coords="116,219,249,248"/>
-</map>

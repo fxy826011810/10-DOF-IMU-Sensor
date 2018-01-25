@@ -1,8 +1,0 @@
-<map id="Drivers" name="Drivers">
-<area shape="rect" id="node1" href="$a00112.html" title="General sensor configuration types definitions. " alt="" coords="116,5,257,35"/>
-<area shape="rect" id="node3" href="$a00111.html" title="Sensor related types definitions. " alt="" coords="137,59,236,88"/>
-<area shape="rect" id="node4" href="$a00119.html" title="Virtual abstraction of host adapter for serial interface. " alt="" coords="117,112,256,141"/>
-<area shape="rect" id="node5" href="$a00123.html" title="Low&#45;level driver for Icm20602 devices. " alt="" coords="131,165,243,195"/>
-<area shape="rect" id="node6" href="$a00130.html" title="Low&#45;level driver for Icm20603 devices. " alt="" coords="131,219,243,248"/>
-<area shape="rect" id="node7" href="$a00137.html" title="Low&#45;level driver for Icm20690 devices. " alt="" coords="131,272,243,301"/>
-</map>

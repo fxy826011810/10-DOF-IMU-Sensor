@@ -51,6 +51,7 @@ void Ist8310_Crossaxis_Matrix(float crossaxis_inv[9],int enable)
   OTPcrossaxis[2] = ((int16_t) crosszbuf[1]) << 8 | crosszbuf[0];
   OTPcrossaxis[5] = ((int16_t) crosszbuf[3]) << 8 | crosszbuf[2];
   OTPcrossaxis[8] = ((int16_t) crosszbuf[5]) << 8 | crosszbuf[4];
+			
   *crossaxis_det = ((int32_t)OTPcrossaxis[0])*OTPcrossaxis[4]*OTPcrossaxis[8] +
 									 ((int32_t)OTPcrossaxis[1])*OTPcrossaxis[5]*OTPcrossaxis[6] +
 									 ((int32_t)OTPcrossaxis[2])*OTPcrossaxis[3]*OTPcrossaxis[7] -
@@ -106,60 +107,16 @@ void Ist8310_CrossaxisTransformation(float crossaxis_inv[9],magDatadef *m,magDat
   outputtmp[2] = m->mx * crossaxis_inv[6] +
                  m->my * crossaxis_inv[7] +
                  m->mz * crossaxis_inv[8];
-//	o->mx= (short)(outputtmp[0])-20;
-//  o->my= (short)(outputtmp[1])+63;
-//  o->mz= (short)(outputtmp[2])+14.5;
-	o->mx= (short)(outputtmp[0]);
-  o->my= (short)(outputtmp[1]);
-  o->mz= (short)(outputtmp[2]);
+	o->mx= (short)(outputtmp[0])-20;
+  o->my= (short)(outputtmp[1])+63;
+  o->mz= (short)(outputtmp[2])+14.5;
+//	o->mx= (short)(outputtmp[0]);
+//  o->my= (short)(outputtmp[1]);
+//  o->mz= (short)(outputtmp[2]);
 		
 }
 	
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void Ist8310_Init(void)

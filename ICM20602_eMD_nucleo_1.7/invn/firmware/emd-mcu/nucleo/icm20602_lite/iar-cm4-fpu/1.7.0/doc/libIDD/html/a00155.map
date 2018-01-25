@@ -1,6 +1,0 @@
-<map id="inv_device_emd_wrap_icm20xxx" name="inv_device_emd_wrap_icm20xxx">
-<area shape="rect" id="node2" href="$a00013.html" title="Abtract device object definition. " alt="" coords="151,197,231,227"/>
-<area shape="rect" id="node4" href="$a00025.html" title="Device virtual table definition. " alt="" coords="5,101,101,131"/>
-<area shape="rect" id="node6" href="$a00060.html" title="Sensor event listener definition. " alt="" coords="125,101,256,131"/>
-<area shape="rect" id="node8" href="$a00059.html" title="Sensor event definition. " alt="" coords="188,5,308,35"/>
-</map>

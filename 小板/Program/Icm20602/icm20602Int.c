@@ -1,6 +1,7 @@
 #include "stm32f4xx.h"
 #include "icm20602Int.h"
 #include "icm20602.h"
+#include "config.h"
 #include "main.h"
 #include "imu.h"
 void Icm20602IntInit(void)
