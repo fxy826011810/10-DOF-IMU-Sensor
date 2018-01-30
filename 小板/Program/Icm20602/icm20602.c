@@ -4,6 +4,11 @@
 #include "config.h"
 #include "delay.h"
 #include "main.h"
+void mat_invert3(float src[3][3], float dst[3][3]);
+void calculate_calibration_values(float accel_ref[6][3], float *accel_T, float *accel_offs, float g);
+
+float Accel_ref[6][3] = {8068,-167,-112,-8322,-91,-20,-77,8066,-5,-87,-8370,131,-112,-114,8193,-152,-20,-8226};
+	float accel_T[9] = { 0 }, accel_offs[3] = {0};
 uint8_t Icm20602_init(void)
 {
 	Icm20602_SetStatus(PinInt);
@@ -29,9 +34,10 @@ uint8_t Icm20602_init(void)
 	return 1; //校验失败，返回0xff
 	for(i=0;i<len;i++)
 {
-	Icm20602_WriteByte(initdata[i][0],initdata[i][1]);//陀螺仪重启
+	Icm20602_WriteByte(initdata[i][0],initdata[i][1]);
 	delay_ms(100);
 }
+	calculate_calibration_values(Accel_ref, accel_T, accel_offs,8192.0f);
 	return 0;
 }
 
@@ -41,7 +47,7 @@ uint8_t Icm20602_init(void)
 uint8_t Icm20602_Calc(void)
 {
 	Icm20602Datadef offset;
-	uint16_t i=0,time=0;int16_t temp[6]={0};
+	uint16_t i=0,time=0;int32_t temp[6]={0};
 	while(1)
 	{
 		if(Icm20602_GetIntStatus())
@@ -51,32 +57,118 @@ uint8_t Icm20602_Calc(void)
 			if(i%10==0)
 			{
 			time++;
-//		temp[0]=offset.ax;
-//		temp[1]=offset.ay;
-//		temp[2]=offset.az;
+			temp[0]=offset.ax;
+			temp[1]=offset.ay;
+			temp[2]=offset.az;
 			temp[3]-=offset.gx;
 			temp[4]-=offset.gy;
 			temp[5]-=offset.gz;
 			}
 		}
 		if(time==calc_time)
-			break;
+		{
+//			time=0;
+//			temp[0]/=calc_time;
+//			temp[1]/=calc_time;
+//			temp[2]/=calc_time;
+						break;
+		}
 	}
 	temp[3]/=calc_time/2;
 	temp[4]/=calc_time/2;
 	temp[5]/=calc_time/2;
+//	temp[0]/=calc_time;
+//	temp[1]/=calc_time;
+//	temp[2]/=calc_time;
 	//下面的50应该用方差来替代，找个合适的阈值
 	if(temp[3]<50&&temp[4]<50&&temp[5]<50)
 	{
-		Icm20602_WriteByte(ICM20602_XG_OFFS_USRH,(uint8_t)(temp[3]>>8));
-		Icm20602_WriteByte(ICM20602_XG_OFFS_USRL,(uint8_t)(temp[3]&0xFF));
-		Icm20602_WriteByte(ICM20602_YG_OFFS_USRH,(uint8_t)(temp[4]>>8));
-		Icm20602_WriteByte(ICM20602_YG_OFFS_USRL,(uint8_t)(temp[4]&0xFF));
-		Icm20602_WriteByte(ICM20602_ZG_OFFS_USRH,(uint8_t)(temp[5]>>8));
-		Icm20602_WriteByte(ICM20602_ZG_OFFS_USRL,(uint8_t)(temp[5]&0xFF));
+		Icm20602_WriteByte(ICM20602_XG_OFFS_USRH,(uint8_t)((int16_t)temp[3]>>8));
+		Icm20602_WriteByte(ICM20602_XG_OFFS_USRL,(uint8_t)((int16_t)temp[3]&0xFF));
+		Icm20602_WriteByte(ICM20602_YG_OFFS_USRH,(uint8_t)((int16_t)temp[4]>>8));
+		Icm20602_WriteByte(ICM20602_YG_OFFS_USRL,(uint8_t)((int16_t)temp[4]&0xFF));
+		Icm20602_WriteByte(ICM20602_ZG_OFFS_USRH,(uint8_t)((int16_t)temp[5]>>8));
+		Icm20602_WriteByte(ICM20602_ZG_OFFS_USRL,(uint8_t)((int16_t)temp[5]&0xFF));
 		return 0;//矫正成功
 	}
 	return 1;//矫正失败
+}
+
+void mat_invert3(float src[3][3], float dst[3][3])
+{
+	float det = src[0][0] * (src[1][1] * src[2][2] - src[1][2] * src[2][1]) -
+		src[0][1] * (src[1][0] * src[2][2] - src[1][2] * src[2][0]) +
+		src[0][2] * (src[1][0] * src[2][1] - src[1][1] * src[2][0]);
+
+	dst[0][0] = (src[1][1] * src[2][2] - src[1][2] * src[2][1]) / det;
+	dst[1][0] = (src[1][2] * src[2][0] - src[1][0] * src[2][2]) / det;
+	dst[2][0] = (src[1][0] * src[2][1] - src[1][1] * src[2][0]) / det;
+	dst[0][1] = (src[0][2] * src[2][1] - src[0][1] * src[2][2]) / det;
+	dst[1][1] = (src[0][0] * src[2][2] - src[0][2] * src[2][0]) / det;
+	dst[2][1] = (src[0][1] * src[2][0] - src[0][0] * src[2][1]) / det;
+	dst[0][2] = (src[0][1] * src[1][2] - src[0][2] * src[1][1]) / det;
+	dst[1][2] = (src[0][2] * src[1][0] - src[0][0] * src[1][2]) / det;
+	dst[2][2] = (src[0][0] * src[1][1] - src[0][1] * src[1][0]) / det;
+
+
+}
+
+
+void calculate_calibration_values(float accel_ref[6][3], float *accel_T, float *accel_offs, float g)
+{
+	/* calculate offsets */
+	for (unsigned i = 0; i < 3; i++) {
+//		accel_offs[i] = (accel_ref[i * 2][i] + accel_ref[i * 2 + 1][i]) / 2;
+		accel_offs[i] = (accel_ref[i * 2][i] + accel_ref[i * 2 + 1][i]) / 2;
+	}
+
+	/* fill matrix A for linear equations system*/
+	float mat_A[3][3];
+
+
+	for (unsigned i = 0; i < 3; i++) {
+		for (unsigned j = 0; j < 3; j++) {
+			float a = accel_ref[i * 2][j] - accel_offs[j];
+			mat_A[i][j] = a;
+		}
+	}
+
+	/* calculate inverse matrix for A */
+	float mat_A_inv[3][3];
+
+	mat_invert3(mat_A, mat_A_inv);
+
+
+	/* copy results to accel_T */
+	for (unsigned i = 0; i < 3; i++) {
+		for (unsigned j = 0; j < 3; j++) {
+			/* simplify matrices mult because b has only one non-zero element == g at index i */
+			accel_T[j+i*3] = mat_A_inv[i][j] * g;
+		}
+	}
+
+
+}
+
+void Icm20602_CrossaxisTransformation(float crossaxis_inv[9],Icm20602Datadef *m,Icm20602Datadef *o)
+{
+	int i = 0;
+	float outputtmp[3];
+
+  outputtmp[0] = m->ax * crossaxis_inv[0] +
+                 m->ay * crossaxis_inv[1] +
+                 m->az * crossaxis_inv[2];
+
+  outputtmp[1] = m->ax * crossaxis_inv[3] +
+                 m->ay * crossaxis_inv[4] +
+                 m->az * crossaxis_inv[5];
+    
+  outputtmp[2] = m->ax * crossaxis_inv[6] +
+                 m->ay * crossaxis_inv[7] +
+                 m->az * crossaxis_inv[8];
+	o->ax= (short)(outputtmp[0]);
+  o->ay= (short)(outputtmp[1]);
+  o->az= (short)(outputtmp[2]);	
 }
 
 
@@ -112,14 +204,14 @@ void Icm20602_GetData(Icm20602Datadef *icmdata)
 	
 }
 
-#define Filter_time 1000
+#define Filter_time 100
 #define filter_num 1
 #define filter_rate 0.5
 void Icm20602DataFilter(Icm20602Datadef *data,Icm20602Datadef *out)
 {
-//	out->ax=((Filter_time-filter_num)*out->ax+filter_num*data->ax)/Filter_time;
-//	out->ay=((Filter_time-filter_num)*out->ay+filter_num*data->ay)/Filter_time;
-//	out->az=((Filter_time-filter_num)*out->az+filter_num*data->az)/Filter_time;
+	out->ax=((Filter_time-filter_num)*out->ax+filter_num*data->ax)/Filter_time;
+	out->ay=((Filter_time-filter_num)*out->ay+filter_num*data->ay)/Filter_time;
+	out->az=((Filter_time-filter_num)*out->az+filter_num*data->az)/Filter_time;
 	
 	out->ax=data->ax;
 	out->ay=data->ay;
@@ -140,8 +232,9 @@ void Icm20602DataFilter(Icm20602Datadef *data,Icm20602Datadef *out)
 void ICM20602_DataUpdate(void)
 {
 		Icm20602_GetData(&cmd.Icm20602.Data.original);
+		Icm20602_CrossaxisTransformation(accel_T,&cmd.Icm20602.Data.original,&cmd.Icm20602.Data.original);
 		Icm20602DataFilter(&cmd.Icm20602.Data.original,&cmd.Icm20602.Data.calc);
-	
+		
 		Icm20602_DataLimit(&cmd.Icm20602.Data.calc);
 	
 		Icm20602_SetDataStatus(1);

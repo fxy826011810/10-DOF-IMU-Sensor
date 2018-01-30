@@ -35,7 +35,7 @@ void AHRS_Init(ahrs_t *ahrs)
 	ahrs->ki[1]=0.01f;
 }
 
-
+float g;
 #define M_PI (float)3.1415926535
 uint32_t lastUpdate, now; // 采样周期计数 单位 us 
 float exInt, eyInt, ezInt;  // 误差积分
@@ -45,7 +45,7 @@ static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs)
     float vx, vy, vz;//vxyz为重力坐标系转到机体坐标系的分量
     float ex, ey, ez;//重力转换分量和加速度计各轴的分量做叉积作为误差
     float tempq0,tempq1,tempq2,tempq3;
-		float gx, gy, gz, ax, ay, az,halfT; 
+		float gx, gy, gz, ax, ay, az,tempax,tempay,tempaz,tempg,halfT; 
     float q0q0 = ahrs->q[0]*ahrs->q[0];
     float q0q1 = ahrs->q[0]*ahrs->q[1];
     float q0q2 = ahrs->q[0]*ahrs->q[2];
@@ -60,10 +60,28 @@ static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs)
     gx = (float)imu->gx*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
     gy = (float)imu->gy*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
     gz = (float)imu->gz*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
-    ax = (float)imu->ax/8192*9.8f;
+	
+		ax = (float)imu->ax/8192*9.8f;
     ay = (float)imu->ay/8192*9.8f;
     az = (float)imu->az/8192*9.8f;
-	
+
+	if(ax>9.8f)
+		ax=9.8f;
+	if(ax<-9.8f)
+    ax=-9.8f;
+	if(ay>9.8f)
+		ay=9.8f;
+	if(ay<-9.8f)
+    ay=-9.8f;
+	if(az>9.8f)
+		az=9.8f;
+	if(az<-9.8f)
+    az=-9.8f;
+//	tempg=invSqrt(ax*ax+ay*ay+az*az);
+//	if(tempg>9.8f)
+//	{
+//		tempax
+//	}
     now = Get_Time_Micros();  //读取时间 单位是us   
 		if(now>=lastUpdate)	
     {
@@ -71,7 +89,8 @@ static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs)
     }
     lastUpdate = now;	//更新时间
 
-    norm = invSqrt(ax*ax + ay*ay + az*az);       
+    norm = invSqrt(ax*ax + ay*ay + az*az);    
+		g=norm;		
     ax = ax * norm;
     ay = ay * norm;
     az = az * norm; //把加计的三维向量转成单位向量。
@@ -139,7 +158,18 @@ static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
     mx = (float)m->my*a;
     my = (float)m->mx*b;
     mz = (float)m->mz*c;		
-		
+		if(ax>9.8f)
+		ax=9.8f;
+	if(ax<-9.8f)
+    ax=-9.8f;
+	if(ay>9.8f)
+		ay=9.8f;
+	if(ay<-9.8f)
+    ay=-9.8f;
+	if(az>9.8f)
+		az=9.8f;
+	if(az<-9.8f)
+    az=-9.8f;
     now = Get_Time_Micros();  //读取时间 单位是us   
 		if(now>=lastUpdate)	
     {
@@ -147,7 +177,8 @@ static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
     }
     lastUpdate = now;	//更新时间
     //快速求平方根算法
-    norm = invSqrt(ax*ax + ay*ay + az*az);       
+    norm = invSqrt(ax*ax + ay*ay + az*az);
+		g=norm;		
     ax = ax * norm;
     ay = ay * norm;
     az = az * norm; //把加计的三维向量转成单位向量。

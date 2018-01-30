@@ -146,7 +146,7 @@ void Usart_Send_Angle(USART_TypeDef* USARTx,float angle_rol, float angle_pit, fl
 
 	
 	data_to_send[_cnt++]=0xAA;
-	
+	data_to_send[_cnt++]=0xBB;
 	FT.F=angle_rol;
 	data_to_send[_cnt++]=FT.U[0];
 	data_to_send[_cnt++]=FT.U[1];
@@ -164,8 +164,9 @@ void Usart_Send_Angle(USART_TypeDef* USARTx,float angle_rol, float angle_pit, fl
 	data_to_send[_cnt++]=FT.U[1];
 	data_to_send[_cnt++]=FT.U[2];
 	data_to_send[_cnt++]=FT.U[3];
-	data_to_send[_cnt++]=2;
-	data_to_send[_cnt++]=0xBB;
+
+	data_to_send[_cnt++]=0xCC;
+
 	if(USARTx==USART1)
 	{
 	usart1_dma_upgrade(data_to_send, _cnt);

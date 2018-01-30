@@ -44,8 +44,11 @@ void controlLoop(void)
 	if(cmd.heart%10==0)
 	{
 //		Usart_Send_Senser(USART1,cmd.Icm20602.Data.calc.ax,cmd.Icm20602.Data.calc.ay,cmd.Icm20602.Data.calc.az,cmd.Icm20602.Data.calc.gx,cmd.Icm20602.Data.calc.gy,cmd.Icm20602.Data.calc.gz,cmd.Ist8310.Data.calc.mx,cmd.Ist8310.Data.calc.my,cmd.Ist8310.Data.calc.mz,0);
-		Usart_Send_Senser(USART1,cmd.Icm20602.Data.calc.ax,cmd.Icm20602.Data.calc.ay,cmd.Icm20602.Data.calc.az,
-														 cmd.Icm20602.Data.calc.gx,cmd.Icm20602.Data.calc.gy,cmd.Icm20602.Data.calc.gz,
+//		Usart_Send_Senser(USART1,cmd.Icm20602.Data.original.ax,cmd.Icm20602.Data.original.ay,cmd.Icm20602.Data.original.az,
+//														 cmd.Icm20602.Data.calc.gx,cmd.Icm20602.Data.calc.gy,cmd.Icm20602.Data.calc.gz,
+//														 cmd.Icm20602.Data.original.gx,cmd.Icm20602.Data.original.gy,cmd.Icm20602.Data.original.gz,0);
+		Usart_Send_Senser(USART1,cmd.Icm20602.Data.original.ax,cmd.Icm20602.Data.original.ay,cmd.Icm20602.Data.original.az,
+														 cmd.Icm20602.Data.calc.ax,cmd.Icm20602.Data.calc.ay,cmd.Icm20602.Data.calc.az,
 														 cmd.Icm20602.Data.original.gx,cmd.Icm20602.Data.original.gy,cmd.Icm20602.Data.original.gz,0);
 	}
 	

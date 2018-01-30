@@ -118,7 +118,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>/</Name>
+          <Name>T髕</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -237,6 +237,21 @@
           <count>17</count>
           <WinNumber>1</WinNumber>
           <ItemText>Kgz</ItemText>
+        </Ww>
+        <Ww>
+          <count>18</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>cmd</ItemText>
+        </Ww>
+        <Ww>
+          <count>19</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g</ItemText>
+        </Ww>
+        <Ww>
+          <count>20</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>accel_T</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
