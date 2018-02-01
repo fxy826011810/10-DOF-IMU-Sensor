@@ -5,43 +5,13 @@
 #define WHILE_DEBUG   0					//主循环调试
 #define TIM_DEBUG			0					//tim循环
 #define USE_TIM				1 				//使用tim
-#define USE_IST8310		0					//使用磁力计
+#define USE_IST8310		1					//使用磁力计
 #define USE_ICM20602	1 				//使用陀螺仪
 #define USE_MS5611		1					//使用气压计
 
+#define USE_SIMIIC		0					//使用软件iic否则硬件iic			
 
 
-
-
-
-/*			I2C			*/
-#define I2CX  I2C1
-#define GPIO_AF_I2CX GPIO_AF_I2C1
-#define RCC_APB1Periph_I2CX RCC_APB1Periph_I2C1
-/*			I2C	IST8310		*/
-#define I2CI_SCL_GPIO  GPIOB
-#define I2CI_SCL_PIN  GPIO_Pin_10
-#define I2CI_SCL_MODE  GPIO_Mode_OUT
-#define I2CI_SCL_OTYPE  GPIO_OType_PP
-#define I2CI_SCL_PinSource GPIO_PinSource10
-
-#define I2CI_SDA_GPIO  GPIOB
-#define I2CI_SDA_PIN  GPIO_Pin_11
-#define I2CI_SDA_MODE  GPIO_Mode_OUT
-#define I2CI_SDA_OTYPE  GPIO_OType_PP
-#define I2CI_SDA_PinSource GPIO_PinSource11
-/*			I2C	Ms5611		*/
-#define I2CM_SCL_GPIO  GPIOA
-#define I2CM_SCL_PIN  GPIO_Pin_8
-#define I2CM_SCL_MODE  GPIO_Mode_OUT
-#define I2CM_SCL_OTYPE  GPIO_OType_PP
-#define I2CM_SCL_PinSource GPIO_PinSource8
-
-#define I2CM_SDA_GPIO  GPIOC
-#define I2CM_SDA_PIN  GPIO_Pin_9
-#define I2CM_SDA_MODE  GPIO_Mode_OUT
-#define I2CM_SDA_OTYPE  GPIO_OType_PP
-#define I2CM_SDA_PinSource GPIO_PinSource9
 
 /*			IST8310	RST INT		*/
 
@@ -53,6 +23,69 @@
 #define IST8310_RST_PIN  GPIO_Pin_1
 #define IST8310_RST_MODE  GPIO_Mode_OUT
 #define IST8310_RST_OTYPE  GPIO_OType_PP
+/*			I2C			*/
+/*			I2C	IST8310		*/
+#if USE_SIMIIC
+	#define I2CI_SCL_GPIO  GPIOB
+	#define I2CI_SCL_PIN  GPIO_Pin_10
+	#define I2CI_SCL_MODE  GPIO_Mode_OUT
+	#define I2CI_SCL_OTYPE  GPIO_OType_PP
+	#define I2CI_SCL_PinSource GPIO_PinSource10
+
+	#define I2CI_SDA_GPIO  GPIOB
+	#define I2CI_SDA_PIN  GPIO_Pin_11
+	#define I2CI_SDA_MODE  GPIO_Mode_OUT
+	#define I2CI_SDA_OTYPE  GPIO_OType_PP
+	#define I2CI_SDA_PinSource GPIO_PinSource11
+#else
+	#define I2CI  I2C2
+	#define GPIO_AF_I2CI GPIO_AF_I2C2
+	#define RCC_APB1Periph_I2CI RCC_APB1Periph_I2C2
+	
+	#define I2CI_SCL_GPIO  GPIOB
+	#define I2CI_SCL_PIN  GPIO_Pin_10
+	#define I2CI_SCL_MODE  GPIO_Mode_AF
+	#define I2CI_SCL_OTYPE  GPIO_OType_OD
+	#define I2CI_SCL_PinSource GPIO_PinSource10
+
+	#define I2CI_SDA_GPIO  GPIOB
+	#define I2CI_SDA_PIN  GPIO_Pin_11
+	#define I2CI_SDA_MODE  GPIO_Mode_AF
+	#define I2CI_SDA_OTYPE  GPIO_OType_OD
+	#define I2CI_SDA_PinSource GPIO_PinSource11
+#endif
+
+/*			I2C	Ms5611		*/
+#if USE_SIMIIC
+	#define I2CM_SCL_GPIO  GPIOA
+	#define I2CM_SCL_PIN  GPIO_Pin_8
+	#define I2CM_SCL_MODE  GPIO_Mode_OUT
+	#define I2CM_SCL_OTYPE  GPIO_OType_PP
+	#define I2CM_SCL_PinSource GPIO_PinSource8
+
+	#define I2CM_SDA_GPIO  GPIOC
+	#define I2CM_SDA_PIN  GPIO_Pin_9
+	#define I2CM_SDA_MODE  GPIO_Mode_OUT
+	#define I2CM_SDA_OTYPE  GPIO_OType_PP
+	#define I2CM_SDA_PinSource GPIO_PinSource9
+#else
+	#define I2CM  I2C3
+	#define GPIO_AF_I2CM GPIO_AF_I2C3
+	#define RCC_APB1Periph_I2CM RCC_APB1Periph_I2C3
+	
+	#define I2CM_SCL_GPIO  GPIOA
+	#define I2CM_SCL_PIN  GPIO_Pin_8
+	#define I2CM_SCL_MODE  GPIO_Mode_AF
+	#define I2CM_SCL_OTYPE  GPIO_OType_OD
+	#define I2CM_SCL_PinSource GPIO_PinSource8
+
+	#define I2CM_SDA_GPIO  GPIOC
+	#define I2CM_SDA_PIN  GPIO_Pin_9
+	#define I2CM_SDA_MODE  GPIO_Mode_AF
+	#define I2CM_SDA_OTYPE  GPIO_OType_OD
+	#define I2CM_SDA_PinSource GPIO_PinSource9
+#endif
+
 
 /*			SPI	CS MISO MOSI SCLK INT*/
 #define SPIX  SPI1

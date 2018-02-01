@@ -1,11 +1,11 @@
 #include "stm32f4xx.h"
 #include "icm20602Int.h"
 #include "icm20602Dri.h"
-#include "icm20602.h"
-#include "ist8310.h"
 #include "ist8310Dri.h"
-#include "ms5611.h"
+#include "ist8310.h"
+#include "icm20602.h"
 #include "ms5611Dri.h"
+#include "ms5611.h"
 #include "monitor.h" 
 #include "config.h"
 #include "delay.h"
@@ -15,6 +15,7 @@
 #include "gpio.h"
 #include "can.h"
 #include "dma.h"
+#include "i2c.h"
 #include "tim.h"
 #include "i2c.h" 
 #include "main.h" 
@@ -24,9 +25,14 @@
 #include "imu.h"
 #include "kalman.h"
 
+/*
+作者 	;华北理工大学  范翔宇
+QQ		:826011810
+邮箱	:826011810@qq.com
+Github:https://github.com/fxy826011810
+*/
 cmd_t cmd={0};
 
-uint32_t ms5611_temp;
 uint32_t ms5611_pressure;
 void system_init(void)
 {
@@ -37,14 +43,16 @@ void system_init(void)
 	Bsp_GPIO_Init();
 	Bsp_DMA_Init();
 	Bsp_Usart_Init();
-
+	Bsp_IIC_Init();
 	delay_ms(1000);
 
 #if	USE_ICM20602	
 	Bsp_Spi_Init();
 	Icm20602_init();
 	
-	Icm20602_Calc();
+	Icm20602_GyroCalc(&cmd.Icm20602.calibrate.offset);
+	Icm20602_AccelCalc(cmd.Icm20602.calibrate.ref);
+//	printf("\r\n float Accel_ref[6][3] ={%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d}\r\n",cmd.Icm20602.calibrate.ref[][])
 	Icm20602IntInit();
 #endif	
 	
@@ -61,7 +69,7 @@ void system_init(void)
   sysEnable();  
 #endif  
 }
-
+uint32_t aa,bb;float cc;
 int main(void)
 {
   system_init();//系统初始化
@@ -82,7 +90,10 @@ int main(void)
 		if(IST8310_GetIntStatus(1))
 		{
 			__disable_irq();
+			aa=Get_Time_Micros();
 				Ist8310_DataUpdate();
+			bb=Get_Time_Micros();
+			cc=(float)(bb-aa)/1000000.0f;
 			__enable_irq();
 		}
 #endif

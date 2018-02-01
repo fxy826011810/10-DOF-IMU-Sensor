@@ -26,17 +26,8 @@ uint8_t IIC_ReadByte(SimIIC_Typedef *simiic,uint8_t reg, uint8_t *pbuffer);//¶Áµ
 uint8_t IIC_Read(SimIIC_Typedef *simiic, uint8_t reg,uint8_t *pbuffer, uint8_t len);//¶Á¶à¸ö×Ö½Ú
 uint8_t IIC_Write(SimIIC_Typedef *simiic, uint8_t reg, uint8_t *Data, uint8_t len);//Ð´¶à¸ö×Ö½Ú
 
-void IIC_SCL(SimIIC_Typedef *simiic,uint8_t x);
-void IIC_SDA(SimIIC_Typedef *simiic,uint8_t x);
-uint8_t READ_SDA(SimIIC_Typedef *simiic);
-void SDA_IN(SimIIC_Typedef *simiic);
-void SDA_OUT(SimIIC_Typedef *simiic);
-uint8_t IIC_Start(SimIIC_Typedef *simiic);
-void IIC_Stop(SimIIC_Typedef *simiic);
-uint8_t IIC_Wait_Ack(SimIIC_Typedef *simiic);
-void IIC_NAck(SimIIC_Typedef *simiic);
-void IIC_Ack(SimIIC_Typedef *simiic);
-void IIC_Send_Byte(SimIIC_Typedef *simiic,uint8_t txd);
-uint8_t IIC_Read_Byte(SimIIC_Typedef *simiic,uint8_t ack);
+void IIC_H_Read(I2C_TypeDef* I2Cx,uint8_t addr,uint8_t reg,uint8_t *pbuffer, uint8_t len);
+void IIC_H_WriteByte(I2C_TypeDef* I2Cx,uint8_t addr,uint8_t reg,uint8_t Data);
+
 #endif
 

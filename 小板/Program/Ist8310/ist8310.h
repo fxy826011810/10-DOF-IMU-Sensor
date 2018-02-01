@@ -1,7 +1,7 @@
 #ifndef __IST8310_H
 #define __IST8310_H
 #include "stm32f4xx.h"
-#define IST8310_ADDR          		0x0C
+
 #define IST8310_WHO_AM_I          0x00
 #define IST8310_R_CONFA           0x0A
 #define IST8310_R_CONFB           0x0B

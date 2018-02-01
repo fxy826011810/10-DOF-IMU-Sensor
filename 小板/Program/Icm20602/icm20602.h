@@ -78,7 +78,7 @@
 
 
 
-typedef struct 
+typedef struct Icm20602Datadef
 {
 	int16_t ax;
 	int16_t ay;
@@ -88,6 +88,9 @@ typedef struct
 	int16_t gy;
 	int16_t gz;
 }Icm20602Datadef;
+
+
+
 typedef enum
 {
 	PinInt,
@@ -96,7 +99,8 @@ typedef enum
 }Icm20602Status;
 
 uint8_t Icm20602_init(void);
-uint8_t Icm20602_Calc(void);
+uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset);
+uint8_t Icm20602_AccelCalc(float ref[6][3]);
 void ICM20602_DataUpdate(void);
 
 uint8_t Icm20602_DataLimit(Icm20602Datadef *data);
@@ -112,4 +116,9 @@ uint8_t Icm20602_GetDataStatus(void);
 Icm20602Status Icm20602_GetStatus(void);
 void Icm20602_SetStatus(Icm20602Status x);
 
+void Icm20602_Set_Calibration_Status(uint8_t  x);
+uint8_t Icm20602_Get_Calibration_Status(void);
+
+void Icm20602_Set_AccelCalibration_Status(uint8_t  x);
+uint8_t Icm20602_Get_AccelCalibration_Status(void);
 #endif

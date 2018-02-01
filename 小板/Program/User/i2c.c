@@ -1,5 +1,7 @@
 #include "stm32f4xx.h"
+#include "stm32f4xx_i2c.h"
 #include "i2c.h" 
+#include "tim.h" 
 #include "config.h"
 #include "delay.h"
 #include "gpio.h" 
@@ -8,11 +10,29 @@ SimIIC_Typedef ms5611IIC;
 
 void Bsp_IIC_Init(void)
 {
+	#if USE_SIMIIC
+	#else
+	I2C_InitTypeDef i2c;
 	
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2CI|RCC_APB1Periph_I2CM,ENABLE);
+	I2C_DeInit(I2CI);
+	I2C_DeInit(I2CM);
+	i2c.I2C_Ack=I2C_Ack_Disable;
+	i2c.I2C_AcknowledgedAddress=I2C_AcknowledgedAddress_7bit;
+	i2c.I2C_ClockSpeed=400000;
+	i2c.I2C_DutyCycle=I2C_DutyCycle_2;
+	i2c.I2C_Mode=I2C_Mode_I2C;
+	i2c.I2C_OwnAddress1=0x0A;
+	I2C_Init(I2CI,&i2c);
+	i2c.I2C_OwnAddress1=0x0B;
+	I2C_Init(I2CM,&i2c);
+	I2C_Cmd(I2CI, ENABLE);
+	I2C_Cmd(I2CM, ENABLE);
+	#endif
 	
 	
 }
-void IIC_SCL(SimIIC_Typedef *simiic,uint8_t x)
+static void IIC_SCL(SimIIC_Typedef *simiic,uint8_t x)
 {
 		switch(x)
 	{
@@ -24,7 +44,7 @@ void IIC_SCL(SimIIC_Typedef *simiic,uint8_t x)
 		break;
 	}
 }
-void IIC_SDA(SimIIC_Typedef *simiic,uint8_t x)
+static void IIC_SDA(SimIIC_Typedef *simiic,uint8_t x)
 {
 		switch(x)
 	{
@@ -36,17 +56,17 @@ void IIC_SDA(SimIIC_Typedef *simiic,uint8_t x)
 		break;
 	}
 }
-uint8_t READ_SDA(SimIIC_Typedef *simiic)
+static uint8_t READ_SDA(SimIIC_Typedef *simiic)
 {
 	return GPIO_ReadInputDataBit(simiic->gpioSda,simiic->sda_gpio_init.GPIO_Pin);
 }
-void SDA_IN(SimIIC_Typedef *simiic)
+static void SDA_IN(SimIIC_Typedef *simiic)
 {
 	simiic->sda_gpio_init.GPIO_Mode							= GPIO_Mode_IN;
 	simiic->sda_gpio_init.GPIO_PuPd							= GPIO_PuPd_NOPULL;
 	GPIO_Init(simiic->gpioSda, &simiic->sda_gpio_init);
 }
-void SDA_OUT(SimIIC_Typedef *simiic)
+static void SDA_OUT(SimIIC_Typedef *simiic)
 {
 	simiic->sda_gpio_init.GPIO_Mode							= GPIO_Mode_OUT;
 	simiic->sda_gpio_init.GPIO_OType							= GPIO_OType_PP;
@@ -55,7 +75,7 @@ void SDA_OUT(SimIIC_Typedef *simiic)
 	GPIO_Init(simiic->gpioSda, &simiic->sda_gpio_init);
 }
  
-uint8_t IIC_Start(SimIIC_Typedef *simiic)
+static uint8_t IIC_Start(SimIIC_Typedef *simiic)
 {
 	SDA_OUT(simiic);     //sda线输出
 	IIC_SDA(simiic,1);	  	  
@@ -69,7 +89,7 @@ uint8_t IIC_Start(SimIIC_Typedef *simiic)
   return 0;
 }	  
 //产生IIC停止信号
-void IIC_Stop(SimIIC_Typedef *simiic)
+static void IIC_Stop(SimIIC_Typedef *simiic)
 {
 	SDA_OUT(simiic);//sda线输出
 	IIC_SCL(simiic,0);
@@ -82,7 +102,7 @@ void IIC_Stop(SimIIC_Typedef *simiic)
 //等待应答信号到来
 //返回值：1，接收应答失败
 //        0，接收应答成功
- uint8_t IIC_Wait_Ack(SimIIC_Typedef *simiic)
+static uint8_t IIC_Wait_Ack(SimIIC_Typedef *simiic)
 {
 	u8 ucErrTime=0;
 	SDA_IN(simiic);      //SDA设置为输入  
@@ -101,7 +121,7 @@ void IIC_Stop(SimIIC_Typedef *simiic)
 	return 0;  
 } 
 //产生ACK应答
- void IIC_NAck(SimIIC_Typedef *simiic)
+static void IIC_NAck(SimIIC_Typedef *simiic)
 {
 	IIC_SCL(simiic,0);
 	SDA_OUT(simiic);
@@ -126,7 +146,7 @@ void IIC_Stop(SimIIC_Typedef *simiic)
 //返回从机有无应答
 //1，有应答
 //0，无应答			  
- void IIC_Send_Byte(SimIIC_Typedef *simiic,uint8_t txd)
+ static void IIC_Send_Byte(SimIIC_Typedef *simiic,uint8_t txd)
 {                        
     uint8_t t;   
     SDA_OUT(simiic); 	    
@@ -148,7 +168,7 @@ void IIC_Stop(SimIIC_Typedef *simiic)
    // IIC_SCL(0);
 } 	    
 //读1个字节，ack=1时，发送ACK，ack=0，发送nACK   
-uint8_t IIC_Read_Byte(SimIIC_Typedef *simiic,uint8_t ack)
+static uint8_t IIC_Read_Byte(SimIIC_Typedef *simiic,uint8_t ack)
 {
 	unsigned char i,receive=0;
 	SDA_IN(simiic);//SDA设置为输入
@@ -222,6 +242,7 @@ uint8_t IIC_ReadByte(SimIIC_Typedef *simiic,uint8_t reg, uint8_t *pbuffer)
 	
     return 0;
 }
+
 uint8_t IIC_Read(SimIIC_Typedef *simiic, uint8_t reg,uint8_t *pbuffer, uint8_t len)
 { 
 	IIC_Start(simiic);
@@ -248,8 +269,9 @@ uint8_t IIC_Read(SimIIC_Typedef *simiic, uint8_t reg,uint8_t *pbuffer, uint8_t l
 		pbuffer++;
 		len--;
 	}
-	IIC_Stop(simiic);//产生一个停止条件	  	
+	IIC_Stop(simiic);//产生一个停止条件	  
 	return 0;
+	
 }
 uint8_t IIC_Write(SimIIC_Typedef *simiic, uint8_t reg, uint8_t *Data, uint8_t len)
 {
@@ -278,7 +300,69 @@ uint8_t IIC_Write(SimIIC_Typedef *simiic, uint8_t reg, uint8_t *Data, uint8_t le
 	return 0;
 }
 
+void IIC_H_WriteByte(I2C_TypeDef* I2Cx,uint8_t addr,uint8_t reg,uint8_t Data)
+{
+	
+	while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_BUSY));
 
+  I2C_GenerateSTART(I2Cx, ENABLE);
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_MODE_SELECT));
+
+
+  I2C_Send7bitAddress(I2Cx, addr<<1, I2C_Direction_Transmitter);
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+
+  I2C_SendData(I2Cx, reg);
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+	I2C_SendData(I2Cx, Data);
+	while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+
+  I2C_GenerateSTOP(I2Cx, ENABLE);
+}
+
+
+
+void IIC_H_Read(I2C_TypeDef* I2Cx,uint8_t addr,uint8_t reg,uint8_t *pbuffer, uint8_t len)
+{ 
+	while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_BUSY));
+	I2C_AcknowledgeConfig(I2Cx, ENABLE);
+	
+	I2C_GenerateSTART(I2Cx, ENABLE);
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_MODE_SELECT));
+
+
+  I2C_Send7bitAddress(I2Cx, addr<<1, I2C_Direction_Transmitter);
+  while (!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+	
+
+  I2C_SendData(I2Cx, reg);
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+	
+	I2C_GenerateSTART(I2Cx, ENABLE);
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_MODE_SELECT));
+	
+	I2C_Send7bitAddress(I2Cx, addr<<1|0x01, I2C_Direction_Receiver);
+  while (!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+	while (len)
+	{
+		
+		if(len==1)
+		{
+			I2C_AcknowledgeConfig(I2Cx, DISABLE);
+			while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_BYTE_RECEIVED));
+			*pbuffer =I2C_ReceiveData(I2Cx);
+		}
+		else
+		{
+			I2C_AcknowledgeConfig(I2Cx, ENABLE);
+			while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_BYTE_RECEIVED));
+			*pbuffer =I2C_ReceiveData(I2Cx);
+		}	         			   	
+		pbuffer++;
+		len--;
+	}
+  I2C_GenerateSTOP(I2Cx, ENABLE);
+}
 
 
 

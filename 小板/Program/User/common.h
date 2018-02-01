@@ -22,5 +22,13 @@ typedef union
 
 extern FormatTrans FT;
 
+//struct calibration_t {
+//	float	x_offset;
+//	float	x_scale;
+//	float	y_offset;
+//	float	y_scale;
+//	float	z_offset;
+//	float	z_scale;
+//};
 #endif
 

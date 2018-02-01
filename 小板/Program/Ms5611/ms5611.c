@@ -18,9 +18,9 @@ uint8_t i,buffer[16];
 	return 0;
 }
 
-uint8_t Ms5611_Reset(void)
+void Ms5611_Reset(void)
 {
-	return Ms5611_WriteByte(RESET,NULL);
+	 Ms5611_WriteByte(RESET,NULL);
 }
 
 void Ms5611_Init(void)

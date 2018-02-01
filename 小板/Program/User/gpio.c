@@ -95,14 +95,15 @@ void Bsp_GPIO_Init(void)
 	GPIO_SetBits(IST8310_RST_GPIO,IST8310_RST_PIN);
 
 	//磁力计IIC
+
 	//SCL
 	GPIO_StructInit(&ist8310IIC.scl_gpio_init);
 	ist8310IIC.gpioScl=I2CI_SCL_GPIO;
 	ist8310IIC.scl_gpio_init.GPIO_Mode = I2CI_SCL_MODE;
 	ist8310IIC.scl_gpio_init.GPIO_OType = I2CI_SCL_OTYPE;
 	ist8310IIC.scl_gpio_init.GPIO_Pin = I2CI_SCL_PIN;
-	ist8310IIC.scl_gpio_init.GPIO_PuPd = GPIO_PuPd_DOWN;
-	ist8310IIC.scl_gpio_init.GPIO_Speed = GPIO_Speed_100MHz;
+	ist8310IIC.scl_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
+	ist8310IIC.scl_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(ist8310IIC.gpioScl, &ist8310IIC.scl_gpio_init);
 	//SDA
 	GPIO_StructInit(&ist8310IIC.sda_gpio_init);
@@ -111,8 +112,13 @@ void Bsp_GPIO_Init(void)
 	ist8310IIC.sda_gpio_init.GPIO_OType = I2CI_SDA_OTYPE;
 	ist8310IIC.sda_gpio_init.GPIO_Pin = I2CI_SDA_PIN;
 	ist8310IIC.sda_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
-	ist8310IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_100MHz;
+	ist8310IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(ist8310IIC.gpioSda, &ist8310IIC.sda_gpio_init);
+#if USE_SIMIIC
+#else
+	GPIO_PinAFConfig(I2CI_SCL_GPIO, I2CI_SCL_PinSource, GPIO_AF_I2CI);
+	GPIO_PinAFConfig(I2CI_SDA_GPIO, I2CI_SDA_PinSource, GPIO_AF_I2CI);
+#endif
 #endif
 #if	USE_MS5611
 	//气压计IIC
@@ -134,6 +140,11 @@ void Bsp_GPIO_Init(void)
 	ms5611IIC.sda_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
 	ms5611IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(ms5611IIC.gpioSda, &ms5611IIC.sda_gpio_init);
+#if USE_SIMIIC
+#else
+	GPIO_PinAFConfig(I2CM_SCL_GPIO, I2CM_SCL_PinSource, GPIO_AF_I2CM);
+	GPIO_PinAFConfig(I2CM_SDA_GPIO, I2CM_SDA_PinSource, GPIO_AF_I2CM);
+#endif	
 #endif
 
 	

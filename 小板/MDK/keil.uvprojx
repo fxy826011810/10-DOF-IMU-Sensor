@@ -116,7 +116,7 @@
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments> -MPU</TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
+          <TargetDlgDllArguments>-pSTM32F405RGx</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -549,6 +549,11 @@
               <FileName>kalman.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\User\kalman.c</FilePath>
+            </File>
+            <File>
+              <FileName>calibration.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\User\calibration.c</FilePath>
             </File>
           </Files>
         </Group>

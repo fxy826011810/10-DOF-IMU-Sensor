@@ -1,5 +1,6 @@
 #include "ist8310Dri.h"
 #include "stm32f4xx.h"
+#include "calibration.h"
 #include "ist8310.h"
 #include "config.h"
 #include "delay.h"
@@ -8,35 +9,14 @@
 
 
 #define OTPsensitivity (330)
-int32_t crossaxis_det[1];
+
 void Ist8310_Crossaxis_Matrix(float crossaxis_inv[9],int enable)
 {
 	uint8_t crossxbuf[6],crossybuf[6],crosszbuf[6];
-	short OTPcrossaxis[9] = {0};
-	float inv[9] = {0};
-	int i = 0;
+	int16_t OTPcrossaxis[9] = {0};
 	
-	if (enable == 0)
- {
-		DET_eql_0:
-			*crossaxis_inv = 1;
-			*(crossaxis_inv+1) = 0;
-      *(crossaxis_inv+2) = 0;
-      *(crossaxis_inv+3) = 0;
-			
-			*(crossaxis_inv+4) = 1;
-			
-			*(crossaxis_inv+5) = 0;
-      *(crossaxis_inv+6) = 0;
-      *(crossaxis_inv+7) = 0;
-			
-			*(crossaxis_inv+8) = 1;
-			
-			*crossaxis_det = 1;
-	        return;
-    }
-	else
-    {
+	float inv[3][3] = {0},mat_A[3][3];
+
 	IST8310_Read(IST8310_REG_XX_CROSS_L,crossxbuf,6);
 	IST8310_Read(IST8310_REG_YX_CROSS_L,crossybuf,6);
 	IST8310_Read(IST8310_REG_ZX_CROSS_L,crosszbuf,6);
@@ -51,29 +31,25 @@ void Ist8310_Crossaxis_Matrix(float crossaxis_inv[9],int enable)
   OTPcrossaxis[2] = ((int16_t) crosszbuf[1]) << 8 | crosszbuf[0];
   OTPcrossaxis[5] = ((int16_t) crosszbuf[3]) << 8 | crosszbuf[2];
   OTPcrossaxis[8] = ((int16_t) crosszbuf[5]) << 8 | crosszbuf[4];
-			
-  *crossaxis_det = ((int32_t)OTPcrossaxis[0])*OTPcrossaxis[4]*OTPcrossaxis[8] +
-									 ((int32_t)OTPcrossaxis[1])*OTPcrossaxis[5]*OTPcrossaxis[6] +
-									 ((int32_t)OTPcrossaxis[2])*OTPcrossaxis[3]*OTPcrossaxis[7] -
-									 ((int32_t)OTPcrossaxis[0])*OTPcrossaxis[5]*OTPcrossaxis[7] -
-									 ((int32_t)OTPcrossaxis[2])*OTPcrossaxis[4]*OTPcrossaxis[6] -
-									 ((int32_t)OTPcrossaxis[1])*OTPcrossaxis[3]*OTPcrossaxis[8];
-	if (*crossaxis_det == 0) {
-            goto DET_eql_0;
-        }
-	inv[0] = (float)OTPcrossaxis[4] * OTPcrossaxis[8] - (float)OTPcrossaxis[5] * OTPcrossaxis[7];
-  inv[1] = (float)OTPcrossaxis[2] * OTPcrossaxis[7] - (float)OTPcrossaxis[1] * OTPcrossaxis[8];
-  inv[2] = (float)OTPcrossaxis[1] * OTPcrossaxis[5] - (float)OTPcrossaxis[2] * OTPcrossaxis[4];
-  inv[3] = (float)OTPcrossaxis[5] * OTPcrossaxis[6] - (float)OTPcrossaxis[3] * OTPcrossaxis[8];
-  inv[4] = (float)OTPcrossaxis[0] * OTPcrossaxis[8] - (float)OTPcrossaxis[2] * OTPcrossaxis[6];
-  inv[5] = (float)OTPcrossaxis[2] * OTPcrossaxis[3] - (float)OTPcrossaxis[0] * OTPcrossaxis[5];
-  inv[6] = (float)OTPcrossaxis[3] * OTPcrossaxis[7] - (float)OTPcrossaxis[4] * OTPcrossaxis[6];
-  inv[7] = (float)OTPcrossaxis[1] * OTPcrossaxis[6] - (float)OTPcrossaxis[0] * OTPcrossaxis[7];
-	inv[8] = (float)OTPcrossaxis[0] * OTPcrossaxis[4] - (float)OTPcrossaxis[1] * OTPcrossaxis[3];
-        
-        for (i=0; i<9; i++) {
-            crossaxis_inv[i] = inv[i] * OTPsensitivity/(*crossaxis_det);
-        }
+	
+	mat_A[0][0]=(float)OTPcrossaxis[0];
+  mat_A[1][0]=(float)OTPcrossaxis[3];
+  mat_A[2][0]=(float)OTPcrossaxis[6];
+  mat_A[0][1]=(float)OTPcrossaxis[1];
+  mat_A[1][1]=(float)OTPcrossaxis[4];
+  mat_A[2][1]=(float)OTPcrossaxis[7];
+  mat_A[0][2]=(float)OTPcrossaxis[2];
+  mat_A[1][2]=(float)OTPcrossaxis[5];
+  mat_A[2][2]=(float)OTPcrossaxis[8];
+	
+	mat_invert3(mat_A,inv);
+      
+  for (int i=0; i<3; i++) 
+	{
+		for (int j=0; j<3; j++) 
+		{
+			crossaxis_inv[j+3*i] = inv[i][j] * OTPsensitivity;
+		}
 	}
 }
 
@@ -107,13 +83,9 @@ void Ist8310_CrossaxisTransformation(float crossaxis_inv[9],magDatadef *m,magDat
   outputtmp[2] = m->mx * crossaxis_inv[6] +
                  m->my * crossaxis_inv[7] +
                  m->mz * crossaxis_inv[8];
-	o->mx= (short)(outputtmp[0])-20;
-  o->my= (short)(outputtmp[1])+63;
-  o->mz= (short)(outputtmp[2])+14.5;
-//	o->mx= (short)(outputtmp[0]);
-//  o->my= (short)(outputtmp[1]);
-//  o->mz= (short)(outputtmp[2]);
-		
+	o->mx= (short)(outputtmp[0]);
+  o->my= (short)(outputtmp[1]);
+  o->mz= (short)(outputtmp[2]);
 }
 	
 	
@@ -182,10 +154,12 @@ uint8_t IST8310_GetIntStatus(uint8_t flag)
 	}
 //	return 0;
 }
+
 void IST8310_GetMagData(uint8_t *data)
 {
-	IST8310_Read(IST8310_R_XL,data,6);
 
+	IST8310_Read(IST8310_R_XL,data,6);
+	
 	IST8310_WriteByte(IST8310_R_CONFA,IST8310_ODR_MODE);
 }
 void IST8310_GetData(magDatadef *m)

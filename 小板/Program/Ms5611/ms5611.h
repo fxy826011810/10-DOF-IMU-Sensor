@@ -1,7 +1,7 @@
 #ifndef __MS5611_H__
 #define __MS5611_H__
 #include "stm32f4xx.h"
-#define MS5611_ADDR          	 0x77
+
 #define RESET          				 0x1E
 #define ADC_READ							 0x00
 

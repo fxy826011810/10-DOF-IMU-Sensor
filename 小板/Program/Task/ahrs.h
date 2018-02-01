@@ -16,6 +16,4 @@ void AHRS_Update(void);
 uint8_t AHRS_GetDataStatus(void);
 void AHRS_SetDataStatus(uint8_t x);
 
-//void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs);
-//void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs);
 #endif

@@ -31,12 +31,12 @@ void AHRS_Init(ahrs_t *ahrs)
 	ahrs->kp[0]=2.0f;
 	ahrs->ki[0]=0.01f;
 	
-	ahrs->kp[1]=2.0f;
+	ahrs->kp[1]=8.0f;
 	ahrs->ki[1]=0.01f;
 }
 
 float g;
-#define M_PI (float)3.1415926535
+#define M_PI 3.1415926535f
 uint32_t lastUpdate, now; // 采样周期计数 单位 us 
 float exInt, eyInt, ezInt;  // 误差积分
 static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs) 
@@ -45,7 +45,7 @@ static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs)
     float vx, vy, vz;//vxyz为重力坐标系转到机体坐标系的分量
     float ex, ey, ez;//重力转换分量和加速度计各轴的分量做叉积作为误差
     float tempq0,tempq1,tempq2,tempq3;
-		float gx, gy, gz, ax, ay, az,tempax,tempay,tempaz,tempg,halfT; 
+		float gx, gy, gz, ax, ay, az,halfT; 
     float q0q0 = ahrs->q[0]*ahrs->q[0];
     float q0q1 = ahrs->q[0]*ahrs->q[1];
     float q0q2 = ahrs->q[0]*ahrs->q[2];
@@ -57,31 +57,13 @@ static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs)
     float q2q3 = ahrs->q[2]*ahrs->q[3];
     float q3q3 = ahrs->q[3]*ahrs->q[3];   
 		
-    gx = (float)imu->gx*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
-    gy = (float)imu->gy*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
-    gz = (float)imu->gz*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
-	
-		ax = (float)imu->ax/8192*9.8f;
-    ay = (float)imu->ay/8192*9.8f;
-    az = (float)imu->az/8192*9.8f;
+		gx = (float)imu->gx/16.4f/57.3f;
+    gy = (float)imu->gy/16.4f/57.3f;
+    gz = (float)imu->gz/16.4f/57.3f;
+		ax = (float)imu->ax/8192.0f*9.8f;
+    ay = (float)imu->ay/8192.0f*9.8f;
+    az = (float)imu->az/8192.0f*9.8f;
 
-	if(ax>9.8f)
-		ax=9.8f;
-	if(ax<-9.8f)
-    ax=-9.8f;
-	if(ay>9.8f)
-		ay=9.8f;
-	if(ay<-9.8f)
-    ay=-9.8f;
-	if(az>9.8f)
-		az=9.8f;
-	if(az<-9.8f)
-    az=-9.8f;
-//	tempg=invSqrt(ax*ax+ay*ay+az*az);
-//	if(tempg>9.8f)
-//	{
-//		tempax
-//	}
     now = Get_Time_Micros();  //读取时间 单位是us   
 		if(now>=lastUpdate)	
     {
@@ -125,9 +107,6 @@ static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs)
     ahrs->q[1] = tempq1 * norm;
     ahrs->q[2] = tempq2 * norm;
     ahrs->q[3] = tempq3 * norm;
-		ahrs->angle[0] = 	-atan2	(	2 * ahrs->q[1] * ahrs->q[2] + 2 * ahrs->q[0] * ahrs->q[3], -2 * ahrs->q[2] * ahrs->q[2] - 2 * ahrs->q[3] * ahrs->q[3] + 1) * 180 / M_PI; // yaw        -pi----pi
-		ahrs->angle[1] = 	-asin	(-2 * ahrs->q[1] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[2]) * 180 / M_PI; // pitch    -pi/2    --- pi/2 
-		ahrs->angle[2] = 	atan2	(	2 * ahrs->q[2] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[1], -2 * ahrs->q[1] * ahrs->q[1] - 2 * ahrs->q[2] * ahrs->q[2] + 1) * 180 / M_PI; // roll       -pi-----pi  
 }
 int8_t a=1,b=1,c=1;
 static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs) 
@@ -149,27 +128,18 @@ static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
     float q2q3 = ahrs->q[2]*ahrs->q[3];
     float q3q3 = ahrs->q[3]*ahrs->q[3];    
 		
-    gx = (float)imu->gx*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
-    gy = (float)imu->gy*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
-    gz = (float)imu->gz*0.06097560975609756097560975609756f*0.01745329251994329576923690768489f;
-    ax = (float)imu->ax/8192*9.8f;
-    ay = (float)imu->ay/8192*9.8f;
-    az = (float)imu->az/8192*9.8f;
+		gx = (float)imu->gx/16.4f/57.3f;
+    gy = (float)imu->gy/16.4f/57.3f;
+    gz = (float)imu->gz/16.4f/57.3f;
+    
     mx = (float)m->my*a;
     my = (float)m->mx*b;
-    mz = (float)m->mz*c;		
-		if(ax>9.8f)
-		ax=9.8f;
-	if(ax<-9.8f)
-    ax=-9.8f;
-	if(ay>9.8f)
-		ay=9.8f;
-	if(ay<-9.8f)
-    ay=-9.8f;
-	if(az>9.8f)
-		az=9.8f;
-	if(az<-9.8f)
-    az=-9.8f;
+    mz = (float)m->mz*c;
+
+		ax = (float)imu->ax/8192.0f*9.8f;
+    ay = (float)imu->ay/8192.0f*9.8f;
+    az = (float)imu->az/8192.0f*9.8f;
+
     now = Get_Time_Micros();  //读取时间 单位是us   
 		if(now>=lastUpdate)	
     {
@@ -228,11 +198,13 @@ static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
     ahrs->q[2] = tempq2 * norm;
     ahrs->q[3] = tempq3 * norm;
 
-		ahrs->angle[0] = -atan2(2 * ahrs->q[1] * ahrs->q[2] + 2 * ahrs->q[0] * ahrs->q[3], -2 * ahrs->q[2] * ahrs->q[2] - 2 * ahrs->q[3] * ahrs->q[3] + 1) * 180 / M_PI; // yaw        -pi----pi
-		ahrs->angle[1] = -asin(-2 * ahrs->q[1] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[2]) * 180 / M_PI; // pitch    -pi/2    --- pi/2 
-		ahrs->angle[2] = atan2(2 * ahrs->q[2] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[1], -2 * ahrs->q[1] * ahrs->q[1] - 2 * ahrs->q[2] * ahrs->q[2] + 1) * 180 / M_PI; // roll       -pi-----pi  
 }
-	
+static void AHRS_Q_To_Angle(ahrs_t *ahrs)
+{
+		ahrs->angle[0] = -atan2(2 * ahrs->q[1] * ahrs->q[2] + 2 * ahrs->q[0] * ahrs->q[3], -2 * ahrs->q[2] * ahrs->q[2] - 2 * ahrs->q[3] * ahrs->q[3] + 1) * 180 / M_PI;
+		ahrs->angle[1] = -asin(-2 * ahrs->q[1] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[2]) * 180 / M_PI; // pitch    -pi/2    --- pi/2 
+		ahrs->angle[2] = atan2(2 * ahrs->q[2] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[1], -2 * ahrs->q[1] * ahrs->q[1] - 2 * ahrs->q[2] * ahrs->q[2] + 1) * 180 / M_PI;
+}
 void AHRS_Update(void)
 {
 	kalmanUpdate();
@@ -248,6 +220,10 @@ void AHRS_Update(void)
 		_6AxisAHRSupdate(&cmd.Icm20602.Data.calc,&cmd.ahrs);
 		Icm20602_SetDataStatus(0);
 		AHRS_SetDataStatus(1);
+	}
+	if(AHRS_GetDataStatus())
+	{
+		AHRS_Q_To_Angle(&cmd.ahrs);
 	}
 }	
 	

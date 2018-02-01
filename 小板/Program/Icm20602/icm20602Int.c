@@ -18,7 +18,7 @@ void Icm20602IntInit(void)
 }
 
 
-
+uint32_t ac,bd;float ce;
 void Icm20602Int_IRQHandler(void)
 {
 	
