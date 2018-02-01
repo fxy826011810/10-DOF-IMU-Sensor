@@ -40,3 +40,4 @@ uint8_t Icm20602_ReadBytes(uint8_t reg,uint8_t *pbuffer,uint8_t num)
 	icm20602(1);
 	return 0;
 }
+

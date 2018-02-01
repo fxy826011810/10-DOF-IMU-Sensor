@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include "usart.h"
 #include "common.h"
-int fputc(int ch,FILE*f)//printf函数重定义
-{
-	USART_SendData(USART3,(unsigned char)ch);
-	while(!USART_GetFlagStatus(USART3,USART_FLAG_TXE));
-	return ch;
-}
+//int fputc(int ch,FILE*f)//printf函数重定义
+//{
+//	USART_SendData(USART3,(unsigned char)ch);
+//	while(!USART_GetFlagStatus(USART3,USART_FLAG_TXE));
+//	return ch;
+//}
 
 void Bsp_Usart_Init(void)
 {

@@ -6,21 +6,6 @@
 #include "delay.h"
 #include "main.h"
 
-
-//float Accel_ref[6][3] = {8068, -167, -112,
-//												-8322,  -91,  -20,
-//													-77, 8066,   -5,
-//												  -87,-8370,  131,
-//												 -112,  114, 8193,
-//												 -152,  -20,-8226};
-
-float Accel_ref[6][3] = {
-													8068, -297,    15,
-												 -8317,  -20,    19,				
-												  112,  8053,    95,
-												 -220, -8355,   175,
-												 -160,  -174,  8203,
-											   -181,    90, -8225};
 	void Icm20602_calculate_calibration_values(float accel_ref[6][3], float *accel_T, float *accel_offs, float g)
 {
 	float mat_A[3][3],
@@ -77,22 +62,22 @@ uint8_t Icm20602_init(void)
 														{ICM20602_I2C_IF,0x40},\
 													};
 	
-		{
-		for (unsigned i = 0; i < 6; i++) {
-			for (unsigned j = 0; j < 3; j++) {
-			cmd.Icm20602.calibrate.ref[i][j] = Accel_ref[i][j];
+//		{
+//		for (unsigned i = 0; i < 6; i++) {
+//			for (unsigned j = 0; j < 3; j++) {
+////			cmd.Icm20602.calibrate.ref[i][j] = Accel_ref[i][j];
 //				cmd.Icm20602.calibrate.ref[i][j] = 0;
-			}
-		}
+//			}
+//		}
 
-		for (unsigned j = 0; j < 9; j++) {
-			cmd.Icm20602.calibrate.Crossaxis[j] = 0.0f;
-		}
-	}
+//		for (unsigned j = 0; j < 9; j++) {
+//			cmd.Icm20602.calibrate.Crossaxis[j] = 0.0f;
+//		}
+//	}
 	Icm20602_SetStatus(PinInt);
 	Icm20602_SetDataStatus(0);
 	Icm20602_Set_AccelCalibration_Status(0);
-	Icm20602_Set_Calibration_Status(1);
+//	Icm20602_Set_Calibration_Status(1);
 	Icm20602_ReadByte(ICM20602_WHO_AM_I,&mpu6500_id);								
 	if (mpu6500_id != ICM20602_WHO_AM_I_CONST)
 	return 1; //Ð£ÑéÊ§°Ü£¬·µ»Ø0xff
@@ -102,10 +87,6 @@ uint8_t Icm20602_init(void)
 	Icm20602_WriteByte(initdata[i][0],initdata[i][1]);
 	delay_ms(100);
 }
-	//Icm20602_calculate_calibration_values(cmd.Icm20602.calibrate.ref, cmd.Icm20602.calibrate.Crossaxis,Aoffset,8192.0f);
-//	cmd.Icm20602.calibrate.offset.ax=Aoffset[0];
-//	cmd.Icm20602.calibrate.offset.ay=Aoffset[1];
-//	cmd.Icm20602.calibrate.offset.az=Aoffset[2];
 	return 0;
 }
 
@@ -114,8 +95,6 @@ uint8_t Icm20602_init(void)
 #define calc_gyrotime 100
 uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset)
 {
-	
-	
 	uint16_t i=0,time=0;int32_t temp[3]={0};
 	while(1)
 	{
@@ -132,7 +111,7 @@ uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset)
 			}
 		}
 		if(time==calc_gyrotime)
-						break;
+			break;
 	}
 	temp[0]/=calc_gyrotime/2;
 	temp[1]/=calc_gyrotime/2;
@@ -158,11 +137,14 @@ uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset)
 #define calc_acctime 500
 uint8_t Icm20602_AccelCalc(float ref[6][3])
 {
+	int i=0,time=0;
+	uint8_t calc_axis=0,calc_lock[6]={0};
+	float flashwrite[7][3];
 	while(Icm20602_Get_Calibration_Status()==0)
 	{
-		int i=0,time=0;
+		
 		int32_t temp[3]={0};
-		uint8_t calc_axis=0,calc_lock[6]={0};
+		
 		if(Icm20602_GetIntStatus())
 			{
 				Icm20602_GetData(&cmd.Icm20602.Data.original);
@@ -177,9 +159,9 @@ uint8_t Icm20602_AccelCalc(float ref[6][3])
 				if(i%10==0)
 				{
 				time++;
-				temp[0]-=cmd.Icm20602.Data.original.ax;
-				temp[1]-=cmd.Icm20602.Data.original.ay;
-				temp[2]-=cmd.Icm20602.Data.original.az;
+				temp[0]+=cmd.Icm20602.Data.original.ax;
+				temp[1]+=cmd.Icm20602.Data.original.ay;
+				temp[2]+=cmd.Icm20602.Data.original.az;
 				}
 			}
 			if(time==calc_acctime)
@@ -192,6 +174,10 @@ uint8_t Icm20602_AccelCalc(float ref[6][3])
 					ref[0][0]=temp[0];
 					ref[0][1]=temp[1];
 					ref[0][2]=temp[2];
+					
+					flashwrite[0][0]=temp[0];
+					flashwrite[0][1]=temp[1];
+					flashwrite[0][2]=temp[2];
 					if(calc_lock[0]==0)
 					{
 						calc_axis++;
@@ -203,6 +189,10 @@ uint8_t Icm20602_AccelCalc(float ref[6][3])
 					ref[1][0]=temp[0];
 					ref[1][1]=temp[1];
 					ref[1][2]=temp[2];
+					
+					flashwrite[1][0]=temp[0];
+					flashwrite[1][1]=temp[1];
+					flashwrite[1][2]=temp[2];
 					if(calc_lock[1]==0)
 					{
 						calc_axis++;
@@ -214,6 +204,10 @@ uint8_t Icm20602_AccelCalc(float ref[6][3])
 					ref[2][0]=temp[0];
 					ref[2][1]=temp[1];
 					ref[2][2]=temp[2];
+					
+					flashwrite[2][0]=temp[0];
+					flashwrite[2][1]=temp[1];
+					flashwrite[2][2]=temp[2];
 					if(calc_lock[2]==0)
 					{
 						calc_axis++;
@@ -225,6 +219,10 @@ uint8_t Icm20602_AccelCalc(float ref[6][3])
 					ref[3][0]=temp[0];
 					ref[3][1]=temp[1];
 					ref[3][2]=temp[2];
+					
+					flashwrite[3][0]=temp[0];
+					flashwrite[3][1]=temp[1];
+					flashwrite[3][2]=temp[2];
 					if(calc_lock[3]==0)
 					{
 						calc_axis++;
@@ -236,6 +234,10 @@ uint8_t Icm20602_AccelCalc(float ref[6][3])
 					ref[4][0]=temp[0];
 					ref[4][1]=temp[1];
 					ref[4][2]=temp[2];
+					
+					flashwrite[4][0]=temp[0];
+					flashwrite[4][1]=temp[1];
+					flashwrite[4][2]=temp[2];
 					if(calc_lock[4]==0)
 					{
 						calc_axis++;
@@ -247,6 +249,10 @@ uint8_t Icm20602_AccelCalc(float ref[6][3])
 					ref[5][0]=temp[0];
 					ref[5][1]=temp[1];
 					ref[5][2]=temp[2];
+					
+					flashwrite[5][0]=temp[0];
+					flashwrite[5][1]=temp[1];
+					flashwrite[5][2]=temp[2];
 					if(calc_lock[5]==0)
 					{
 						calc_axis++;
@@ -260,13 +266,20 @@ uint8_t Icm20602_AccelCalc(float ref[6][3])
 							
 		}
 		if(calc_axis==6)
+		{
 			Icm20602_Set_Calibration_Status(1);
+			flashwrite[6][0]=flashwrite[6][2]=2018;
+			flashwrite[6][1]=Icm20602_Get_Calibration_Status();
+			Bsp_Flash_Write(ADDR_FLASH_SECTOR_11,(uint8_t *)flashwrite,sizeof(flashwrite));
+		}
+		
 	}
 	float Aoffset[3]={0};
 	Icm20602_calculate_calibration_values(cmd.Icm20602.calibrate.ref, cmd.Icm20602.calibrate.Crossaxis,Aoffset,8192.0f);
 	cmd.Icm20602.calibrate.offset.ax=Aoffset[0];
 	cmd.Icm20602.calibrate.offset.ay=Aoffset[1];
 	cmd.Icm20602.calibrate.offset.az=Aoffset[2];
+	
 	return 0;
 }
 void Icm20602_CrossaxisTransformation(float crossaxis_inv[9],Icm20602Datadef *m,Icm20602Datadef *o)
@@ -285,9 +298,12 @@ void Icm20602_CrossaxisTransformation(float crossaxis_inv[9],Icm20602Datadef *m,
   outputtmp[2] = m->ax * crossaxis_inv[6] +
                  m->ay * crossaxis_inv[7] +
                  m->az * crossaxis_inv[8];
-	o->ax= (short)(outputtmp[0]);
-  o->ay= (short)(outputtmp[1]);
-  o->az= (short)(outputtmp[2]);	
+	o->ax= (short)(outputtmp[0])-cmd.Icm20602.calibrate.offset.ax;
+  o->ay= (short)(outputtmp[1])-cmd.Icm20602.calibrate.offset.ay;
+  o->az= (short)(outputtmp[2])-cmd.Icm20602.calibrate.offset.az;
+//	o->ax= (short)(outputtmp[0]);
+//  o->ay= (short)(outputtmp[1]);
+//  o->az= (short)(outputtmp[2]);
 }
 
 

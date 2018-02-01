@@ -1,6 +1,7 @@
 #ifndef __ICM20602_H__
 #define __ICM20602_H__
 #include "stm32f4xx.h"
+#include "flash.h"
 #define ICM20602_XG_OFFS_TC_H							0x04
 #define ICM20602_XG_OFFS_TC_L							0x05
 #define ICM20602_YG_OFFS_TC_H							0x07

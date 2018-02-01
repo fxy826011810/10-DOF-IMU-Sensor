@@ -435,6 +435,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\src\stm32f4xx_dma.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\src\stm32f4xx_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -554,6 +559,11 @@
               <FileName>calibration.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\User\calibration.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\User\flash.c</FilePath>
             </File>
           </Files>
         </Group>

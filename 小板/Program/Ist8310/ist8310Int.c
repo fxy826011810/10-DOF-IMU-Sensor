@@ -33,3 +33,4 @@ void Ist8310Int_IRQHandler(void)
 #endif
 	}
 }
+

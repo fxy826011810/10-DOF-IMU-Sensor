@@ -24,18 +24,29 @@
 #include "control.h"
 #include "imu.h"
 #include "kalman.h"
-
+#include "flash.h"
+#include <stdio.h>
+#include <string.h>
 /*
 作者 	;华北理工大学  范翔宇
 QQ		:826011810
 邮箱	:826011810@qq.com
-Github:https://github.com/fxy826011810
 */
 cmd_t cmd={0};
 
-uint32_t ms5611_pressure;
+float initData[7][3];
 void system_init(void)
 {
+	memcpy(initData,(void *)ADDR_FLASH_SECTOR_11,sizeof(initData));
+	if(initData[6][0]==2018&&initData[6][1]==1&&initData[6][2]==2018)
+	{
+		memcpy(cmd.Icm20602.calibrate.ref,initData,sizeof(initData)-12);
+		Icm20602_Set_Calibration_Status(1);
+	}
+	else
+	{
+		Icm20602_Set_Calibration_Status(0);
+	}
 	kalmanInit();
 	AHRS_Init(&cmd.ahrs);
 	Monitor_Init();
@@ -44,7 +55,7 @@ void system_init(void)
 	Bsp_DMA_Init();
 	Bsp_Usart_Init();
 	Bsp_IIC_Init();
-	delay_ms(1000);
+//	delay_ms(1000);
 
 #if	USE_ICM20602	
 	Bsp_Spi_Init();
@@ -52,7 +63,6 @@ void system_init(void)
 	
 	Icm20602_GyroCalc(&cmd.Icm20602.calibrate.offset);
 	Icm20602_AccelCalc(cmd.Icm20602.calibrate.ref);
-//	printf("\r\n float Accel_ref[6][3] ={%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d}\r\n",cmd.Icm20602.calibrate.ref[][])
 	Icm20602IntInit();
 #endif	
 	
