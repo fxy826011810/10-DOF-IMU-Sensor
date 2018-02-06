@@ -77,7 +77,10 @@
 #define ICM20602_WHO_AM_I_CONST		(0X12)//WHO_AM_I编码
 
 
-
+#define ICM20602LIMIT_MIN 2			//陀螺仪最小数据限制
+#define calc_gyrotime 100				//陀螺仪矫正数据采样次数
+#define ACCMAX 7000							//加速度计矫正阈值
+#define calc_acctime 500				//加速度计矫正数据采样次数
 
 typedef struct Icm20602Datadef
 {
@@ -90,8 +93,6 @@ typedef struct Icm20602Datadef
 	int16_t gz;
 }Icm20602Datadef;
 
-
-
 typedef enum
 {
 	PinInt,
@@ -100,8 +101,8 @@ typedef enum
 }Icm20602Status;
 
 uint8_t Icm20602_init(void);
-uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset);
-uint8_t Icm20602_AccelCalc(float ref[6][3]);
+void Icm20602_OffsetInit(void);
+
 void ICM20602_DataUpdate(void);
 
 uint8_t Icm20602_DataLimit(Icm20602Datadef *data);

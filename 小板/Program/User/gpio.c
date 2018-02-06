@@ -10,7 +10,6 @@ void Bsp_GPIO_Init(void)
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC| RCC_AHB1Periph_GPIOB |RCC_AHB1Periph_GPIOA, ENABLE);
 
 //led1
-
 	gpio.GPIO_Mode							= GPIO_Mode_OUT;
 	gpio.GPIO_OType							= GPIO_OType_PP;
 	gpio.GPIO_Pin							= GPIO_Pin_12;
@@ -86,17 +85,19 @@ void Bsp_GPIO_Init(void)
   GPIO_Init(IST8310_INT_GPIO,&gpio);
 	//磁力计重启
 	GPIO_StructInit(&gpio);
-	gpio.GPIO_Mode = IST8310_RST_MODE;
-	gpio.GPIO_OType = IST8310_RST_OTYPE;
-	gpio.GPIO_Pin = IST8310_RST_PIN;
-	gpio.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	gpio.GPIO_Speed = GPIO_Speed_2MHz;
+	gpio.GPIO_Mode 							= IST8310_RST_MODE;
+	gpio.GPIO_OType 						= IST8310_RST_OTYPE;
+	gpio.GPIO_Pin 							= IST8310_RST_PIN;
+	gpio.GPIO_PuPd 							= GPIO_PuPd_NOPULL;
+	gpio.GPIO_Speed 						= GPIO_Speed_2MHz;
 	GPIO_Init(IST8310_RST_GPIO, &gpio);
 	GPIO_SetBits(IST8310_RST_GPIO,IST8310_RST_PIN);
 
 	//磁力计IIC
 
 	//SCL
+
+#if USE_SIMIIC
 	GPIO_StructInit(&ist8310IIC.scl_gpio_init);
 	ist8310IIC.gpioScl=I2CI_SCL_GPIO;
 	ist8310IIC.scl_gpio_init.GPIO_Mode = I2CI_SCL_MODE;
@@ -114,14 +115,31 @@ void Bsp_GPIO_Init(void)
 	ist8310IIC.sda_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
 	ist8310IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(ist8310IIC.gpioSda, &ist8310IIC.sda_gpio_init);
-#if USE_SIMIIC
 #else
+	GPIO_StructInit(&gpio);
+	gpio.GPIO_Mode = I2CI_SCL_MODE;
+	gpio.GPIO_OType = I2CI_SCL_OTYPE;
+	gpio.GPIO_Pin = I2CI_SCL_PIN;
+	gpio.GPIO_PuPd = GPIO_PuPd_UP;
+	gpio.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(I2CI_SCL_GPIO, &gpio);
+	//SDA
+	GPIO_StructInit(&gpio);
+	gpio.GPIO_Mode = I2CI_SDA_MODE;
+	gpio.GPIO_OType = I2CI_SDA_OTYPE;
+	gpio.GPIO_Pin = I2CI_SDA_PIN;
+	gpio.GPIO_PuPd = GPIO_PuPd_UP;
+	gpio.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(I2CI_SDA_GPIO, &gpio);
+	
 	GPIO_PinAFConfig(I2CI_SCL_GPIO, I2CI_SCL_PinSource, GPIO_AF_I2CI);
 	GPIO_PinAFConfig(I2CI_SDA_GPIO, I2CI_SDA_PinSource, GPIO_AF_I2CI);
 #endif
 #endif
 #if	USE_MS5611
 	//气压计IIC
+
+	#if USE_SIMIIC
 	//SCL
 	GPIO_StructInit(&ms5611IIC.scl_gpio_init);
 	ms5611IIC.gpioScl=I2CM_SCL_GPIO;
@@ -140,11 +158,28 @@ void Bsp_GPIO_Init(void)
 	ms5611IIC.sda_gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
 	ms5611IIC.sda_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(ms5611IIC.gpioSda, &ms5611IIC.sda_gpio_init);
-#if USE_SIMIIC
-#else
+	#else
+	//SCL
+	GPIO_StructInit(&gpio);
+	gpio.GPIO_Mode = I2CM_SCL_MODE;
+	gpio.GPIO_OType = I2CM_SCL_OTYPE;
+	gpio.GPIO_Pin = I2CM_SCL_PIN;
+	gpio.GPIO_PuPd = GPIO_PuPd_DOWN;
+	gpio.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(I2CM_SCL_GPIO, &gpio);
+	//SDA
+	GPIO_StructInit(&gpio);
+	gpio.GPIO_Mode = I2CM_SDA_MODE;
+	gpio.GPIO_OType = I2CM_SDA_OTYPE;
+	gpio.GPIO_Pin = I2CM_SDA_PIN;
+	gpio.GPIO_PuPd = GPIO_PuPd_UP;
+	gpio.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(I2CM_SDA_GPIO, &gpio);
+	
 	GPIO_PinAFConfig(I2CM_SCL_GPIO, I2CM_SCL_PinSource, GPIO_AF_I2CM);
 	GPIO_PinAFConfig(I2CM_SDA_GPIO, I2CM_SDA_PinSource, GPIO_AF_I2CM);
-#endif	
+	#endif
+
 #endif
 
 	

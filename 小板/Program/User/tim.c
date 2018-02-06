@@ -1,6 +1,7 @@
 #include "stm32f4xx.h"
 #include "tim.h"
 #include "control.h"
+#include "common.h"
 #include "config.h"
 void Bsp_Tim_Init(void)
 {
@@ -37,7 +38,7 @@ void TIM6_DAC_IRQHandler(void)//¿ØÖÆÈÎÎñ
 				{
 					TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
 					TIM_ClearFlag(TIM6, TIM_FLAG_Update);
-					controlLoop();
+					getFunctionTime(&controlLoop_t);
 				}
 }
 

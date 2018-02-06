@@ -37,3 +37,8 @@ void Monitor_Update(void)
 	Monitor_Calc(&cmd.Ist8310.monitor);
 	Monitor_Calc(&cmd.Ms5611.monitor);
 }
+
+void Monitor_GetFrame(System_Monitor_t *mon)
+{
+	
+}

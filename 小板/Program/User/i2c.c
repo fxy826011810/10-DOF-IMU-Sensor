@@ -5,8 +5,6 @@
 #include "config.h"
 #include "delay.h"
 #include "gpio.h" 
-SimIIC_Typedef ist8310IIC;
-SimIIC_Typedef ms5611IIC;
 
 void Bsp_IIC_Init(void)
 {
@@ -32,6 +30,10 @@ void Bsp_IIC_Init(void)
 	
 	
 }
+#if USE_SIMIIC
+SimIIC_Typedef ist8310IIC;
+SimIIC_Typedef ms5611IIC;
+
 static void IIC_SCL(SimIIC_Typedef *simiic,uint8_t x)
 {
 		switch(x)
@@ -299,7 +301,7 @@ uint8_t IIC_Write(SimIIC_Typedef *simiic, uint8_t reg, uint8_t *Data, uint8_t le
 	IIC_Stop(simiic);
 	return 0;
 }
-
+#else
 void IIC_H_WriteByte(I2C_TypeDef* I2Cx,uint8_t addr,uint8_t reg,uint8_t Data)
 {
 	
@@ -363,7 +365,7 @@ void IIC_H_Read(I2C_TypeDef* I2Cx,uint8_t addr,uint8_t reg,uint8_t *pbuffer, uin
 	}
   I2C_GenerateSTOP(I2Cx, ENABLE);
 }
-
+#endif
 
 
 

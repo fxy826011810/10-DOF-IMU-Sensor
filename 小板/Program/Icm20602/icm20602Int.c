@@ -4,6 +4,7 @@
 #include "config.h"
 #include "main.h"
 #include "imu.h"
+#include "common.h"
 void Icm20602IntInit(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
@@ -31,7 +32,7 @@ void Icm20602Int_IRQHandler(void)
 		cmd.Icm20602.status=PinInt;
 		if(Icm20602_GetStatus()==PinInt)
 		{
-			ICM20602_DataUpdate();
+			getFunctionTime(&ICM20602_DataUpdate_t);
 		}	
 #endif
 	}

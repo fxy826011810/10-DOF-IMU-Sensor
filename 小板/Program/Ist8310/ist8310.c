@@ -6,9 +6,9 @@
 #include "delay.h"
 #include "main.h"
 #include "i2c.h" 
+#include <string.h>
 
-
-#define OTPsensitivity (330)
+#define OTPsensitivity (165)
 
 void Ist8310_Crossaxis_Matrix(float crossaxis_inv[9],int enable)
 {
@@ -32,15 +32,15 @@ void Ist8310_Crossaxis_Matrix(float crossaxis_inv[9],int enable)
   OTPcrossaxis[5] = ((int16_t) crosszbuf[3]) << 8 | crosszbuf[2];
   OTPcrossaxis[8] = ((int16_t) crosszbuf[5]) << 8 | crosszbuf[4];
 	
-	mat_A[0][0]=(float)OTPcrossaxis[0];
-  mat_A[1][0]=(float)OTPcrossaxis[3];
-  mat_A[2][0]=(float)OTPcrossaxis[6];
-  mat_A[0][1]=(float)OTPcrossaxis[1];
-  mat_A[1][1]=(float)OTPcrossaxis[4];
-  mat_A[2][1]=(float)OTPcrossaxis[7];
-  mat_A[0][2]=(float)OTPcrossaxis[2];
-  mat_A[1][2]=(float)OTPcrossaxis[5];
-  mat_A[2][2]=(float)OTPcrossaxis[8];
+	mat_A[0][0]=(float)OTPcrossaxis[0]/2;
+  mat_A[1][0]=(float)OTPcrossaxis[3]/2;
+  mat_A[2][0]=(float)OTPcrossaxis[6]/2;
+  mat_A[0][1]=(float)OTPcrossaxis[1]/2;
+  mat_A[1][1]=(float)OTPcrossaxis[4]/2;
+  mat_A[2][1]=(float)OTPcrossaxis[7]/2;
+  mat_A[0][2]=(float)OTPcrossaxis[2]/2;
+  mat_A[1][2]=(float)OTPcrossaxis[5]/2;
+  mat_A[2][2]=(float)OTPcrossaxis[8]/2;
 	
 	mat_invert3(mat_A,inv);
       
@@ -83,9 +83,9 @@ void Ist8310_CrossaxisTransformation(float crossaxis_inv[9],magDatadef *m,magDat
   outputtmp[2] = m->mx * crossaxis_inv[6] +
                  m->my * crossaxis_inv[7] +
                  m->mz * crossaxis_inv[8];
-	o->mx= (short)(outputtmp[0]);
-  o->my= (short)(outputtmp[1]);
-  o->mz= (short)(outputtmp[2]);
+	o->mx= (short)(outputtmp[0])-16;
+  o->my= (short)(outputtmp[1])-300;
+  o->mz= (short)(outputtmp[2])-201;
 }
 	
 	
@@ -93,13 +93,14 @@ void Ist8310_CrossaxisTransformation(float crossaxis_inv[9],magDatadef *m,magDat
 
 void Ist8310_Init(void)
 {
+#if USE_SIMIIC
 	ist8310IIC.writedataflag=1;
 	ist8310IIC.Addr=IST8310_ADDR;
 	ist8310IIC.ReadByte=&IIC_ReadByte;
 	ist8310IIC.ReadBytes=&IIC_Read;
 	ist8310IIC.WriteByte=&IIC_WriteByte;
 	ist8310IIC.WriteBytes=&IIC_Write;
-	
+#endif	
 	uint8_t id1=0,c,d;
 	IST8310_ReadByte(IST8310_WHO_AM_I,&id1);
 	delay_ms(10);
@@ -136,24 +137,11 @@ void Ist8310_DataUpdate(void)
 {
 	IST8310_GetData(&cmd.Ist8310.Data.original);
 	Ist8310_CrossaxisTransformation(cmd.Ist8310.Crossaxis,&cmd.Ist8310.Data.original,&cmd.Ist8310.Data.calc);
-			
+//	memcpy(&cmd.Ist8310.Data.calc,&cmd.Ist8310.Data.original,sizeof(cmd.Ist8310.Data.original));		
 	IST8310_SetDataStatus(1);
 	Monitor_Set(&cmd.Ist8310.monitor);
 }
-uint8_t IST8310_GetIntStatus(uint8_t flag)
-{
-	uint8_t a;
-	if(flag)
-	{
-	return GPIO_ReadInputDataBit(IST8310_INT_GPIO,IST8310_INT_PIN);
-	}
-	else
-	{
-	 IST8310_ReadByte(IST8310_R_MODE,&a);
-	return a&0x01;
-	}
-//	return 0;
-}
+
 
 void IST8310_GetMagData(uint8_t *data)
 {
@@ -187,7 +175,20 @@ void IST8310_SetDataStatus(uint8_t x)
 	cmd.Ist8310.dataStatus=x;
 }
 
-
+uint8_t IST8310_GetIntStatus(uint8_t flag)
+{
+	uint8_t a;
+	if(flag)
+	{
+	return GPIO_ReadInputDataBit(IST8310_INT_GPIO,IST8310_INT_PIN);
+	}
+	else
+	{
+	 IST8310_ReadByte(IST8310_R_MODE,&a);
+	return a&0x01;
+	}
+//	return 0;
+}
 
 
 

@@ -31,7 +31,7 @@ void AHRS_Init(ahrs_t *ahrs)
 	ahrs->kp[0]=2.0f;
 	ahrs->ki[0]=0.01f;
 	
-	ahrs->kp[1]=8.0f;
+	ahrs->kp[1]=4.0f;
 	ahrs->ki[1]=0.01f;
 }
 
@@ -132,9 +132,9 @@ static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
     gy = (float)imu->gy/16.4f/57.3f;
     gz = (float)imu->gz/16.4f/57.3f;
     
-    mx = (float)m->my*a;
-    my = (float)m->mx*b;
-    mz = (float)m->mz*c;
+    mx = (float)(m->my)*a;
+    my = (float)(m->mx)*b;
+    mz = (float)(m->mz)*c;
 
 		ax = (float)imu->ax/8192.0f*9.8f;
     ay = (float)imu->ay/8192.0f*9.8f;

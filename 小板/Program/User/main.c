@@ -47,6 +47,7 @@ void system_init(void)
 	{
 		Icm20602_Set_Calibration_Status(0);
 	}
+	getFunctionTimeInit();
 	kalmanInit();
 	AHRS_Init(&cmd.ahrs);
 	Monitor_Init();
@@ -55,14 +56,10 @@ void system_init(void)
 	Bsp_DMA_Init();
 	Bsp_Usart_Init();
 	Bsp_IIC_Init();
-//	delay_ms(1000);
-
 #if	USE_ICM20602	
 	Bsp_Spi_Init();
 	Icm20602_init();
-	
-	Icm20602_GyroCalc(&cmd.Icm20602.calibrate.offset);
-	Icm20602_AccelCalc(cmd.Icm20602.calibrate.ref);
+	Icm20602_OffsetInit();
 	Icm20602IntInit();
 #endif	
 	
@@ -91,7 +88,7 @@ int main(void)
 				if(Icm20602_GetIntStatus())
 			{
 				__disable_irq();
-				ICM20602_DataUpdate();
+				getFunctionTime(&ICM20602_DataUpdate_t);
 				__enable_irq();
 			}
 		}
@@ -100,17 +97,12 @@ int main(void)
 		if(IST8310_GetIntStatus(1))
 		{
 			__disable_irq();
-			aa=Get_Time_Micros();
-				Ist8310_DataUpdate();
-			bb=Get_Time_Micros();
-			cc=(float)(bb-aa)/1000000.0f;
+			getFunctionTime(&Ist8310_DataUpdate_t);
 			__enable_irq();
 		}
 #endif
 
-#if WHILE_DEBUG
-		LED_HEAT();
-#endif
+
 
   }
 }

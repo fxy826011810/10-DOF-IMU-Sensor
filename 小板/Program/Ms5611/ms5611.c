@@ -6,7 +6,8 @@
 #include "main.h" 
 #include "stm32f4xx.h" 
 #include "monitor.h" 
-uint8_t Ms5611_PromRead(SimIIC_Typedef *simiic,uint8_t reg,uint16_t *Data)
+
+static uint8_t Ms5611_PromRead(uint8_t reg,uint16_t *Data)
 {
 uint8_t i,buffer[16];
 	for(i=0;i<8;i++)
@@ -25,17 +26,19 @@ void Ms5611_Reset(void)
 
 void Ms5611_Init(void)
 {
+	
 	cmd.Ms5611.Status=prepareTempADC;
+#if USE_SIMIIC
 	ms5611IIC.writedataflag=0;
 	ms5611IIC.Addr=MS5611_ADDR;
 	ms5611IIC.ReadByte=&IIC_ReadByte;
 	ms5611IIC.ReadBytes=&IIC_Read;
 	ms5611IIC.WriteByte=&IIC_WriteByte;
 	ms5611IIC.WriteBytes=&IIC_Write;
-	
+#endif	
 	Ms5611_Reset();
 	delay_ms(100);
-	Ms5611_PromRead(&ms5611IIC,NULL,cmd.Ms5611.Data.prom);
+	Ms5611_PromRead(NULL,cmd.Ms5611.Data.prom);
 }
 
 
@@ -57,12 +60,12 @@ uint8_t Ms5611_ReadD(Ms5611Status *status,Ms5611DataDef *data)
 	
 	if(*status==prepareTempADC)
 	{
-		Ms5611_WriteByte(Convert_D2_4096,NULL);
+		Ms5611_WriteByte(Convert_D2_2048,NULL);
 		*status=readTempADC;
 	}
 	else if(*status==preparePressureADC)
 	{
-		Ms5611_WriteByte(Convert_D1_4096,NULL);
+		Ms5611_WriteByte(Convert_D1_2048,NULL);
 		*status=readPressureADC;
 	}
   return 0;

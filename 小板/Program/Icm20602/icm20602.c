@@ -62,18 +62,7 @@ uint8_t Icm20602_init(void)
 														{ICM20602_I2C_IF,0x40},\
 													};
 	
-//		{
-//		for (unsigned i = 0; i < 6; i++) {
-//			for (unsigned j = 0; j < 3; j++) {
-////			cmd.Icm20602.calibrate.ref[i][j] = Accel_ref[i][j];
-//				cmd.Icm20602.calibrate.ref[i][j] = 0;
-//			}
-//		}
 
-//		for (unsigned j = 0; j < 9; j++) {
-//			cmd.Icm20602.calibrate.Crossaxis[j] = 0.0f;
-//		}
-//	}
 	Icm20602_SetStatus(PinInt);
 	Icm20602_SetDataStatus(0);
 	Icm20602_Set_AccelCalibration_Status(0);
@@ -91,9 +80,8 @@ uint8_t Icm20602_init(void)
 }
 
 
-#define ICM20602LIMIT_MIN 2
-#define calc_gyrotime 100
-uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset)
+
+static uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset)
 {
 	uint16_t i=0,time=0;int32_t temp[3]={0};
 	while(1)
@@ -133,9 +121,8 @@ uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset)
 	return 1;//½ÃÕýÊ§°Ü
 }
 
-#define ACCMAX 7000
-#define calc_acctime 500
-uint8_t Icm20602_AccelCalc(float ref[6][3])
+
+static uint8_t Icm20602_AccelCalc(float ref[6][3])
 {
 	int i=0,time=0;
 	uint8_t calc_axis=0,calc_lock[6]={0};
@@ -282,6 +269,12 @@ uint8_t Icm20602_AccelCalc(float ref[6][3])
 	
 	return 0;
 }
+
+void Icm20602_OffsetInit(void)
+{
+	Icm20602_GyroCalc(&cmd.Icm20602.calibrate.offset);
+	Icm20602_AccelCalc(cmd.Icm20602.calibrate.ref);
+}
 void Icm20602_CrossaxisTransformation(float crossaxis_inv[9],Icm20602Datadef *m,Icm20602Datadef *o)
 {
 
@@ -337,7 +330,21 @@ void Icm20602_GetData(Icm20602Datadef *icmdata)
 	icmdata->gx=(data[8]<<8|data[9]);
 	icmdata->gy=(data[10]<<8|data[11]);
 	icmdata->gz=(data[12]<<8|data[13]);
+	if(icmdata->ax>8192)
+		icmdata->ax=8192;
+	if(icmdata->ax<-8192)
+		icmdata->ax=-8192;
 	
+	if(icmdata->ay>8192)
+		icmdata->ay=8192;
+	if(icmdata->ay<-8192)
+		icmdata->ay=-8192;
+	
+	if(icmdata->az>8192)
+		icmdata->az=8192;
+	if(icmdata->az<-8192)
+		icmdata->az=-8192;
+
 //	icmdata->gx=(data[8]<<8|data[9])+offset.gx;
 //	icmdata->gy=(data[10]<<8|data[11])+offset.gy;
 //	icmdata->gz=(data[12]<<8|data[13])+offset.gz;
@@ -357,13 +364,13 @@ void Icm20602DataFilter(Icm20602Datadef *data,Icm20602Datadef *out)
 	out->ay=data->ay;
 	out->az=data->az;
 	
-//	out->gx=(1-filter_rate)*out->gx+filter_rate*data->gx;
-//	out->gy=(1-filter_rate)*out->gy+filter_rate*data->gy;
-//	out->gz=(1-filter_rate)*out->gz+filter_rate*data->gz;
+	out->gx=(1-filter_rate)*out->gx+filter_rate*data->gx;
+	out->gy=(1-filter_rate)*out->gy+filter_rate*data->gy;
+	out->gz=(1-filter_rate)*out->gz+filter_rate*data->gz;
 	
-	out->gx=data->gx;
-	out->gy=data->gy;
-	out->gz=data->gz;
+//	out->gx=data->gx;
+//	out->gy=data->gy;
+//	out->gz=data->gz;
 	
 	out->temp=((Filter_time-1)*out->temp+data->temp)/Filter_time;
 }

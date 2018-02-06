@@ -7,8 +7,8 @@
 #include "ms5611.h"
 #include "monitor.h"
 #include "ahrs.h"
-
-
+#include "config.h"
+#include "common.h"
 #define	LED_HEAT() GPIOC->ODR^=GPIO_Pin_12
 #define LED(x)	x ? GPIO_SetBits(GPIOC,GPIO_Pin_12):GPIO_ResetBits(GPIOC,GPIO_Pin_12)
 
