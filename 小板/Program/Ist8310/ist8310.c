@@ -7,7 +7,7 @@
 #include "main.h"
 #include "i2c.h" 
 #include <string.h>
-
+Ist8310_t ist8310;
 #define OTPsensitivity (165)
 
 void Ist8310_Crossaxis_Matrix(float crossaxis_inv[9],int enable)
@@ -129,20 +129,23 @@ void Ist8310_Init(void)
         crossaxis_enable = 0;
     else
         crossaxis_enable = 1;
-	Ist8310_Crossaxis_Matrix(cmd.Ist8310.Crossaxis,crossaxis_enable);
+	Ist8310_Crossaxis_Matrix(ist8310.Crossaxis,crossaxis_enable);
 	
 }
 
+
+void IST8310_GetCalcData(Ist8310_t *ist8310)
+{
+	IST8310_GetData(&ist8310->Data.original);
+	Ist8310_CrossaxisTransformation(ist8310->Crossaxis,&ist8310->Data.original,&ist8310->Data.calc);
+//	memcpy(&ist8310.Data.calc,&ist8310.Data.original,sizeof(ist8310.Data.original));		
+	IST8310_SetDataStatus(1);
+	
+}
 void Ist8310_DataUpdate(void)
 {
-	IST8310_GetData(&cmd.Ist8310.Data.original);
-	Ist8310_CrossaxisTransformation(cmd.Ist8310.Crossaxis,&cmd.Ist8310.Data.original,&cmd.Ist8310.Data.calc);
-//	memcpy(&cmd.Ist8310.Data.calc,&cmd.Ist8310.Data.original,sizeof(cmd.Ist8310.Data.original));		
-	IST8310_SetDataStatus(1);
-	Monitor_Set(&cmd.Ist8310.monitor);
+	IST8310_GetCalcData(&ist8310);
 }
-
-
 void IST8310_GetMagData(uint8_t *data)
 {
 
@@ -160,19 +163,19 @@ void IST8310_GetData(magDatadef *m)
 }
 uint8_t IST8310_GetStatus(void)
 {
-	return cmd.Ist8310.status;
+	return ist8310.status;
 }
 void IST8310_SetStatus(uint8_t x)
 {
-	cmd.Ist8310.status=x;
+	ist8310.status=x;
 }
 uint8_t IST8310_GetDataStatus(void)
 {
-	return cmd.Ist8310.dataStatus;
+	return ist8310.dataStatus;
 }
 void IST8310_SetDataStatus(uint8_t x)
 {
-	cmd.Ist8310.dataStatus=x;
+	ist8310.dataStatus=x;
 }
 
 uint8_t IST8310_GetIntStatus(uint8_t flag)

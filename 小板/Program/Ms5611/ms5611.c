@@ -6,7 +6,7 @@
 #include "main.h" 
 #include "stm32f4xx.h" 
 #include "monitor.h" 
-
+Ms5611_t ms5611;
 static uint8_t Ms5611_PromRead(uint8_t reg,uint16_t *Data)
 {
 uint8_t i,buffer[16];
@@ -27,7 +27,7 @@ void Ms5611_Reset(void)
 void Ms5611_Init(void)
 {
 	
-	cmd.Ms5611.Status=prepareTempADC;
+	ms5611.Status=prepareTempADC;
 #if USE_SIMIIC
 	ms5611IIC.writedataflag=0;
 	ms5611IIC.Addr=MS5611_ADDR;
@@ -38,35 +38,35 @@ void Ms5611_Init(void)
 #endif	
 	Ms5611_Reset();
 	delay_ms(100);
-	Ms5611_PromRead(NULL,cmd.Ms5611.Data.prom);
+	Ms5611_PromRead(NULL,ms5611.Data.prom);
 }
 
 
-uint8_t Ms5611_ReadD(Ms5611Status *status,Ms5611DataDef *data)
+uint8_t Ms5611_ReadD(Ms5611_t *ms)
 {
 	uint8_t ms5611Registerdata[3];
-	 if(*status==readTempADC)
+	 if(ms->Status==readTempADC)
 	{
 		Ms5611_Read(ADC_READ,ms5611Registerdata,3);
-		data->temp=ms5611Registerdata[0]<<16|ms5611Registerdata[1]<<8|ms5611Registerdata[2];
-		*status=preparePressureADC;
+		ms->Data.temp=ms5611Registerdata[0]<<16|ms5611Registerdata[1]<<8|ms5611Registerdata[2];
+		ms->Status=preparePressureADC;
 	}
-	else if(*status==readPressureADC)
+	else if(ms->Status==readPressureADC)
 	{
 		Ms5611_Read(ADC_READ,ms5611Registerdata,3);
-		data->pressure=ms5611Registerdata[0]<<16|ms5611Registerdata[1]<<8|ms5611Registerdata[2];
-		*status=prepareTempADC;
+		ms->Data.pressure=ms5611Registerdata[0]<<16|ms5611Registerdata[1]<<8|ms5611Registerdata[2];
+		ms->Status=prepareTempADC;
 	}
 	
-	if(*status==prepareTempADC)
+	if(ms->Status==prepareTempADC)
 	{
 		Ms5611_WriteByte(Convert_D2_2048,NULL);
-		*status=readTempADC;
+		ms->Status=readTempADC;
 	}
-	else if(*status==preparePressureADC)
+	else if(ms->Status==preparePressureADC)
 	{
 		Ms5611_WriteByte(Convert_D1_2048,NULL);
-		*status=readPressureADC;
+		ms->Status=readPressureADC;
 	}
   return 0;
 }
@@ -74,9 +74,7 @@ uint8_t Ms5611_ReadD(Ms5611Status *status,Ms5611DataDef *data)
 
 void Ms5611_DataUpdate(void)
 {
-	Ms5611_ReadD(&cmd.Ms5611.Status,&cmd.Ms5611.Data);
-	Monitor_Set(&cmd.Ms5611.monitor);
-	
+	Ms5611_ReadD(&ms5611);
 }
 
 

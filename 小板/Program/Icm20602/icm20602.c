@@ -6,6 +6,8 @@
 #include "delay.h"
 #include "main.h"
 
+Icm20602_t icm20602;
+//矫正矩阵计算
 	void Icm20602_calculate_calibration_values(float accel_ref[6][3], float *accel_T, float *accel_offs, float g)
 {
 	float mat_A[3][3],
@@ -38,12 +40,8 @@
 		}
 	}
 }
-	
-	
-	
-	
-	
-	
+
+//芯片初始化
 uint8_t Icm20602_init(void)
 {
 	
@@ -65,37 +63,39 @@ uint8_t Icm20602_init(void)
 
 	Icm20602_SetStatus(PinInt);
 	Icm20602_SetDataStatus(0);
-	Icm20602_Set_AccelCalibration_Status(0);
+	Icm20602_openAccelCalibrate(0);
 //	Icm20602_Set_Calibration_Status(1);
 	Icm20602_ReadByte(ICM20602_WHO_AM_I,&mpu6500_id);								
 	if (mpu6500_id != ICM20602_WHO_AM_I_CONST)
 	return 1; //校验失败，返回0xff
 	
 	for(i=0;i<len;i++)
-{
-	Icm20602_WriteByte(initdata[i][0],initdata[i][1]);
-	delay_ms(100);
-}
+	{
+		Icm20602_WriteByte(initdata[i][0],initdata[i][1]);
+		delay_ms(100);
+	}
+	Icm20602_OffsetInit();
 	return 0;
 }
 
 
-
-static uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset)
+//陀螺仪矫正值获取
+static uint8_t Icm20602_GyroCalc(Icm20602_t *icm)
 {
 	uint16_t i=0,time=0;int32_t temp[3]={0};
+	Icm20602Datadef	tempData;
 	while(1)
 	{
 		if(Icm20602_GetIntStatus())
 		{
 			i++;	
-			Icm20602_GetData(&cmd.Icm20602.Data.original);
+			Icm20602_GetData(&tempData);
 			if(i%10==0)
 			{
 			time++;
-			temp[0]-=cmd.Icm20602.Data.original.gx;
-			temp[1]-=cmd.Icm20602.Data.original.gy;
-			temp[2]-=cmd.Icm20602.Data.original.gz;
+			temp[0]-=tempData.gx;
+			temp[1]-=tempData.gy;
+			temp[2]-=tempData.gz;
 			}
 		}
 		if(time==calc_gyrotime)
@@ -107,9 +107,9 @@ static uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset)
 	//下面的50应该用方差来替代，找个合适的阈值
 	if(temp[0]<100&&temp[1]<100&&temp[2]<100)
 	{
-		offset->gx=temp[0];
-		offset->gy=temp[1];
-		offset->gz=temp[2];
+		icm->calibrate.offset.gx=temp[0];
+		icm->calibrate.offset.gy=temp[1];
+		icm->calibrate.offset.gz=temp[2];
 		Icm20602_WriteByte(ICM20602_XG_OFFS_USRH,(uint8_t)((int16_t)temp[0]>>8));
 		Icm20602_WriteByte(ICM20602_XG_OFFS_USRL,(uint8_t)((int16_t)temp[0]&0xFF));
 		Icm20602_WriteByte(ICM20602_YG_OFFS_USRH,(uint8_t)((int16_t)temp[1]>>8));
@@ -121,7 +121,7 @@ static uint8_t Icm20602_GyroCalc(Icm20602Datadef *offset)
 	return 1;//矫正失败
 }
 
-
+//加速度计矫正值获取
 static uint8_t Icm20602_AccelCalc(float ref[6][3])
 {
 	int i=0,time=0;
@@ -134,21 +134,21 @@ static uint8_t Icm20602_AccelCalc(float ref[6][3])
 		
 		if(Icm20602_GetIntStatus())
 			{
-				Icm20602_GetData(&cmd.Icm20602.Data.original);
+				Icm20602_GetData(&icm20602.Data.original);
 			}
 			
-			while(Icm20602_Get_AccelCalibration_Status())
+			while(Icm20602_isOpenAccelCalibrate())
 		{
 			if(Icm20602_GetIntStatus())
 			{
 				i++;	
-				Icm20602_GetData(&cmd.Icm20602.Data.original);
+				Icm20602_GetData(&icm20602.Data.original);
 				if(i%10==0)
 				{
 				time++;
-				temp[0]+=cmd.Icm20602.Data.original.ax;
-				temp[1]+=cmd.Icm20602.Data.original.ay;
-				temp[2]+=cmd.Icm20602.Data.original.az;
+				temp[0]+=icm20602.Data.original.ax;
+				temp[1]+=icm20602.Data.original.ay;
+				temp[2]+=icm20602.Data.original.az;
 				}
 			}
 			if(time==calc_acctime)
@@ -248,7 +248,7 @@ static uint8_t Icm20602_AccelCalc(float ref[6][3])
 				}
 				i=0;
 				time=0;
-				Icm20602_Set_AccelCalibration_Status(0);
+				Icm20602_openAccelCalibrate(0);
 			}
 							
 		}
@@ -262,19 +262,21 @@ static uint8_t Icm20602_AccelCalc(float ref[6][3])
 		
 	}
 	float Aoffset[3]={0};
-	Icm20602_calculate_calibration_values(cmd.Icm20602.calibrate.ref, cmd.Icm20602.calibrate.Crossaxis,Aoffset,8192.0f);
-	cmd.Icm20602.calibrate.offset.ax=Aoffset[0];
-	cmd.Icm20602.calibrate.offset.ay=Aoffset[1];
-	cmd.Icm20602.calibrate.offset.az=Aoffset[2];
+	Icm20602_calculate_calibration_values(icm20602.calibrate.ref, icm20602.calibrate.Crossaxis,Aoffset,8192.0f);
+	icm20602.calibrate.offset.ax=Aoffset[0];
+	icm20602.calibrate.offset.ay=Aoffset[1];
+	icm20602.calibrate.offset.az=Aoffset[2];
 	
 	return 0;
 }
-
+//芯片矫正初始化
 void Icm20602_OffsetInit(void)
 {
-	Icm20602_GyroCalc(&cmd.Icm20602.calibrate.offset);
-	Icm20602_AccelCalc(cmd.Icm20602.calibrate.ref);
+	Icm20602_GyroCalc(&icm20602);
+	Icm20602_AccelCalc(icm20602.calibrate.ref);
 }
+
+//对初始加速度数据进行椭圆矫正
 void Icm20602_CrossaxisTransformation(float crossaxis_inv[9],Icm20602Datadef *m,Icm20602Datadef *o)
 {
 
@@ -291,17 +293,17 @@ void Icm20602_CrossaxisTransformation(float crossaxis_inv[9],Icm20602Datadef *m,
   outputtmp[2] = m->ax * crossaxis_inv[6] +
                  m->ay * crossaxis_inv[7] +
                  m->az * crossaxis_inv[8];
-	o->ax= (short)(outputtmp[0])-cmd.Icm20602.calibrate.offset.ax;
-  o->ay= (short)(outputtmp[1])-cmd.Icm20602.calibrate.offset.ay;
-  o->az= (short)(outputtmp[2])-cmd.Icm20602.calibrate.offset.az;
+	o->ax= (short)(outputtmp[0])-icm20602.calibrate.offset.ax;
+  o->ay= (short)(outputtmp[1])-icm20602.calibrate.offset.ay;
+  o->az= (short)(outputtmp[2])-icm20602.calibrate.offset.az;
 //	o->ax= (short)(outputtmp[0]);
 //  o->ay= (short)(outputtmp[1]);
 //  o->az= (short)(outputtmp[2]);
 }
 
 
-
-uint8_t Icm20602_DataLimit(Icm20602Datadef *data)
+//限制陀螺仪读取值
+uint8_t Icm20602_GyroDataLimit(Icm20602Datadef *data)
 {
 	if(data->gx<ICM20602LIMIT_MIN&&data->gx>(-ICM20602LIMIT_MIN))
 		data->gx=0;
@@ -311,13 +313,13 @@ uint8_t Icm20602_DataLimit(Icm20602Datadef *data)
 		data->gz=0;
 	return 0;
 }
-
+//读取寄存器数值
 void Icm20602_GetRegisterData(uint8_t *data)
 {
 	Icm20602_ReadBytes(ICM20602_ACCEL_XOUT_H,data,14);
 }
 
-
+//读取并解析数据
 void Icm20602_GetData(Icm20602Datadef *icmdata)
 {
 	uint8_t data[14];
@@ -351,9 +353,13 @@ void Icm20602_GetData(Icm20602Datadef *icmdata)
 	
 }
 
+
+
+
+//数据滤波
 #define Filter_time 100
 #define filter_num 1
-#define filter_rate 0.5
+#define filter_rate 0.9
 void Icm20602DataFilter(Icm20602Datadef *data,Icm20602Datadef *out)
 {
 //	out->ax=((Filter_time-filter_num)*out->ax+filter_num*data->ax)/Filter_time;
@@ -375,34 +381,43 @@ void Icm20602DataFilter(Icm20602Datadef *data,Icm20602Datadef *out)
 	out->temp=((Filter_time-1)*out->temp+data->temp)/Filter_time;
 }
 
-
+//数据更新
 void ICM20602_DataUpdate(void)
 {
-		Icm20602_GetData(&cmd.Icm20602.Data.original);
-		Icm20602_CrossaxisTransformation(cmd.Icm20602.calibrate.Crossaxis,&cmd.Icm20602.Data.original,&cmd.Icm20602.Data.original);
-		Icm20602DataFilter(&cmd.Icm20602.Data.original,&cmd.Icm20602.Data.calc);
+		Icm20602_GetData(&icm20602.Data.original);
+		Icm20602_CrossaxisTransformation(icm20602.calibrate.Crossaxis,&icm20602.Data.original,&icm20602.Data.original);
+		Icm20602DataFilter(&icm20602.Data.original,&icm20602.Data.calc);
 		
-		Icm20602_DataLimit(&cmd.Icm20602.Data.calc);
+		Icm20602_GyroDataLimit(&icm20602.Data.calc);
 	
 		Icm20602_SetDataStatus(1);
 	
-		Monitor_Set(&cmd.Icm20602.monitor);
+		
 }
 
 
-
+//设置ICM20602数据读取状态
 void Icm20602_SetDataStatus(uint8_t x)
 {
 	if(x)
-	cmd.Icm20602.Data.dataStatus=1;
+	icm20602.Data.dataStatus=1;
 	else
-	cmd.Icm20602.Data.dataStatus=0;
-}
-uint8_t Icm20602_GetDataStatus(void)
-{
-	return cmd.Icm20602.Data.dataStatus;
+	icm20602.Data.dataStatus=0;
 }
 
+
+
+
+//获取ICM20602数据读取状态
+uint8_t Icm20602_GetDataStatus(void)
+{
+	return icm20602.Data.dataStatus;
+}
+
+
+
+
+//获取ICM20602_INT_STATUS状态
 uint8_t Icm20602_GetIntStatus(void)
 {
 	uint8_t a;
@@ -410,33 +425,86 @@ uint8_t Icm20602_GetIntStatus(void)
 	return a&0x01;
 }
 
+
+
+
+//获取ic状态
 Icm20602Status Icm20602_GetStatus(void)
 {
-	return cmd.Icm20602.status;
+	return icm20602.status;
 }
+
+//设置ic状态
 void Icm20602_SetStatus(Icm20602Status  x)
 {
-	cmd.Icm20602.status=x;
+	icm20602.status=x;
 }
+
+
+
+
+//设置总矫正状态
 void Icm20602_Set_Calibration_Status(uint8_t  x)
 {
 	if(x)
-		cmd.Icm20602.calibrate.status=1;
+		icm20602.calibrate.status=1;
 	else
-		cmd.Icm20602.calibrate.status=0;
+		icm20602.calibrate.status=0;
 }
+//获取总矫正状态
 uint8_t Icm20602_Get_Calibration_Status(void)
 {
-	return cmd.Icm20602.calibrate.status;
+	return icm20602.calibrate.status;
 }
-void Icm20602_Set_AccelCalibration_Status(uint8_t  x)
+
+
+
+
+
+//设置加速度计矫正状态
+void Icm20602_Set_AccCalibration_Status(uint8_t  x)
 {
 	if(x)
-		cmd.Icm20602.calibrate.AccelOn=1;
+		icm20602.calibrate.accStatus=1;
 	else
-		cmd.Icm20602.calibrate.AccelOn=0;
+		icm20602.calibrate.accStatus=0;
 }
-uint8_t Icm20602_Get_AccelCalibration_Status(void)
+//获取加速度计矫正状态
+uint8_t Icm20602_Get_AccCalibration_Status(void)
 {
-	return cmd.Icm20602.calibrate.AccelOn;
+	return icm20602.calibrate.accStatus;
+}
+
+
+
+
+//设置陀螺仪矫正状态
+void Icm20602_Set_GyroCalibration_Status(uint8_t  x)
+{
+	if(x)
+		icm20602.calibrate.gyroStatus=1;
+	else
+		icm20602.calibrate.gyroStatus=0;
+}
+//获取陀螺仪矫正状态
+uint8_t Icm20602_Get_GyroCalibration_Status(void)
+{
+	return icm20602.calibrate.gyroStatus;
+}
+
+
+
+
+//设置是否加速度计矫正
+void Icm20602_openAccelCalibrate(uint8_t  x)
+{
+	if(x)
+		icm20602.calibrate.AccelOn=1;
+	else
+		icm20602.calibrate.AccelOn=0;
+}
+//是否开启加速度计矫正
+uint8_t Icm20602_isOpenAccelCalibrate(void)
+{
+	return icm20602.calibrate.AccelOn;
 }

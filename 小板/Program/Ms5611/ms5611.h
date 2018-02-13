@@ -1,6 +1,7 @@
 #ifndef __MS5611_H__
 #define __MS5611_H__
 #include "stm32f4xx.h"
+#include "monitor.h"
 
 #define RESET          				 0x1E
 #define ADC_READ							 0x00
@@ -34,7 +35,12 @@ typedef enum
 	readPressureADC,
 }Ms5611Status;
 
-
+typedef struct 
+{
+	Ms5611DataDef			Data;
+	Ms5611Status			Status;
+	System_Monitor_t 	monitor;
+}Ms5611_t;
 
 void Ms5611_Init(void);
 void Ms5611_DataUpdate(void);

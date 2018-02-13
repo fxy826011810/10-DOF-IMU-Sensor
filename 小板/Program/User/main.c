@@ -1,4 +1,5 @@
 #include "stm32f4xx.h"
+#include "initialize.h"
 #include "icm20602Int.h"
 #include "icm20602Dri.h"
 #include "ist8310Dri.h"
@@ -25,6 +26,7 @@
 #include "imu.h"
 #include "kalman.h"
 #include "flash.h"
+#include "debug.h"
 #include <stdio.h>
 #include <string.h>
 /*
@@ -34,22 +36,18 @@ QQ		:826011810
 */
 cmd_t cmd={0};
 
-float initData[7][3];
+
+
+
+
 void system_init(void)
 {
-	memcpy(initData,(void *)ADDR_FLASH_SECTOR_11,sizeof(initData));
-	if(initData[6][0]==2018&&initData[6][1]==1&&initData[6][2]==2018)
-	{
-		memcpy(cmd.Icm20602.calibrate.ref,initData,sizeof(initData)-12);
-		Icm20602_Set_Calibration_Status(1);
-	}
-	else
-	{
-		Icm20602_Set_Calibration_Status(0);
-	}
-	getFunctionTimeInit();
+
+	
+	cmd_init();
+	Debug_Init();
 	kalmanInit();
-	AHRS_Init(&cmd.ahrs);
+	AHRS_Init();
 	Monitor_Init();
   Bsp_NVIC_Init();
 	Bsp_GPIO_Init();
@@ -59,7 +57,7 @@ void system_init(void)
 #if	USE_ICM20602	
 	Bsp_Spi_Init();
 	Icm20602_init();
-	Icm20602_OffsetInit();
+	
 	Icm20602IntInit();
 #endif	
 	
@@ -70,7 +68,7 @@ void system_init(void)
 #if	USE_MS5611
 	Ms5611_Init();
 #endif
-
+	
 #if USE_TIM
 	Bsp_Tim_Init();
   sysEnable();  
@@ -89,6 +87,7 @@ int main(void)
 			{
 				__disable_irq();
 				getFunctionTime(&ICM20602_DataUpdate_t);
+				Monitor_Set(&cmd.Icm20602->monitor);
 				__enable_irq();
 			}
 		}
@@ -98,6 +97,7 @@ int main(void)
 		{
 			__disable_irq();
 			getFunctionTime(&Ist8310_DataUpdate_t);
+			Monitor_Set(&cmd.Ist8310->monitor);
 			__enable_irq();
 		}
 #endif

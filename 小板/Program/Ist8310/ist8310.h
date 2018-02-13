@@ -1,7 +1,7 @@
 #ifndef __IST8310_H
 #define __IST8310_H
 #include "stm32f4xx.h"
-
+#include "monitor.h"
 #define IST8310_WHO_AM_I          0x00
 #define IST8310_R_CONFA           0x0A
 #define IST8310_R_CONFB           0x0B
@@ -48,6 +48,20 @@ typedef struct
 	int16_t my;
 	int16_t mz;
 }magDatadef;
+
+typedef struct 
+{
+	uint8_t						status;						//磁力计是否正常
+	uint8_t						dataStatus;				//数据状态
+	float Crossaxis[9];									//旋转矩阵
+	struct
+	{
+		magDatadef				original;
+		magDatadef				calc;
+	}Data;
+	System_Monitor_t 	monitor;	
+}Ist8310_t;
+
 void Ist8310_Init(void);
 void IST8310_GetData(magDatadef *m);
 void Ist8310_CrossaxisTransformation(float crossaxis_inv[9],magDatadef *m,magDatadef *o);

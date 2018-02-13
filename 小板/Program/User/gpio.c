@@ -121,7 +121,7 @@ void Bsp_GPIO_Init(void)
 	gpio.GPIO_OType = I2CI_SCL_OTYPE;
 	gpio.GPIO_Pin = I2CI_SCL_PIN;
 	gpio.GPIO_PuPd = GPIO_PuPd_UP;
-	gpio.GPIO_Speed = GPIO_Speed_50MHz;
+	gpio.GPIO_Speed = GPIO_High_Speed;
 	GPIO_Init(I2CI_SCL_GPIO, &gpio);
 	//SDA
 	GPIO_StructInit(&gpio);
@@ -129,7 +129,7 @@ void Bsp_GPIO_Init(void)
 	gpio.GPIO_OType = I2CI_SDA_OTYPE;
 	gpio.GPIO_Pin = I2CI_SDA_PIN;
 	gpio.GPIO_PuPd = GPIO_PuPd_UP;
-	gpio.GPIO_Speed = GPIO_Speed_50MHz;
+	gpio.GPIO_Speed = GPIO_High_Speed;
 	GPIO_Init(I2CI_SDA_GPIO, &gpio);
 	
 	GPIO_PinAFConfig(I2CI_SCL_GPIO, I2CI_SCL_PinSource, GPIO_AF_I2CI);

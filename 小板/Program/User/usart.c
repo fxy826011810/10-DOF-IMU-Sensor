@@ -2,12 +2,8 @@
 #include <stdio.h>
 #include "usart.h"
 #include "common.h"
-//int fputc(int ch,FILE*f)//printf函数重定义
-//{
-//	USART_SendData(USART3,(unsigned char)ch);
-//	while(!USART_GetFlagStatus(USART3,USART_FLAG_TXE));
-//	return ch;
-//}
+#include "icm20602.h"
+#include "ist8310.h"
 
 void Bsp_Usart_Init(void)
 {
@@ -92,7 +88,7 @@ void Usart_DMASend(USART_TypeDef* USARTx,uint8_t *send,uint8_t len)//各种数据
 }
 
 
-void Usart_Send_Status(USART_TypeDef* USARTx,float angle_rol, float angle_pit, float angle_yaw, s32 alt, u8 fly_model, u8 armed)//上位机接收的
+void Usart_Send_Status(USART_TypeDef* USARTx,float angle[3], s32 alt, u8 fly_model, u8 armed)//上位机接收的
 {
 	u8 _cnt=0;
 	vs16 _temp;
@@ -103,13 +99,13 @@ void Usart_Send_Status(USART_TypeDef* USARTx,float angle_rol, float angle_pit, f
 	data_to_send[_cnt++]=0x01;
 	data_to_send[_cnt++]=0;
 	
-	_temp = (int)(angle_rol*100);
+	_temp = (int)(angle[2]*100);
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = (int)(angle_pit*100);
+	_temp = (int)(angle[1]*100);
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = (int)(angle_yaw*100);
+	_temp = (int)(angle[0]*100);
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
 	
@@ -128,45 +124,54 @@ void Usart_Send_Status(USART_TypeDef* USARTx,float angle_rol, float angle_pit, f
 	for(u8 i=0;i<_cnt;i++)
 		sum += data_to_send[i];
 	data_to_send[_cnt++]=sum;
-	if(USARTx==USART1)
-	{
-	usart1_dma_upgrade(data_to_send, _cnt);
-	}
-	else if(USARTx==USART3)
-	{
-		usart3_dma_upgrade(data_to_send, _cnt);
-	}
+	Usart_DMASend(USARTx,data_to_send,_cnt);
 }
 
 
-void Usart_Send_Angle(USART_TypeDef* USARTx,float angle_rol, float angle_pit, float angle_yaw)//上位机接收的
+void Usart_Send_Angle(USART_TypeDef* USARTx,float angle[3])//上位机接收的
 {
 	u8 _cnt=0;
 	vs16 _temp;
-
 	data_to_send[_cnt++]=0xAA;
-	_temp = (int)(angle_rol*100);
+	_temp = (int)(angle[2]*100);
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = (int)(angle_pit*100);
+	_temp = (int)(angle[1]*100);
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = (int)(angle_yaw*100);
+	_temp = (int)(angle[0]*100);
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
 	data_to_send[_cnt++]=0xBB;
-	if(USARTx==USART1)
-	{
-	usart1_dma_upgrade(data_to_send, _cnt);
-	}
-	else if(USARTx==USART3)
-	{
-		usart3_dma_upgrade(data_to_send, _cnt);
-	}
+//	u8 _cnt=0;
+//	vs16 _temp;
+//	
+//	data_to_send[_cnt++]=0xAA;
+//	
+//	FT.F=angle_rol;
+//	data_to_send[_cnt++]=FT.U[0];
+//	data_to_send[_cnt++]=FT.U[1];
+//	data_to_send[_cnt++]=FT.U[2];
+//	data_to_send[_cnt++]=FT.U[3];
+//	
+//	FT.F=angle_pit;
+//	data_to_send[_cnt++]=FT.U[0];
+//	data_to_send[_cnt++]=FT.U[1];
+//	data_to_send[_cnt++]=FT.U[2];
+//	data_to_send[_cnt++]=FT.U[3];
+//	
+//	FT.F=angle_yaw;
+//	data_to_send[_cnt++]=FT.U[0];
+//	data_to_send[_cnt++]=FT.U[1];
+//	data_to_send[_cnt++]=FT.U[2];
+//	data_to_send[_cnt++]=FT.U[3];
+//	data_to_send[_cnt++]=0;
+//	data_to_send[_cnt++]=0xBB;
+	Usart_DMASend(USARTx,data_to_send,_cnt);
 }
 
 
-void Usart_Send_Senser(USART_TypeDef* USARTx,s16 a_x,s16 a_y,s16 a_z,s16 g_x,s16 g_y,s16 g_z,s16 m_x,s16 m_y,s16 m_z,s32 bar)//各种数据
+void Usart_Send_Senser(USART_TypeDef* USARTx,Icm20602Datadef *icm,magDatadef *ist,s32 bar)//各种数据
 {
 	u8 _cnt=0;
 	vs16 _temp;
@@ -176,33 +181,33 @@ void Usart_Send_Senser(USART_TypeDef* USARTx,s16 a_x,s16 a_y,s16 a_z,s16 g_x,s16
 	data_to_send[_cnt++]=0x02;
 	data_to_send[_cnt++]=0;
 	
-	_temp = a_x;
+	_temp = icm->ax;
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = a_y;
+	_temp = icm->ay;
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = a_z;	
-	data_to_send[_cnt++]=BYTE1(_temp);
-	data_to_send[_cnt++]=BYTE0(_temp);
-	
-	_temp = g_x;	
-	data_to_send[_cnt++]=BYTE1(_temp);
-	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = g_y;	
-	data_to_send[_cnt++]=BYTE1(_temp);
-	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = g_z;	
+	_temp = icm->az;	
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
 	
-	_temp = m_x;	
+	_temp = icm->gx;	
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = m_y;	
+	_temp = icm->gy;	
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
-	_temp = m_z;	
+	_temp = icm->gz;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	
+	_temp = ist->mx;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = ist->my;	
+	data_to_send[_cnt++]=BYTE1(_temp);
+	data_to_send[_cnt++]=BYTE0(_temp);
+	_temp = ist->mz;	
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
 
@@ -212,14 +217,7 @@ void Usart_Send_Senser(USART_TypeDef* USARTx,s16 a_x,s16 a_y,s16 a_z,s16 g_x,s16
 	for(u8 i=0;i<_cnt;i++)
 	sum += data_to_send[i];
 	data_to_send[_cnt++] = sum;
-	if(USARTx==USART1)
-	{
-	usart1_dma_upgrade(data_to_send, _cnt);
-	}
-	else if(USARTx==USART3)
-	{
-		usart3_dma_upgrade(data_to_send, _cnt);
-	}
+	Usart_DMASend(USARTx,data_to_send,_cnt);
 }
 
 

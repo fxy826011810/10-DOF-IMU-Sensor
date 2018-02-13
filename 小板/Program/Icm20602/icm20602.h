@@ -1,6 +1,7 @@
 #ifndef __ICM20602_H__
 #define __ICM20602_H__
 #include "stm32f4xx.h"
+#include "monitor.h"
 #include "flash.h"
 #define ICM20602_XG_OFFS_TC_H							0x04
 #define ICM20602_XG_OFFS_TC_L							0x05
@@ -79,6 +80,7 @@
 
 #define ICM20602LIMIT_MIN 2			//陀螺仪最小数据限制
 #define calc_gyrotime 100				//陀螺仪矫正数据采样次数
+#define check_gyrotime 10				//陀螺仪矫正数据采样次数
 #define ACCMAX 7000							//加速度计矫正阈值
 #define calc_acctime 500				//加速度计矫正数据采样次数
 
@@ -100,12 +102,33 @@ typedef enum
 	Lost,
 }Icm20602Status;
 
+typedef struct 
+	{
+		Icm20602Status			status;					//imu选用中断或读取寄存器读取数据
+		struct
+		{
+			uint8_t AccelOn;									//用于矫正模式下矫正加速度 设置为1开始矫正
+			uint8_t status;										//总矫正状态 1为矫正 0为未校正
+			uint8_t accStatus;								//加速度计的矫正状态
+			uint8_t gyroStatus;								//陀螺仪的的矫正状态
+			float ref[6][3];									//用于存放加速度计的矫正原始数据
+			float Crossaxis[9];								//加速度计旋转矩阵
+			Icm20602Datadef	offset;						//用于存放矫正值
+		}calibrate;
+		struct
+		{
+			uint8_t							dataStatus;		//数据状态
+			Icm20602Datadef			original;			//原始数据
+			Icm20602Datadef 		calc;					//矫正数据
+		}Data;
+	System_Monitor_t 		monitor;					//记录imu帧率 更新频率为1hz
+}Icm20602_t;
+	
 uint8_t Icm20602_init(void);
 void Icm20602_OffsetInit(void);
 
 void ICM20602_DataUpdate(void);
 
-uint8_t Icm20602_DataLimit(Icm20602Datadef *data);
 void Icm20602_GetData(Icm20602Datadef *icmdata);
 
 void Icm20602DataFilter(Icm20602Datadef *data,Icm20602Datadef *out);
@@ -121,6 +144,6 @@ void Icm20602_SetStatus(Icm20602Status x);
 void Icm20602_Set_Calibration_Status(uint8_t  x);
 uint8_t Icm20602_Get_Calibration_Status(void);
 
-void Icm20602_Set_AccelCalibration_Status(uint8_t  x);
-uint8_t Icm20602_Get_AccelCalibration_Status(void);
+void Icm20602_openAccelCalibrate(uint8_t  x);
+uint8_t Icm20602_isOpenAccelCalibrate(void);
 #endif

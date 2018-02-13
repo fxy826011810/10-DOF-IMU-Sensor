@@ -4,7 +4,7 @@
 #include "stm32f4xx.h" 
 #define TIM_DEBUG							0					//tim循环
 #define USE_TIM								1 				//使用tim
-#define USE_SIMIIC						1					//使用软件iic否则硬件iic	
+#define USE_SIMIIC						0					//使用软件iic否则硬件iic	
 #define USE_IST8310						0					//使用磁力计
 #define USE_ICM20602					1 				//使用陀螺仪
 #define USE_MS5611						1					//使用气压计

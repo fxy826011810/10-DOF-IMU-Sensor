@@ -15,31 +15,31 @@ float invSqrt(float x)
 	y = y * (1.5f - (halfx * y * y));
 	return y;
 }
-
-void AHRS_Init(ahrs_t *ahrs)
+ahrs_t ahrs;
+void AHRS_Init(void)
 {
-	ahrs->dataStatus=0;
-	ahrs->q[0]=1.0f;
-	ahrs->q[1]=0.0f;
-	ahrs->q[2]=0.0f;
-	ahrs->q[3]=0.0f;
+	ahrs.dataStatus=0;
+	ahrs.q[0]=1.0f;
+	ahrs.q[1]=0.0f;
+	ahrs.q[2]=0.0f;
+	ahrs.q[3]=0.0f;
 	
-	ahrs->angle[0]=0.0f;
-	ahrs->angle[1]=0.0f;
-	ahrs->angle[2]=0.0f;
+	ahrs.angle[0]=0.0f;
+	ahrs.angle[1]=0.0f;
+	ahrs.angle[2]=0.0f;
 	
-	ahrs->kp[0]=2.0f;
-	ahrs->ki[0]=0.01f;
+	ahrs.kp[0]=2.0f;
+	ahrs.ki[0]=0.01f;
 	
-	ahrs->kp[1]=4.0f;
-	ahrs->ki[1]=0.01f;
+	ahrs.kp[1]=4.0f;
+	ahrs.ki[1]=0.01f;
 }
 
 float g;
 #define M_PI 3.1415926535f
 uint32_t lastUpdate, now; // 采样周期计数 单位 us 
 float exInt, eyInt, ezInt;  // 误差积分
-static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs) 
+void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs) 
 {
 		float norm;
     float vx, vy, vz;//vxyz为重力坐标系转到机体坐标系的分量
@@ -109,7 +109,7 @@ static void _6AxisAHRSupdate(Icm20602Datadef *imu,ahrs_t *ahrs)
     ahrs->q[3] = tempq3 * norm;
 }
 int8_t a=1,b=1,c=1;
-static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs) 
+void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs) 
 {
 		float norm;
     float hx, hy, hz, bx, bz;//hxyz为地坐标系转到机体坐标系的各个分量
@@ -199,39 +199,19 @@ static void _9AxisAHRSupdate(Icm20602Datadef *imu,magDatadef *m,ahrs_t *ahrs)
     ahrs->q[3] = tempq3 * norm;
 
 }
-static void AHRS_Q_To_Angle(ahrs_t *ahrs)
+void AHRS_Q_To_Angle(ahrs_t *ahrs)
 {
 		ahrs->angle[0] = -atan2(2 * ahrs->q[1] * ahrs->q[2] + 2 * ahrs->q[0] * ahrs->q[3], -2 * ahrs->q[2] * ahrs->q[2] - 2 * ahrs->q[3] * ahrs->q[3] + 1) * 180 / M_PI;
 		ahrs->angle[1] = -asin(-2 * ahrs->q[1] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[2]) * 180 / M_PI; // pitch    -pi/2    --- pi/2 
 		ahrs->angle[2] = atan2(2 * ahrs->q[2] * ahrs->q[3] + 2 * ahrs->q[0] * ahrs->q[1], -2 * ahrs->q[1] * ahrs->q[1] - 2 * ahrs->q[2] * ahrs->q[2] + 1) * 180 / M_PI;
 }
-void AHRS_Update(void)
-{
-	kalmanUpdate();
-	if(IST8310_GetStatus()==1&&IST8310_GetDataStatus()==1&&Icm20602_GetDataStatus()==1&&Icm20602_GetStatus()!=Lost)
-	{
-		_9AxisAHRSupdate(&cmd.Icm20602.Data.calc,&cmd.Ist8310.Data.calc,&cmd.ahrs);
-		Icm20602_SetDataStatus(0);
-		IST8310_SetDataStatus(0);
-		AHRS_SetDataStatus(1);
-	}
-	else if(Icm20602_GetDataStatus()==1&&IST8310_GetDataStatus()==0&&Icm20602_GetStatus()!=Lost)
-	{
-		_6AxisAHRSupdate(&cmd.Icm20602.Data.calc,&cmd.ahrs);
-		Icm20602_SetDataStatus(0);
-		AHRS_SetDataStatus(1);
-	}
-	if(AHRS_GetDataStatus())
-	{
-		AHRS_Q_To_Angle(&cmd.ahrs);
-	}
-}	
+
 	
 uint8_t AHRS_GetDataStatus(void)
 {
-	return cmd.ahrs.dataStatus;
+	return ahrs.dataStatus;
 }
 void AHRS_SetDataStatus(uint8_t x)
 {
-	cmd.ahrs.dataStatus=x;
+	ahrs.dataStatus=x;
 }

@@ -47,12 +47,12 @@ void kalmanInit(void)
 
 void kalmanUpdate(void)	
 {
-	cmd.Icm20602.Data.calc.gx=(int16_t)KalmanFilter(&Kgx,cmd.Icm20602.Data.calc.gx);
-	cmd.Icm20602.Data.calc.gy=(int16_t)KalmanFilter(&Kgy,cmd.Icm20602.Data.calc.gy);
-	cmd.Icm20602.Data.calc.gz=(int16_t)KalmanFilter(&Kgz,cmd.Icm20602.Data.calc.gz);
-	cmd.Icm20602.Data.calc.ax=(int16_t)KalmanFilter(&Kax,cmd.Icm20602.Data.calc.ax);
-	cmd.Icm20602.Data.calc.ay=(int16_t)KalmanFilter(&Kay,cmd.Icm20602.Data.calc.ay);
-	cmd.Icm20602.Data.calc.az=(int16_t)KalmanFilter(&Kaz,cmd.Icm20602.Data.calc.az);
+	cmd.Icm20602->Data.calc.gx=(int16_t)KalmanFilter(&Kgx,cmd.Icm20602->Data.calc.gx);
+	cmd.Icm20602->Data.calc.gy=(int16_t)KalmanFilter(&Kgy,cmd.Icm20602->Data.calc.gy);
+	cmd.Icm20602->Data.calc.gz=(int16_t)KalmanFilter(&Kgz,cmd.Icm20602->Data.calc.gz);
+	cmd.Icm20602->Data.calc.ax=(int16_t)KalmanFilter(&Kax,cmd.Icm20602->Data.calc.ax);
+	cmd.Icm20602->Data.calc.ay=(int16_t)KalmanFilter(&Kay,cmd.Icm20602->Data.calc.ay);
+	cmd.Icm20602->Data.calc.az=(int16_t)KalmanFilter(&Kaz,cmd.Icm20602->Data.calc.az);
 }
 	
 	
