@@ -8,6 +8,7 @@
 #include "ahrs.h"
 #include "main.h"
 #include "tim.h"
+#include "can.h"
 #include <stdio.h>
 
 void controlLoop(void)
@@ -39,6 +40,7 @@ void controlLoop(void)
 	{
 		if(AHRS_GetDataStatus())
 		{
+			Can_AngleSend(CAN2,cmd.Ahrs->angle);
 			Usart_Send_Angle(USART3,cmd.Ahrs->angle);
 			Usart_Send_Status(USART1,cmd.Ahrs->angle,0,0,0);
 			AHRS_SetDataStatus(0);

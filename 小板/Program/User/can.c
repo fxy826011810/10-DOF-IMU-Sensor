@@ -1,6 +1,6 @@
 #include "stm32f4xx.h"
 #include "can.h"
-
+#include "usart.h"
 
 	void Bsp_Can_Init(void)
 {
@@ -47,22 +47,27 @@
 			CAN_ITConfig(CAN2, CAN_IT_FMP0, ENABLE);
 }
 
-
-	void cm_senddata(CAN_TypeDef* CANx, int num1, int num2, int num3, int num4)//µ×ÅÌcan·¢ËÍ
+	void Can_AngleSend(CAN_TypeDef* CANx, float angle[3])
 {
 		CanTxMsg  sendmessage;
+		vs16 _temp;
+
 		sendmessage.DLC									= 0x08;
 		sendmessage.IDE									= CAN_ID_STD;
 		sendmessage.RTR									= CAN_RTR_DATA;
-		sendmessage.StdId								= 0x200;
-		sendmessage.Data[0]								= ((num1) >> 8);
-		sendmessage.Data[1]								= (num1);
-		sendmessage.Data[2]								= ((num2) >> 8);
-		sendmessage.Data[3]								= (num2);
-		sendmessage.Data[4]								= ((num3) >> 8);
-		sendmessage.Data[5]								= (num3);
-		sendmessage.Data[6]								= ((num4) >> 8);
-		sendmessage.Data[7]								= (num4);
+		sendmessage.StdId								= 0x40;
+		_temp = (int)(angle[2]*100);
+		sendmessage.Data[0]							= BYTE1(_temp);
+		sendmessage.Data[1]							= BYTE0(_temp);
+		_temp = (int)(angle[1]*100);
+		sendmessage.Data[2]							= BYTE1(_temp);
+		sendmessage.Data[3]							= BYTE0(_temp);
+		_temp = (int)(angle[0]*100);
+		sendmessage.Data[4]							= BYTE1(_temp);
+		sendmessage.Data[5]							= BYTE0(_temp);
+		
+		sendmessage.Data[6]							= 0xAA;
+		sendmessage.Data[7]							= 0xBB;
 
 		CAN_Transmit(CANx, &sendmessage);
 }

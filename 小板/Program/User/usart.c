@@ -42,10 +42,6 @@ void Bsp_Usart_Init(void)
 //	USART_ClearFlag(USART3,USART_FLAG_IDLE);//防止接受不到第一个字符
 }
 
-#define BYTE0(dwTemp)       ( *( (char *)(&dwTemp)		) )
-#define BYTE1(dwTemp)       ( *( (char *)(&dwTemp) + 1) )
-#define BYTE2(dwTemp)       ( *( (char *)(&dwTemp) + 2) )
-#define BYTE3(dwTemp)       ( *( (char *)(&dwTemp) + 3) )
 uint8_t data_to_send[50];	//发送数据缓存
 void usart3_dma_upgrade(uint8_t* data,u8 len)
 {

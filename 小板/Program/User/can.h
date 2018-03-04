@@ -6,7 +6,7 @@
 
 void Bsp_Can_Init(void);
 
-void cm_senddata(CAN_TypeDef* CANx, int num1, int num2, int num3, int num4);
+void Can_AngleSend(CAN_TypeDef* CANx, float angle[3]);
 void gm_senddata(CAN_TypeDef* CANx, int num1, int num2);
 void gyro_senddata(void);
 
