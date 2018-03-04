@@ -52,7 +52,7 @@
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
-          <DebugInformation>1</DebugInformation>
+          <DebugInformation>0</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
@@ -439,6 +439,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\src\stm32f4xx_flash.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\src\stm32f4xx_adc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -573,6 +578,11 @@
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\User\debug.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\User\adc.c</FilePath>
             </File>
           </Files>
         </Group>

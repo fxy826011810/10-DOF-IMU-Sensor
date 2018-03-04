@@ -11,6 +11,7 @@
 
 			//can1
 			CAN_DeInit(CAN1);
+			CAN_DeInit(CAN2);
 			CAN_StructInit(&can);
 			can.CAN_ABOM									= DISABLE;
 			can.CAN_AWUM									= DISABLE;
@@ -25,34 +26,7 @@
 			can.CAN_Mode									= CAN_Mode_Normal;
 			CAN_Init(CAN1, &can);
 			CAN_Init(CAN2, &can);
-			can_filter.CAN_FilterActivation					= ENABLE;
-			can_filter.CAN_FilterFIFOAssignment				= 0;
-			can_filter.CAN_FilterIdHigh						= 0x0000;
-			can_filter.CAN_FilterIdLow						= 0x0000;
-			can_filter.CAN_FilterMaskIdHigh					= 0x0000;
-			can_filter.CAN_FilterMaskIdLow					= 0x0000;
-			can_filter.CAN_FilterMode						= CAN_FilterMode_IdMask;
-			can_filter.CAN_FilterNumber						= 0;
-			can_filter.CAN_FilterScale						= CAN_FilterScale_32bit;
-			CAN_FilterInit(&can_filter);
-			can_filter.CAN_FilterNumber						= 0;
-			CAN_FilterInit(&can_filter);
-			//can2
-			CAN_DeInit(CAN2);
-			CAN_StructInit(&can);
-			can.CAN_ABOM									= DISABLE;
-			can.CAN_AWUM									= DISABLE;
-			can.CAN_NART									= DISABLE;
-			can.CAN_RFLM									= DISABLE;
-			can.CAN_TTCM									= DISABLE;
-			can.CAN_TXFP									= ENABLE;
-			can.CAN_SJW										= CAN_SJW_1tq;
-			can.CAN_BS1										= CAN_BS1_9tq;
-			can.CAN_BS2										= CAN_BS2_4tq;
-			can.CAN_Prescaler								= 3;
-			can.CAN_Mode									= CAN_Mode_Normal;
 			
-
 			can_filter.CAN_FilterActivation					= ENABLE;
 			can_filter.CAN_FilterFIFOAssignment				= 0;
 			can_filter.CAN_FilterIdHigh						= 0x0000;
@@ -62,6 +36,10 @@
 			can_filter.CAN_FilterMode						= CAN_FilterMode_IdMask;
 			can_filter.CAN_FilterNumber						= 0;
 			can_filter.CAN_FilterScale						= CAN_FilterScale_32bit;
+			CAN_FilterInit(&can_filter);
+			can_filter.CAN_FilterNumber						= 0;
+			CAN_FilterInit(&can_filter);
+			
 			can_filter.CAN_FilterNumber						= 14;
 			CAN_FilterInit(&can_filter);
 
