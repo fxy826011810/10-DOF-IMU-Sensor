@@ -29,12 +29,14 @@ void Icm20602Int_IRQHandler(void)
 		EXTI_ClearFlag(EXTI_Line3);
 		
 #if USE_ICM20602
+		__disable_irq();
 		Icm20602_SetStatus(PinInt);
 		if(Icm20602_GetStatus()==PinInt)
 		{
 			getFunctionTime(&ICM20602_DataUpdate_t);
 			Monitor_Set(&cmd.Icm20602->monitor);
 		}	
+		__enable_irq();
 #endif
 	}
 }

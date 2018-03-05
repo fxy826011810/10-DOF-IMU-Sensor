@@ -36,10 +36,6 @@ QQ		:826011810
 */
 cmd_t cmd={0};
 
-
-
-
-
 void system_init(void)
 {
 
@@ -51,6 +47,7 @@ void system_init(void)
 	Monitor_Init();
   Bsp_NVIC_Init();
 	Bsp_GPIO_Init();
+	Bsp_Can_Init();
 	Bsp_DMA_Init();
 	Bsp_Usart_Init();
 	Bsp_IIC_Init();
@@ -74,7 +71,8 @@ void system_init(void)
   sysEnable();  
 #endif  
 }
-uint32_t aa,bb;float cc;
+
+
 int main(void)
 {
   system_init();//系统初始化

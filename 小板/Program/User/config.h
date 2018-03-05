@@ -1,28 +1,23 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-#include "stm32f4xx.h" 
-#define TIM_DEBUG							0					//tim循环
+#include "stm32f4xx.h"
+
 #define USE_TIM								1 				//使用tim
 #define USE_SIMIIC						0					//使用软件iic否则硬件iic	
 #define USE_IST8310						0					//使用磁力计
 #define USE_ICM20602					1 				//使用陀螺仪
-#define USE_MS5611						1					//使用气压计
-
-		
-
-
+#define USE_MS5611						0					//使用气压计
 
 /*			IST8310	RST INT		*/
+	#define IST8310_INT_GPIO  	GPIOB
+	#define IST8310_INT_PIN  		GPIO_Pin_0
+	#define IST8310_INT_MODE  	GPIO_Mode_IN
 
-#define IST8310_INT_GPIO  		GPIOB
-#define IST8310_INT_PIN  			GPIO_Pin_0
-#define IST8310_INT_MODE  		GPIO_Mode_IN
-
-#define IST8310_RST_GPIO  		GPIOB
-#define IST8310_RST_PIN  			GPIO_Pin_1
-#define IST8310_RST_MODE  		GPIO_Mode_OUT
-#define IST8310_RST_OTYPE  		GPIO_OType_PP
+	#define IST8310_RST_GPIO  	GPIOB
+	#define IST8310_RST_PIN  		GPIO_Pin_1
+	#define IST8310_RST_MODE  	GPIO_Mode_OUT
+	#define IST8310_RST_OTYPE  	GPIO_OType_PP
 /*			I2C			*/
 /*			I2C	IST8310		*/
 #if USE_SIMIIC

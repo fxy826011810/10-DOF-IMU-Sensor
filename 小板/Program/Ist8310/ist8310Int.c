@@ -22,15 +22,10 @@ void Ist8310IntInit(void)
 
 void Ist8310Int_IRQHandler(void)
 {
-	
 	if (EXTI_GetITStatus(EXTI_Line0)!= 0)
 	{
 		EXTI_ClearITPendingBit(EXTI_Line0);
 		EXTI_ClearFlag(EXTI_Line0);
-		
-#if USE_ICM20602
-
-#endif
 	}
 }
 

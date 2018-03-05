@@ -17,12 +17,10 @@ static void cmdOffsetDataInit(void)
 	if(initData[6][0]==2018&&initData[6][1]==1&&initData[6][2]==2018)
 	{
 		memcpy(cmd.Icm20602->calibrate.ref,initData,sizeof(initData)-12);
-//		Icm20602_openAccelCalibrate(1);
 		Icm20602_Set_Calibration_Status(1);
 	}
 	else
 	{
-//		Icm20602_openAccelCalibrate(0);
 		Icm20602_Set_Calibration_Status(0);
 	}
 }

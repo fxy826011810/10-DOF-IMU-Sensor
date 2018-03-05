@@ -24,12 +24,12 @@ void Bsp_NVIC_Init(void)
 //	NVIC_Init(&nvic);
 
 
-//	//can1
-//	nvic.NVIC_IRQChannel											= CAN1_RX0_IRQn;
-//	nvic.NVIC_IRQChannelCmd										= ENABLE;
-//	nvic.NVIC_IRQChannelPreemptionPriority		= 1;
-//	nvic.NVIC_IRQChannelSubPriority						= 1;
-//	NVIC_Init(&nvic);
+	//can1
+	nvic.NVIC_IRQChannel											= CAN1_RX0_IRQn;
+	nvic.NVIC_IRQChannelCmd										= ENABLE;
+	nvic.NVIC_IRQChannelPreemptionPriority		= 1;
+	nvic.NVIC_IRQChannelSubPriority						= 1;
+	NVIC_Init(&nvic);
 //	//can2
 //	nvic.NVIC_IRQChannel											= CAN2_RX0_IRQn;
 //	nvic.NVIC_IRQChannelCmd										= ENABLE;

@@ -19,7 +19,9 @@ void controlLoop(void)
 	if(cmd.heart%5==0)
 	{
 #if USE_MS5611
+		__disable_irq();
 		getFunctionTime(&Ms5611_DataUpdate_t);
+		__enable_irq();
 		Monitor_Set(&cmd.Ms5611->monitor);
 #endif
 	}
@@ -40,27 +42,16 @@ void controlLoop(void)
 	{
 		if(AHRS_GetDataStatus())
 		{
-			Can_AngleSend(CAN2,cmd.Ahrs->angle);
+			Can_AngleSend(CAN1,cmd.Ahrs->angle);
 			Usart_Send_Angle(USART3,cmd.Ahrs->angle);
 			Usart_Send_Status(USART1,cmd.Ahrs->angle,0,0,0);
 			AHRS_SetDataStatus(0);
 		}
 	}
-	
-	
 	if(cmd.heart%10==5)
 	{
 		Usart_Send_Senser(USART1,&cmd.Icm20602->Data.original,&cmd.Ist8310->Data.original,0);
 	}
-	
-	#if USE_MS5611
-	
-#endif
-	#if TIM_DEBUG
-		LED_HEAT();
-	#endif
-	
-	
 }
 
 

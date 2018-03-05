@@ -44,7 +44,7 @@
 			CAN_FilterInit(&can_filter);
 
 			CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);
-			CAN_ITConfig(CAN2, CAN_IT_FMP0, ENABLE);
+//			CAN_ITConfig(CAN2, CAN_IT_FMP0, ENABLE);
 }
 
 	void Can_AngleSend(CAN_TypeDef* CANx, float angle[3])
