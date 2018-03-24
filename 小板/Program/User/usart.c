@@ -139,30 +139,6 @@ void Usart_Send_Angle(USART_TypeDef* USARTx,float angle[3])//上位机接收的
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
 	data_to_send[_cnt++]=0xBB;
-//	u8 _cnt=0;
-//	vs16 _temp;
-//	
-//	data_to_send[_cnt++]=0xAA;
-//	
-//	FT.F=angle_rol;
-//	data_to_send[_cnt++]=FT.U[0];
-//	data_to_send[_cnt++]=FT.U[1];
-//	data_to_send[_cnt++]=FT.U[2];
-//	data_to_send[_cnt++]=FT.U[3];
-//	
-//	FT.F=angle_pit;
-//	data_to_send[_cnt++]=FT.U[0];
-//	data_to_send[_cnt++]=FT.U[1];
-//	data_to_send[_cnt++]=FT.U[2];
-//	data_to_send[_cnt++]=FT.U[3];
-//	
-//	FT.F=angle_yaw;
-//	data_to_send[_cnt++]=FT.U[0];
-//	data_to_send[_cnt++]=FT.U[1];
-//	data_to_send[_cnt++]=FT.U[2];
-//	data_to_send[_cnt++]=FT.U[3];
-//	data_to_send[_cnt++]=0;
-//	data_to_send[_cnt++]=0xBB;
 	Usart_DMASend(USARTx,data_to_send,_cnt);
 }
 
