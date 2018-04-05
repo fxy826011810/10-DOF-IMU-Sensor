@@ -45,7 +45,7 @@ Icm20602_t icm20602;
 uint8_t Icm20602_init(void)
 {
 	
-	uint8_t len=12,mpu6500_id=0;
+	uint8_t len=12,Icm20602_id=0;
 	uint8_t i,initdata[][2]={ {ICM20602_PWR_MGMT_1,0x80},\
 														{ICM20602_PWR_MGMT_1,0x01},\
 														{ICM20602_INT_PIN_CFG,0x00},\
@@ -61,20 +61,21 @@ uint8_t Icm20602_init(void)
 													};
 	
 
-	Icm20602_SetStatus(PinInt);
-	Icm20602_SetDataStatus(0);
-	Icm20602_openAccelCalibrate(0);
-//	Icm20602_Set_Calibration_Status(1);
-	Icm20602_ReadByte(ICM20602_WHO_AM_I,&mpu6500_id);								
-	if (mpu6500_id != ICM20602_WHO_AM_I_CONST)
-	return 1; //校验失败，返回0xff
-	
+	Icm20602_SetStatus(PinInt);//设置初始使用中断读取方式
+	Icm20602_SetDataStatus(0);//设置数据准备态
+	Icm20602_openAccelCalibrate(0);//设置不矫正加速度计
+	Icm20602_ReadByte(ICM20602_WHO_AM_I,&Icm20602_id);								
+	if (Icm20602_id != ICM20602_WHO_AM_I_CONST)//id不对
+	{
+		Icm20602_SetStatus(Lost);//进入lost模式
+		return 1; //校验失败，返回0xff
+	}
 	for(i=0;i<len;i++)
 	{
-		Icm20602_WriteByte(initdata[i][0],initdata[i][1]);
+		Icm20602_WriteByte(initdata[i][0],initdata[i][1]);//将初始化参数写入ic
 		delay_ms(100);
 	}
-	Icm20602_OffsetInit();
+	Icm20602_OffsetInit();//芯片数据初始化
 	return 0;
 }
 
@@ -272,8 +273,8 @@ static uint8_t Icm20602_AccelCalc(float ref[6][3])
 //芯片矫正初始化
 void Icm20602_OffsetInit(void)
 {
-	Icm20602_GyroCalc(&icm20602);
-	Icm20602_AccelCalc(icm20602.calibrate.ref);
+	Icm20602_GyroCalc(&icm20602);//陀螺矫正
+	Icm20602_AccelCalc(icm20602.calibrate.ref);//加速度矫正
 }
 
 //对初始加速度数据进行椭圆矫正
@@ -346,11 +347,6 @@ void Icm20602_GetData(Icm20602Datadef *icmdata)
 		icmdata->az=8192;
 	if(icmdata->az<-8192)
 		icmdata->az=-8192;
-
-//	icmdata->gx=(data[8]<<8|data[9])+offset.gx;
-//	icmdata->gy=(data[10]<<8|data[11])+offset.gy;
-//	icmdata->gz=(data[12]<<8|data[13])+offset.gz;
-	
 }
 
 
@@ -387,12 +383,8 @@ void ICM20602_DataUpdate(void)
 		Icm20602_GetData(&icm20602.Data.original);
 		Icm20602_CrossaxisTransformation(icm20602.calibrate.Crossaxis,&icm20602.Data.original,&icm20602.Data.original);
 		Icm20602DataFilter(&icm20602.Data.original,&icm20602.Data.calc);
-		
 		Icm20602_GyroDataLimit(&icm20602.Data.calc);
-	
 		Icm20602_SetDataStatus(1);
-	
-		
 }
 
 

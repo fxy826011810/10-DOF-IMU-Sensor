@@ -78,7 +78,7 @@
 #define ICM20602_WHO_AM_I_CONST		(0X12)//WHO_AM_I编码
 
 
-#define ICM20602LIMIT_MIN 2			//陀螺仪最小数据限制
+#define ICM20602LIMIT_MIN 3			//陀螺仪最小数据限制
 #define calc_gyrotime 100				//陀螺仪矫正数据采样次数
 #define check_gyrotime 10				//陀螺仪矫正数据采样次数
 #define ACCMAX 7000							//加速度计矫正阈值
